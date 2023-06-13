@@ -25,47 +25,43 @@ if(isset($_POST['submit'])){
     $gphoto = $_FILES['gphoto'];
     $sname = $_POST['sname'];
     $documents = $_POST['documents'];
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-    $cpassword = $_POST['cpassword'];
 
-    if($password == $cpassword){
-        $imageupload = null;
-        if($photo){
-            $imagefilename = $photo['name'];
-            $imagetemp = $photo['tmp_name'];
-            $imageerror = $photo['error'];
-            $image_seperate = explode('.',$imagefilename);
-            $image_extension = strtolower(end($image_seperate));
-            $extension = array("jpg","jpeg","png");
-            if(in_array($image_extension,$extension)){
-                $imageupload = '../uploaded/' . $imagefilename ;
-                move_uploaded_file($imagetemp,$imageupload);
-            }
-        }
-        $gimageupload = null;
-        if($gphoto){
-            $gimagefilename = $gphoto['name'];
-            $gimagetemp = $gphoto['tmp_name'];
-            $gimageerror = $gphoto['error'];
-            $gimage_seperate = explode('.',$gimagefilename);
-            $gimage_extension = strtolower(end($gimage_seperate));
-            $extension = array("jpg","jpeg","png");
-            if(in_array($gimage_extension,$extension)){
-                $gimageupload = '../uploaded/' . $gimagefilename ;
-                move_uploaded_file($gimagetemp,$gimageupload);
-            }
-        }
-
-        $sql = "INSERT INTO `customers` (dor,name,fname,address,city,phone,photo,gname,gfname,gaddress,gcity,gphone,gphoto,sname,documents,username,password) VALUES ('$dor','$name','$fname','$address','$city','$phone','$imageupload','$gname','$gfname','$gaddress','$gcity','$gphone','$gimageupload','$sname','$documents','$username','$password')";
-
-        $result = mysqli_query($conn,$sql);
-
-        if($result){
-            header("Location: customers.php");
-            exit();
+    $imageupload = null;
+    if($photo){
+        $imagefilename = $photo['name'];
+        $imagetemp = $photo['tmp_name'];
+        $imageerror = $photo['error'];
+        $image_seperate = explode('.',$imagefilename);
+        $image_extension = strtolower(end($image_seperate));
+        $extension = array("jpg","jpeg","png");
+        if(in_array($image_extension,$extension)){
+            $imageupload = '../uploaded/' . $imagefilename ;
+            move_uploaded_file($imagetemp,$imageupload);
         }
     }
+    $gimageupload = null;
+    if($gphoto){
+        $gimagefilename = $gphoto['name'];
+        $gimagetemp = $gphoto['tmp_name'];
+        $gimageerror = $gphoto['error'];
+        $gimage_seperate = explode('.',$gimagefilename);
+        $gimage_extension = strtolower(end($gimage_seperate));
+        $extension = array("jpg","jpeg","png");
+        if(in_array($gimage_extension,$extension)){
+            $gimageupload = '../uploaded/' . $gimagefilename ;
+            move_uploaded_file($gimagetemp,$gimageupload);
+        }
+    }
+
+    $sql = "INSERT INTO `customers` (dor,name,fname,address,city,phone,photo,gname,gfname,gaddress,gcity,gphone,gphoto,sname,documents) VALUES ('$dor','$name','$fname','$address','$city','$phone','$imageupload','$gname','$gfname','$gaddress','$gcity','$gphone','$gimageupload','$sname','$documents')";
+
+    $result = mysqli_query($conn,$sql);
+
+    if($result){
+        header("Location: customers.php");
+        exit();
+    }
+    
 }
 ?>
 
@@ -123,7 +119,7 @@ if(isset($_POST['submit'])){
                         <?php if(!isset($_GET['id'])){ ?>
                         <div>
                             <label for="photo" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Photo</label>
-                            <input type="file" name="photo" id="photo" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" <?php if(isset($_GET['id'])){echo "value='".$user['photo']."'";} ?> >
+                            <input type="file" name="photo" id="photo" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         </div>
                         <?php } ?>
                         <hr class="my-12 h-0.5 border-t-0 bg-neutral-100 opacity-100 dark:opacity-50" />
@@ -136,21 +132,21 @@ if(isset($_POST['submit'])){
                             <input type="text" name="gfname" id="gfname" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" <?php if(isset($_GET['id'])){echo "value='".$user['gfname']."'";} ?> >
                         </div>
                         <div>
-                            <label for="gaddress" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Address</label>
+                            <label for="gaddress" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Guaranter Address</label>
                             <input type="textarea" name="gaddress" id="gaddress" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" <?php if(isset($_GET['id'])){echo "value='".$user['gaddress']."'";} ?> >
                         </div>
                         <div>
-                            <label for="gcity" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">City</label>
+                            <label for="gcity" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Guaranter City</label>
                             <input type="text" name="gcity" id="gcity" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" <?php if(isset($_GET['id'])){echo "value='".$user['gcity']."'";} ?> >
                         </div>
                         <div>
-                            <label for="gphone" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Phone No.</label>
+                            <label for="gphone" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Guaranter Phone No.</label>
                             <input type="text" name="gphone" id="gphone" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="+91 " <?php if(isset($_GET['id'])){echo "value='".$user['gphone']."'";} ?> >
                         </div>
                         <?php if(!isset($_GET['id'])){ ?>
                         <div>
                             <label for="gphoto" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Guranter photo</label>
-                            <input type="file" name="gphoto" id="gphoto" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" <?php if(isset($_GET['id'])){echo "value='".$user['gphoto']."'";} ?> >
+                            <input type="file" name="gphoto" id="gphoto" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         </div>
                         <?php } ?>
                         <hr class="my-12 h-0.5 border-t-0 bg-neutral-100 opacity-100 dark:opacity-50" />
@@ -161,19 +157,6 @@ if(isset($_POST['submit'])){
                         <div>
                             <label for="documents" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Documents</label>
                             <input type="textarea" name="documents" id="documents" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" <?php if(isset($_GET['id'])){echo "value='".$user['documents']."'";} ?> >
-                        </div>
-                        <hr class="my-12 h-0.5 border-t-0 bg-neutral-100 opacity-100 dark:opacity-50" />
-                        <div>
-                            <label for="username" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Username</label>
-                            <input type="text" name="username" id="username" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" <?php if(isset($_GET['id'])){echo "value='".$user['username']."'";} ?> required>
-                        </div>
-                        <div>
-                            <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
-                            <input type="password" name="password" id="password" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" <?php if(isset($_GET['id'])){echo "value='".$user['password']."'";} ?> required>
-                        </div>
-                        <div>
-                            <label for="cpassword" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Confirm password</label>
-                            <input type="password" name="cpassword" id="cpassword" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" <?php if(isset($_GET['id'])){echo "value='".$user['password']."'";} ?> required>
                         </div>
                         <button type="submit" name="submit" id="submit" class="w-full text-white bg-blue-500 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-primary-600 hover:bg-primary-700 focus:ring-primary-800"><?php if(isset($_GET['id'])){echo "Update Customer";}else{ echo "Add Customer";} ?></button>
                     </form>
