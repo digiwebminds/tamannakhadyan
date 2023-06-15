@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $customerid = $_POST['customerid'];
     // $customername = $_POST['customer-name'];
     $principle = $_POST['principle-amount'];
-    $roi = $_POST['roi'];
+    // $roi = $_POST['roi'];
     $comment = $_POST['comment'];
     $installment = $_POST['installment'];
     $days_weeks_months = $_POST['days'];
@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
     
 
-    $sql = "INSERT INTO `loans` (`customer_id`, `principle`, `comment`, `dor`, `loan_type`, `installment`, `roi`,`total`,`days_weeks_month`,`timestamp`,`ldol`) VALUES ('$customerid', '$principle', '$comment', '$dorloan', '$loancategory', '$installment', '$roi',$total,$days_weeks_months,$timestamp,$ldol)";
+    $sql = "INSERT INTO `loans` (`customer_id`, `principle`, `comment`, `dor`, `loan_type`, `installment`,`total`,`days_weeks_month`,`timestamp`,`ldol`) VALUES ('$customerid', '$principle', '$comment', '$dorloan', '$loancategory', '$installment',$total,$days_weeks_months,$timestamp,$ldol)";
 
     $result = mysqli_query($conn, $sql);
 
