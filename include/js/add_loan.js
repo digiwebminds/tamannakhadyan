@@ -96,17 +96,15 @@ $(document).ready(function() {
     // });
 
     //to calculate last date of repayment, total amount, installments on the basis of number of days, date of registration and principal amount
-    $(document).on("keyup", "#days, #dorloan, #roi, #principle-amount, #ldorloan", function() {
+    $(document).on("keyup", "#days, #dorloan, #principle-amount, #installment", function() {
         var dor = $("#dorloan").val();
         var days = $("#days").val();
+        var installment = $("#installment").val();
         var loancat = $("#loancategory").val();
-        var roi = $("#roi").val();
         var principal = $("#principle-amount").val();
-        // alert(loancat);
 
-        if(!$.isNumeric(days) || !$.isNumeric(roi) || !$.isNumeric(principal)){
+        if(!$.isNumeric(days) || !$.isNumeric(principal)){
             $("#days").css("border","2px solid red");
-            $("#roi").css("border","2px solid red");
             $("#principle-amount").css("border","2px solid red");
             $("#ldorloan").css("border","2px solid red");
             $("#submit").attr("disabled", true);
@@ -115,7 +113,6 @@ $(document).ready(function() {
             return false;
         }else{
             $("#days").css("border","");
-            $("#roi").css("border","");
             $("#principle-amount").css("border","");
             $("#ldorloan").css("border","");
             $("#submit").attr("disabled", false);
@@ -126,14 +123,16 @@ $(document).ready(function() {
         $.ajax({
             url: '../include/ajaxphpfiles/fetch_custname.php',
             type: 'POST',
-            data: { 'dor': dor ,'days': days, 'loancat': loancat, 'roi' : roi, 'principal' : principal},
+            data: { 'dor': dor ,'days': days, 'loancat': loancat, 'principal' : principal, 'installment' : installment},
             success: function(data) {
-                // console.log(data);
+                console.log(data);
                 var data = JSON.parse(data);
                 $("#ldorloan").val(data.ldorloan);
-                $("#total").val(data.total);
-                $("#installment").val(data.installment);
-                $("#roir").val(data.roir);
+                if(data.total == ""){
+                    $("#total").val("");
+                }else{
+                    $("#total").val(data.total);
+                }
             }
         });
     });
@@ -148,10 +147,16 @@ $(document).ready(function() {
         if(ldorloan < dor){
             $(this).css("border","2px solid red");
             $("#days").css("border","2px solid red");
+            $("#submit").attr("disabled", true);
+            $("#submit").css("color","#ff3333");
+            $("#submit").css("border","2px solid red");
             return false;
         }else{
             $(this).css("border","");
             $("#days").css("border","");
+            $("#submit").attr("disabled", false);
+            $("#submit").css("color","");
+            $("#submit").css("border","");
         }
 
         $.ajax({
@@ -167,7 +172,6 @@ $(document).ready(function() {
     //on change of type of loan fields changes
     $(document).on("change", "#loancategory", function(){
         var tol = $(this).val();
-
         $.ajax({
             url: '../include/ajaxphpfiles/fetch_custname.php',
             type: 'POST',

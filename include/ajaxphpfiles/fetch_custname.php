@@ -949,32 +949,31 @@ if(isset($_POST['dor'])){
 
   if(isset($_POST['days']) && isset($_POST['loancat'])){
     $loancat = $_POST['loancat'];
-    $roi = $_POST['roi'];
     $principal = $_POST['principal'];
     $result = [];
     if($loancat == 2){
       $dor = strtotime($_POST['dor']);
       $days = $_POST['days'] * 86400;
       $ldorloan = $dor + $days;
-      $result['ldorloan'] = date("Y-m-d",$ldorloan);
+      $ldorloan = date("Y-m-d",$ldorloan);
     }elseif($loancat == 3){
       $dor = strtotime($_POST['dor']);
       $weeks = $_POST['days'] * 7 * 86400;
       $ldorloan = $dor + $weeks;
-      $result['ldorloan'] = date("Y-m-d",$ldorloan);
+      $ldorloan = date("Y-m-d",$ldorloan);
     }elseif($loancat == 4){
       $dor = strtotime($_POST['dor']);
       $months = $_POST['days'] * 30 * 86400;
       $ldorloan = $dor + $months;
-      $result['ldorloan'] = date("Y-m-d",$ldorloan);
+      $ldorloan = date("Y-m-d",$ldorloan);
     }
-    $roirupees = ($roi/100) * $principal;
-    $total = ($roirupees * $_POST['days']) + $principal;
-    $result['total'] = $total;
-    $installment = $total / $_POST['days'];
-    $result['installment'] = $installment;
-    //roi(in %) to roi(in rupees)
-    $result['roir'] = ($_POST['roi']/100) * $_POST['principal'];
+    $result['ldorloan'] = $ldorloan;
+    if(isset($_POST['installment'])){
+      $installment = (int) $_POST['installment'];
+      $total = $_POST['days'] * $installment;
+      $result['total'] = $total;
+    }
+
     echo json_encode($result);
   }
 
@@ -995,7 +994,7 @@ if(isset($_POST['dor'])){
       $dor = strtotime($_POST['dor']);
         $ldorloan = strtotime($_POST['ldorloan']);
         $days = ($ldorloan - $dor) / 86400; // Convert seconds to days
-        $months = ceil($days / 7); // Round up to the nearest week
+        $months = ceil($days / 30); // Round up to the nearest month
         echo $months;
     }
   }
