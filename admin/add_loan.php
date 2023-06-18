@@ -6,39 +6,45 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $dorloan = $_POST['dorloan'];
     $loancategory = $_POST['loancategory'];
     $customerid = $_POST['customerid'];
-    // $customername = $_POST['customer-name'];
     $principle = $_POST['principle-amount'];
-    // $roi = $_POST['roi'];
     $comment = $_POST['comment'];
     $installment = $_POST['installment'];
-    $days_weeks_months = $_POST['days'];
     $timestamp = time();
-    // echo $ldol = $_POST['ldorloan'];
-    // var_dump($ldol);die;
+    
     if($loancategory == 1){
-        $total = NULL;
-        $ldol = NULL;
+        $roi = $_POST['roi'];
+
+        $sql = "INSERT INTO `loans` (`customer_id`, `principle`, `comment`, `dor`, `loan_type`, `installment`,`timestamp`,`roi`) VALUES ('$customerid', '$principle', '$comment', '$dorloan', '$loancategory', '$installment',$timestamp,$roi)";
+
+        $result = mysqli_query($conn, $sql);
+    
+        if ($result) {
+    
+            echo '<div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
+                <span class="font-medium">Loan Created!</span><a href="loans.php"> Click here to View Loan Page </a>
+              </div>';
+        } else {
+            die(mysqli_error($conn));
+        }
     }else{
         $total = $_POST['total'];
-        // $ldol = $_POST['ldorloan'];
+        $days_weeks_months = $_POST['days'];
         $ldol = $_POST['ldorloan'];
-        // echo $ldol;die;
-    }
-    // echo $ldol;die;
+
+        $sql = "INSERT INTO `loans` (`customer_id`, `principle`, `comment`, `dor`, `loan_type`, `installment`,`total`,`days_weeks_month`,`timestamp`,`ldol`) VALUES ('$customerid', '$principle', '$comment', '$dorloan', '$loancategory', '$installment',$total,$days_weeks_months,$timestamp,$ldol)";
+
+        $result = mysqli_query($conn, $sql);
     
-
-    $sql = "INSERT INTO `loans` (`customer_id`, `principle`, `comment`, `dor`, `loan_type`, `installment`,`total`,`days_weeks_month`,`timestamp`,`ldol`) VALUES ('$customerid', '$principle', '$comment', '$dorloan', '$loancategory', '$installment',$total,$days_weeks_months,$timestamp,$ldol)";
-
-    $result = mysqli_query($conn, $sql);
-
-    if ($result) {
-
-        echo '<div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
-            <span class="font-medium">Loan Created!</span><a href="loans.php"> Click here to View Loan Page </a>
-          </div>';
-    } else {
-        die(mysqli_error($conn));
+        if ($result) {
+    
+            echo '<div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
+                <span class="font-medium">Loan Created!</span><a href="loans.php"> Click here to View Loan Page </a>
+              </div>';
+        } else {
+            die(mysqli_error($conn));
+        }
     }
+    
 }
 ?>
 

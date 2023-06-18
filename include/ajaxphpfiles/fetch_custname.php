@@ -50,13 +50,13 @@ if (isset($_POST['loanid'])) {
   // GROUP BY c.id, l.id, c.name, c.fname, c.city, c.photo, l.principle, l.dor, l.loan_type, l.installment, l.roi
   // HAVING phone_count > 0;";
 
-  $sql = "SELECT c.id AS cust_id, l.id,l.days_weeks_month, c.name, c.fname, c.city, COUNT(c.phone) AS phone_count, COUNT(re.loan_id) AS emi_count, c.photo, l.principle, l.dor, l.loan_type,l.dor,l.ldol, l.installment, l.roi,SUM(re.	installment_amount) as amount_paid,
+  $sql = "SELECT c.id AS cust_id, l.id,l.days_weeks_month,l.total, c.name, c.fname, c.city, COUNT(c.phone) AS phone_count, COUNT(re.loan_id) AS emi_count, c.photo, l.principle, l.dor, l.loan_type,l.dor,l.ldol, l.installment, l.roi,SUM(re.	installment_amount) as amount_paid,
   (SELECT SUM(repay_amount) FROM principle_repayment WHERE loan_id = l.id) AS total_principal_paid
 FROM customers AS c
 JOIN loans AS l ON c.id = l.customer_id
 LEFT JOIN repayment AS re ON l.id = re.loan_id
 WHERE l.id = $loanid
-GROUP BY c.id, l.id, c.name, c.fname, c.city, c.photo, l.principle, l.dor, l.loan_type,l.dor,l.ldol, l.installment, l.roi
+GROUP BY c.id, l.id, c.name, c.fname, c.city, c.photo, l.principle,l.total, l.dor, l.loan_type,l.dor,l.ldol, l.installment, l.roi
 HAVING phone_count > 0";
 
   $result = mysqli_query($conn, $sql);
@@ -88,7 +88,7 @@ HAVING phone_count > 0";
       $remprincipal = $row['principle']- $row["total_principal_paid"];
       $reminstallmentamount = $remprincipal*($row["roi"]/100);
 
-      echo '<div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-5">
+      echo '<div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-1">
   <table class="w-full text-sm text-left font-bold text-gray-500 dark:text-gray-900">
   <tbody>
   <tr class="border-b border-gray-200 dark:border-gray-700">
@@ -128,7 +128,7 @@ HAVING phone_count > 0";
 
 if($loan_type==1){  
   echo '<tr class="border-b border-gray-200 dark:border-gray-700">
-  <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700"> Principal Amount Remaining </th>
+  <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700"> Loan Amount Remaining (शेष ऋण राशि)</th>
   <td class="px-6 py-2 border border-gray-700 text-gray-900">' . $remprincipal . ' &nbsp; &nbsp; &nbsp; | Principal Paid :- '.$row["total_principal_paid"].' | Total Principal :- '.$row["principle"].'
 
   &nbsp;<button id="openprincipalpaidtable" class="text-black font-bold py-2 px-4 rounded">
@@ -139,7 +139,7 @@ if($loan_type==1){
   </tr>';
 }else {
   echo '<tr class="border-b border-gray-200 dark:border-gray-700">
-  <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700"> Principal Amount </th>
+  <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700"> Loan Amount (ऋण की राशि)</th>
   <td class="px-6 py-2 border border-gray-700 text-gray-900">'.$row["principle"].'
   </td>
   </tr>';
@@ -147,22 +147,28 @@ if($loan_type==1){
   if($loan_type == 1){
     
     echo '<tr class="border-b border-gray-200 dark:border-gray-700">
-    <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700"> Installment Amount </th>
+    <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700"> Installment Amount (किस्त की राशि)</th>
     <td class="px-6 py-2 border border-gray-700">' . $reminstallmentamount . '
     </td>
     </tr>';
   }else{
     echo '<tr class="border-b border-gray-200 dark:border-gray-700">
-    <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700"> Installment Amount </th>
+    <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700"> Installment Amount (किस्त की राशि)</th>
     <td class="px-6 py-2 border border-gray-700">' . $row['installment'] . '
     </td>
     </tr>';
   }
 
+  echo '<tr class="border-b border-gray-200 dark:border-gray-700">
+  <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700">Total Amount Due (कुल शेष राशि)</th>
+  <td class="px-6 py-2 border border-gray-700 text-red-900">'.$row["total"].'
+  </td>
+  </tr>';
+
   if($loan_type != 1){
     
     echo '<tr class="border-b border-gray-200 dark:border-gray-700">
-    <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700"> Total Installment </th>
+    <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700"> Total Installment (कुल किश्त)</th>
     <td class="px-6 py-2 border border-gray-700">' . $row['days_weeks_month'] . '
 
     &nbsp;<button id="opentotalinstallmenttablemodal" class="text-black font-bold py-2 px-4 rounded">
@@ -175,13 +181,13 @@ if($loan_type==1){
 
 
       echo '<tr class="border-b border-gray-200 dark:border-gray-700">
-      <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700"> Total Installment Till Today </th>
+      <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700"> Total Installment Till Today (आज तक की कुल किश्त)</th>
       <td class="px-6 py-2 border border-gray-700">'. $totalInstallmentstilldate .'
       </td>
       </tr>
 
       <tr class="border-b border-gray-200 dark:border-gray-700">
-      <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700"> Paid Installments & Amount </th>
+      <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700"> Paid Installments & Amount (भारी किस्त और राशि)</th>
       <td class="px-6 py-2 border border-gray-700">'.$paidInstallments.'&nbsp;( Paid Amount: '. $row["amount_paid"].')
       
       &nbsp;<button id="openpaidinstallmentinfo" class="text-black font-bold py-2 px-4 rounded">
@@ -192,10 +198,14 @@ if($loan_type==1){
       </tr>
 
       <tr class="border-b border-gray-200 dark:border-gray-700">
-      <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700"> UnPaid Installments </th>
-      <td class="px-6 py-2 border border-gray-700">'.$unpaidInstallments.'
+      <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700"> UnPaid Installments (बिना भारी किस्त)</th>
+      <td class="px-6 py-2 border border-gray-700">'.$unpaidInstallments;
+      if($loan_type != 1){
 
-      &nbsp;<button id="openunpaidinstallmenttablemodal" class="text-black font-bold py-2 px-4 rounded">
+        echo "<span>( Total Amount Due (कुल शेष राशि):</span><span font-red>".$unpaidInstallments*$row['installment'].")</span>";
+      }
+
+      echo '&nbsp;<button id="openunpaidinstallmenttablemodal" class="text-black font-bold py-2 px-4 rounded">
       <i class="fa-solid fa-circle-info"></i>
       </button>
 
@@ -203,21 +213,30 @@ if($loan_type==1){
       </tr>
       </tr>
       <tr class="border-b border-gray-200 dark:border-gray-700">
-      <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700"> Repay </th>
+      <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700"> Repay Installment (किश्त चुकाएं)</th>
       <td class="px-6 py-2 border border-gray-700">
       <button id="openModalButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded">Pay Installment</button>
       </td>
       </tr>';
       if ($loan_type == 1) {
         echo '<tr class="border-b border-gray-200 dark:border-gray-700">
-        <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700"> Repay Principle </th>
+        <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700"> Repay Principle (मूलधन चुकाएं)</th>
         <td class="px-6 py-2 border border-gray-700">
         <button id="openModalprinciplerepay" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Pay Principle</button>
         </td>
         </tr>';
       }
-      echo '</tbody>
-      </table>
+      echo '
+      <tr class="border-b border-gray-200 dark:border-gray-700">
+        <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700"> Due Amount Till Today (बकाया राशि आज तक)</th>
+        <td class="px-6 py-2 border border-gray-700 text-red-900">' .$unpaidInstallments*$row['installment']. '
+        </td>
+      </tr>
+      
+      
+      
+      </tbody>
+      </table>  
 </div>';
 
 
@@ -267,13 +286,18 @@ if($loan_type==1){
                       
                       echo '" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required>
                   </div>
+
+                  <div>
+                      <label for="comment_repay" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-900">Comment</label>
+                      <input type="text" name="comment_repay" id="comment_repay" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required>
+                  </div>
+
                   <div id="repaymentalert"></div>
                   <button type="submit" id="repaysubmitbtnn" class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800">
                       Pay Installment
                   </button>
               </div>
           </form>
-  
 </div>
 </div>';
 
@@ -314,6 +338,11 @@ echo '<div id="myModalrepayprinciple" class="modal hidden fixed inset-0 flex ite
                       <label for="principle-amount-repay" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-900">Principle Amount</label>
                       <input type="number" name="principle-amount-repay" id="principle-amount-repay" value="" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required>
                   </div>
+                  <div>
+                      <label for="comment_prirepay" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-900">Comment</label>
+                      <input type="text" name="comment_prirepay" id="comment_prirepay" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required>
+                  </div>
+
                   <div id="principlerepayalert"></div>
                   <button type="submit" id="repay-principle-submitbtnn" class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800">
                       Pay Principle
@@ -888,8 +917,9 @@ if (isset($_POST['dorepay']) && isset($_POST['loan_id']) && isset($_POST['instal
   $dorepay = $_POST['dorepay'];
   $loan_id = $_POST['loan_id'];
   $installmentamt = $_POST['installmentamt'];
+  $comment = $_POST['comment'];
 
-  $sql = "INSERT INTO `repayment` (`loan_id`, `DORepayment`, `installment_amount`) VALUES ('$loan_id', '$dorepay', '$installmentamt')";
+  $sql = "INSERT INTO `repayment` (`loan_id`, `DORepayment`, `installment_amount`,`comment_repay`) VALUES ('$loan_id', '$dorepay', '$installmentamt','$comment')";
   $result = mysqli_query($conn,$sql);
   if($result){
     echo '<div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
@@ -909,8 +939,9 @@ if (isset($_POST['dorepay']) && isset($_POST['loan_id']) && isset($_POST['princi
   $dorepay = $_POST['dorepay'];
   $loan_id = $_POST['loan_id'];
   $principleamt = $_POST['principleamt'];
+  $comment = $_POST['comment'];
 
-  $sql = "INSERT INTO `principle_repayment` (`loan_id`, `dorepayment`, `repay_amount`) VALUES ('$loan_id', '$dorepay', '$principleamt')";
+  $sql = "INSERT INTO `principle_repayment` (`loan_id`, `dorepayment`, `repay_amount`,`comment_prirepay`) VALUES ('$loan_id', '$dorepay', '$principleamt','$comment')";
   $result = mysqli_query($conn,$sql);
   if($result){
     echo '<div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
