@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Loans</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
 
 </head>
@@ -12,7 +13,7 @@
     <?php
     include ("../include/navbar.php");
     ?>
-    <button href="add_user.php" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded"><a href="add_loan.php">Add loan</a></button>
+    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded"><a href="add_loan.php">Add loan</a></button>
     <h1>fetch loans here</h1>
 
     <div class="relative" id="pagination-result">

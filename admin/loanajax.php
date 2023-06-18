@@ -4,7 +4,7 @@ require_once("pagination.class.php");
 
 $perPage = new PerPage();
 
-$sql = "SELECT * from loans";
+$sql = "SELECT * from loans ORDER BY id DESC";
 $paginationlink = "loanajax.php?page=";
 
 $page = 1;
@@ -37,6 +37,9 @@ $output .= '<table class="w-full text-sm text-left text-gray-400">
 				S.no.
 			</th>
 			<th scope="col" class="px-6 py-3">
+				Loan Id
+			</th>
+			<th scope="col" class="px-6 py-3">
 				Loan type
 			</th>
 			<th scope="col" class="px-6 py-3">
@@ -64,36 +67,38 @@ foreach ($faq as $k => $v) {
 	$i++;
 	$output .= "<tr class='border-b bg-gray-800 border-gray-700'>
 		<th>" . $i . "</th>
-		<td>" . $faq[$k]['loan_type'] . "</td>
-		<td>" . $faq[$k]['customer_id'] . "</td>
-		<td>" . $faq[$k]['customer_name'] . "</td>
-		<td>" . $faq[$k]['principle'] . "</td>
+		<td>" . $faq[$k]['id'] . "</td>";
+		if($faq[$k]['loan_type'] == 1){
+			$output .= "<td>CC</td>";
+		}
+		if($faq[$k]['loan_type'] == 2){
+			$output .= "<td>Daily</td>";
+		}
+		if($faq[$k]['loan_type'] == 3){
+			$output .= "<td>Weekly</td>";
+		}
+		if($faq[$k]['loan_type'] == 4){
+			$output .= "<td>Monthly</td>";
+		}
+	$output .= "
+		<td>" . $faq[$k]['customer_id'] . "</td>";
+		$userid = $faq[$k]['customer_id'];
+		$sql = "SELECT name FROM customers WHERE id = $userid";
+		$result = mysqli_query($conn,$sql);
+		if (mysqli_num_rows($result) > 0) {
+			$row = mysqli_fetch_assoc($result);
+			$name = $row['name'];
+			$output .= "<td>" . $row['name'] . "</td>";
+		}
+	$output .= "<td>" . $faq[$k]['principle'] . "</td>
 		<td>" . $faq[$k]['installment'] . "</td>
 		<td>" . $faq[$k]['dor'] . "</td>
-		<td>" . '<button> <a href="update.php?updateSno=' . $faq[$k]['id'] . '" > Update</a></button> <button><a href="delete.php?deleteSno=' . $faq[$k]['id'] . '" > Delete </a> </button></td>
-			</tr>';
+		<td>" . '<button> <a href="add_loan.php?lid=' . $faq[$k]['id'] . '" > Update</a></button> <button><a href="delete.php?lid=' . $faq[$k]['id'] . '" > Delete </a> </button></td>
+		</tr>';
 }
 $output .= '</tbody>
-        </table>';
+       		</table>';
 if (!empty($perpageresult)) {
 	$output .= '<div id="pagination grid h-screen place-items-center">' . $perpageresult . '</div>';
 }
 print $output;
-// foreach ($faq as $k => $v) {
-// 	$i++;
-// 	$output .= "<tr class='border-b bg-gray-800 border-gray-700'>
-// 		<th>" . $i . "</th>
-// 		<td>";
-//     if($faq[$k]['loan_type'] == 1){ $output .= "CC";}
-//     if($faq[$k]['loan_type'] == 2){ $output .= "Daily";}
-//     if($faq[$k]['loan_type'] == 3){ $output .= "Weekly";}
-//     if($faq[$k]['loan_type'] == 4){ $output .= "Monthly";}
-//     $output = "</td>
-// 		<td>" . $faq[$k]['customer_id'] . "</td>
-// 		<td>" . $faq[$k]['customer_name'] . "</td>
-// 		<td>" . $faq[$k]['principle'] . "</td>
-// 		<td>" . $faq[$k]['installment'] . "</td>\
-// 		<td>" . $faq[$k]['dor'] . "</td>
-// 		<td>" . '<button> <a href="update.php?updateSno=' . $faq[$k]['id'] . '" > Update</a></button> <button><a href="delete.php?deleteSno=' . $faq[$k]['id'] . '" > Delete </a> </button></td>
-// 			</tr>';
-// }

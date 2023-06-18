@@ -2,6 +2,13 @@
 
 require_once("../include/connect.php");
 
+if(isset($_GET['lid'])){
+    $id = $_GET['lid'];
+    $sql2 = "SELECT * FROM loans WHERE id = $id";
+    $result = mysqli_query($conn,$sql2);
+    $loan = mysqli_fetch_assoc($result);
+}
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $dorloan = $_POST['dorloan'];
     $loancategory = $_POST['loancategory'];
@@ -74,20 +81,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
                     <div class="sm:col-span-2">
                         <label for="dorloan" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date of Registration</label>
-                        <input type="date" name="dorloan" id="dorloan" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required value="<?php echo date("Y-m-d"); ?>">
+                        <input type="date" name="dorloan" id="dorloan" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required value="<?php if(isset($_GET['lid'])){echo $loan['dor'];} else{echo date("Y-m-d");} ?>">
                     </div>
                     <div>
                         <label for="customerid" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Customer ID</label>
-                        <input type="number" name="customerid" id="customerid" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required="">
+                        <input type="number" name="customerid" id="customerid" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required="" value="<?php if(isset($_GET['lid'])){echo $loan['customer_id'];} ?>">
                     </div>
                     <div>
                         <label for="loancategory" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select Loan Type</label>
                         <select id="loancategory" name="loancategory" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                            <option selected="">Select Loan Type</option>
-                            <option value="1">CC Loan</option>
-                            <option value="2">Daily Loan</option>
-                            <option value="3">Weekly Loan</option>
-                            <option value="4">Monthly Loan</option>
+                            <option >Select Loan Type</option>
+                            <option value="1" <?php if(isset($_GET['lid'])){ if($loan['loan_type'] == 1){echo "selected";}} ?>>CC Loan</option>
+                            <option value="2" <?php if(isset($_GET['lid'])){ if($loan['loan_type'] == 2){echo "selected";}} ?>>Daily Loan</option>
+                            <option value="3" <?php if(isset($_GET['lid'])){ if($loan['loan_type'] == 3){echo "selected";}} ?>>Weekly Loan</option>
+                            <option value="4" <?php if(isset($_GET['lid'])){ if($loan['loan_type'] == 4){echo "selected";}} ?>>Monthly Loan</option>
                         </select>
                     </div>
                     <div class="sm:col-span-2">
@@ -131,6 +138,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <button type="submit" name="submit" id="submit" class="w-full text-white bg-blue-500 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-primary-600 hover:bg-primary-700 focus:ring-primary-800">
                         Add Loan
                     </button>
+                    <?php
+                        if(isset($_GET['lid'])){
+                            echo '<a href="loans.php" class ="w-full text-white bg-blue-500 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-primary-600 hover:bg-primary-700 focus:ring-primary-800">Cancel</a>';
+                        }
+                    ?>
                 </div>
             </form>
         </div>
