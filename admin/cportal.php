@@ -13,7 +13,7 @@
     date_default_timezone_set("Asia/Calcutta");
     include "../include/connect.php";
     $sql = "SELECT l.*,c.name,c.fname,c.phone,c.sname,c.city FROM loans as l
-    JOIN customers as c on c.id=l.customer_id;";
+    JOIN customers as c on c.id=l.customer_id where l.status = 1;";
     $result = mysqli_query($conn,$sql);
     if($result){
         if (mysqli_num_rows($result) > 0) {
@@ -51,7 +51,7 @@
                         <div class="pt-0.5"><span class="font-medium">Phone:</span> <span class="font-medium text-white">'.$row['phone'].'</span> <br/></div>
                         <div class="pt-0.5 pb-1"><span class="font-medium">Installment Amount:</span> <span class="font-medium text-white">'.$row['installment'].'</span> <br/> </div>
 
-                        <button type="button" class="text-gray-900 bg-white hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-sm px-5 py-2.5 mr-2 mb-2 bg-gray-800 hover:bg-white hover:text-blue-900 focus:ring-gray-700 border-gray-700"><a href="repayment.php"> Repayment Page</a></button>
+                        <a href="repayment.php"><button type="button" class="text-gray-900 bg-white hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-sm px-5 py-2.5 mr-2 mb-2 bg-gray-800 hover:bg-white hover:text-blue-900 focus:ring-gray-700 border-gray-700">Repayment Page</button></a>
 
                         
                          </div>
@@ -87,7 +87,7 @@
                         <div class="pt-0.5"><span class="font-medium">Phone:</span> <span class="font-medium text-white">'.$row['phone'].'</span> <br/></div>
                         <div class="pt-0.5 pb-1"><span class="font-medium">Installment Amount:</span> <span class="font-medium text-white">'.$row['installment'].'</span> <br/> </div>
 
-                        <button type="button" class="text-gray-900 bg-white hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-sm px-5 py-2.5 mr-2 mb-2 bg-gray-800 hover:bg-white hover:text-blue-900 focus:ring-gray-700 border-gray-700"><a href="repayment.php"> Repayment Page</a></button>
+                        <a href="repayment.php"><button type="button" class="text-gray-900 bg-white hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-sm px-5 py-2.5 mr-2 mb-2 bg-gray-800 hover:bg-white hover:text-blue-900 focus:ring-gray-700 border-gray-700"> Repayment Page</button></a>
 
                         
                          </div>
