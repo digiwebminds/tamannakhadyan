@@ -4,7 +4,7 @@ require_once("pagination.class.php");
 
 $perPage = new PerPage();
 
-$sql = "SELECT * FROM customers WHERE deleted = 0";
+$sql = "SELECT * FROM customers WHERE deleted = 0 ORDER BY id DESC";
 $paginationlink = "custajax.php?page=";
 
 $page = 1;
