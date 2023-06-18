@@ -51,16 +51,17 @@ $(document).ready(function () {
         var dorepay = $("#dorepay").val();
         var loan_id = $("#loan_id").val();
         var installmentamt = $("#install-amount").val();
+        var comment = $("#comment_repay").val();
 
         $.ajax({
             url: '../include/ajaxphpfiles/fetch_custname.php',
             type: 'POST',
-            data: { 'dorepay': dorepay, 'loan_id': loan_id, 'installmentamt': installmentamt},
+            data: { 'dorepay': dorepay, 'loan_id': loan_id, 'installmentamt': installmentamt,'comment': comment},
             success: function (data) {
                 $("#repaymentalert").html(data);
                 window.setTimeout(function(){
                     $("#myModal").addClass("hidden");
-                }, 1500);
+                }, 2000);
             }
         });
     })
@@ -71,16 +72,17 @@ $(document).ready(function () {
         var dorepay = $("#dorepay-principal").val();
         var loan_id = $("#loan_id").val();
         var principleamt = $("#principle-amount-repay").val();
+        var comment = $("#comment_prirepay").val();
 
         $.ajax({
             url: '../include/ajaxphpfiles/fetch_custname.php',
             type: 'POST',
-            data: { 'dorepay': dorepay, 'loan_id': loan_id, 'principleamt': principleamt},
+            data: { 'dorepay': dorepay, 'loan_id': loan_id, 'principleamt': principleamt,'comment': comment},
             success: function (data) {
                 $("#principlerepayalert").html(data);
                 window.setTimeout(function(){
                     $("#myModalrepayprinciple").addClass("hidden");
-                }, 1500);
+                }, 2000);
             }
         });
     })

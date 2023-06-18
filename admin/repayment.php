@@ -32,7 +32,7 @@
     ?>
     <section class="bg-white dark:bg-gray-900">
         <div class="py-4 px-4 mx-auto max-w-2xl lg:py-2">
-            <!--      <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Enter</h2> -->
+            <!--<h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Enter</h2> -->
             <form action="" method="POST">
                 <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
                     <div class="sm:col-span-2 relative">
@@ -49,7 +49,9 @@
 
     <!-- <button id="openModalButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Open Modal</button> -->
 
-
+    <?php 
+    include "../include/footer.php"; 
+    ?>
 </body>
 
 </html>

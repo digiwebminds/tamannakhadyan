@@ -23,13 +23,22 @@ if($result){
             </div>
             </div>
             ';
-            $sql ="SELECT c.name,c.fname,c.phone, c.photo,c.gaddress,l.* FROM customers as c
-           JOIN loans as l ON c.id = l.customer_id where c.id = $custid";
+            $sql ="SELECT c.id AS cust_id, l.id,l.days_weeks_month,l.total, c.name, c.fname, c.city, COUNT(c.phone) AS phone_count, COUNT(re.loan_id) AS emi_count, c.photo, l.principle, l.dor, l.loan_type,l.dor,l.ldol, l.installment, l.roi,SUM(re.	installment_amount) as amount_paid,
+            (SELECT SUM(repay_amount) FROM principle_repayment WHERE loan_id = l.id) AS total_principal_paid
+          FROM customers AS c
+          JOIN loans AS l ON c.id = l.customer_id
+          LEFT JOIN repayment AS re ON l.id = re.loan_id
+          WHERE c.id = $custid
+          GROUP BY c.id, l.id, c.name, c.fname, c.city, c.photo, l.principle,l.total, l.dor, l.loan_type,l.dor,l.ldol, l.installment, l.roi
+          HAVING phone_count > 0";
+          $paidamountsum = [];
+          $totalprincipleamount = [];
+          $totalamountduetilldate = [];
            $result = mysqli_query($conn,$sql);
            if($result){
             echo '<div class="relative overflow-x-auto">
-            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <table class="w-full text-sm text-left text-gray-400">
+                <thead class="text-xs uppercase bg-gray-700 text-white">
                     <tr>
                         <th scope="col" class="px-6 py-3">
                             Loan ID
@@ -42,6 +51,9 @@ if($result){
                         </th>
                         <th scope="col" class="px-6 py-3">
                             Principal (Loan Amount)
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Total Amount (Principal + Interest)
                         </th>
                         <th scope="col" class="px-6 py-3">
                             No. of Installment
@@ -60,9 +72,11 @@ if($result){
                 <tbody>';
             while($row = mysqli_fetch_assoc($result)){
             $loan_type = $row['loan_type'];
+            $paidamountsum[] = $row['amount_paid'];
+            $totalprincipleamount[] = $row['principle'];
                 echo '
-                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            <tr class="border-b bg-gray-800 border-gray-700">
+                                <th scope="row" class="px-6 py-4 font-medium text-white whitespace-nowrap ">
                                     '.$row['id'].'
                                 </th>
                                 <td class="px-6 py-4">
@@ -71,38 +85,100 @@ if($result){
                                 <td class="px-6 py-4">';
                                 if ($loan_type == 1) {
                                     echo 'CC Loan';
-                                    // $frequency = 1;
                                   } elseif ($loan_type == 2) {
                                     echo 'Daily Loan';
-                                    // $frequency = 1;
                                   } elseif ($loan_type == 3) {
                                     echo 'Weekly Loan';
-                                    // $frequency = 7;
                                   } else {
                                     echo 'Monthly Loan';
-                                    // $frequency = 30;
                                   }
                                 echo '</td>
                                 <td class="px-6 py-4">
                                 '.$row['principle'].' 
-                                </td>
-                                <td class="px-6 py-4">
-                                '.$row['days_weeks_month'].'
-                                </td>
-                                <td class="px-6 py-4">
+                                </td>';
+                                if($loan_type != 1 ){
+                                    echo '<td class="px-6 py-4">
+                                    '.$row['total'].' 
+                                    </td>';
+                                }else{
+                                    echo '<td class="px-6 py-4">
+                                    Not Applicable 
+                                    </td>';
+                                } 
+
+                                if ($loan_type != 1){
+                                     echo '<td class="px-6 py-4">
+                                    '.$row['days_weeks_month'].'
+                                    </td>';
+                                }else {
+                                    echo '<td class="px-6 py-4">
+                                    Not Applicable 
+                                    </td>';
+                                }
+                                echo '<td class="px-6 py-4">
                                 '.$row['installment'].'
                                 </td>
-                            </tr>          
-                        ';
+                                <td class="px-6 py-4">
+                                '.$row['amount_paid'].'
+                                </td>
+                                <td class="px-6 py-4">';
+                                $startDate = strtotime($row['dor']);
+                                $today = strtotime(date('Y-m-d'));
+                                if ($loan_type == 1) {
+                                    $frequency = 1;
+                                }elseif ($loan_type == 2) {
+                                    $frequency = 1;
+                                } elseif ($loan_type == 3) {
+                                    $frequency = 7;
+                                } else {
+                                    $frequency = 30;
+                                }
+                                $totalInstallmentstilldate = floor(($today - $startDate) / (60 * 60 * 24 * $frequency)); 
+                                $currentDate = $startDate;
+                                $paidInstallments = $row['emi_count'];
+                                $unpaidInstallments = $totalInstallmentstilldate - $paidInstallments;
+
+                                // $remprincipal = $row['principle']- $row["total_principal_paid"];
+                                // $reminstallmentamount = $remprincipal*($row["roi"]/100);
+
+                                echo $totalInstallmentstilldate*$row['installment'] - $row['amount_paid'];
+                                //some changes may needs to calculate for CC loan type
+
+                                $totalamountduetilldate[] = ($totalInstallmentstilldate*$row['installment'] - $row['amount_paid']);
+                                
+                                echo '</td>
+                                </tr>';
             }
+            // print_r($paidamountsum);
             echo '</tbody>
             </table>
+            <div class="font-bold border border-black p-4 md:p-8">
+            
+            <p class="text-red-900">Total Amount Due till today (आज तक): '.array_sum($totalamountduetilldate).'</p>
+            <p>Total Loan Amount: '.array_sum($totalprincipleamount).'</p>
+            </div>
+
         </div>';
            }
         }
+    }else {
+        echo '<div class="flex p-4 mb-4 text-sm text-yellow-800 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300" role="alert">
+    <svg aria-hidden="true" class="flex-shrink-0 inline w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
+    <span class="sr-only">Info</span>
+    <div>
+      <span class="font-medium">Loan Not Found!</span> Enter Correct CustomerID !
+    </div>
+  </div>';
     }
-}
+    }
+
+
+
+
+include "../footer.php"; 
 
 }
+
+
 
 ?>
