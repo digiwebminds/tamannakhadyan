@@ -62,7 +62,7 @@ HAVING phone_count > 0";
             $totalinstallmentamountpaidtilldate = [];
             $totalprincipalamountdue =[];
             $totalinstallmentamount = [];
-
+    $i = 1;
     while ($row = mysqli_fetch_assoc($result)) {
       $loan_type = $row['loan_type'];
 
@@ -102,7 +102,7 @@ HAVING phone_count > 0";
 
       echo '<tr class="border-b bg-gray-800 border-gray-700">
       <td class="px-6 py-4">
-          1
+      '.$i++.'
       </td>
       <td class="px-6 py-4">
           '.$row['id'].'
@@ -243,7 +243,7 @@ HAVING phone_count > 0";
             $totalinstallmentamountpaidtilldate = [];
             $totalprincipalamountdue =[];
             $totalinstallmentamount = [];
-
+    $i = 1;
     while ($row = mysqli_fetch_assoc($result)) {
       $loan_type = $row['loan_type'];
 
@@ -283,7 +283,7 @@ HAVING phone_count > 0";
 
       echo '<tr class="border-b bg-gray-800 border-gray-700">
       <td class="px-6 py-4">
-          1
+          '.$i++.'
       </td>
       <td class="px-6 py-4">
           '.$row['id'].'
@@ -420,7 +420,7 @@ HAVING phone_count > 0";
             $totalinstallmentamountpaidtilldate = [];
             $totalprincipalamountdue =[];
             $totalinstallmentamount = [];
-
+    $i = 1;
     while ($row = mysqli_fetch_assoc($result)) {
       $loan_type = $row['loan_type'];
 
@@ -460,7 +460,7 @@ HAVING phone_count > 0";
 
       echo '<tr class="border-b bg-gray-800 border-gray-700">
       <td class="px-6 py-4">
-          1
+      '.$i++.'
       </td>
       <td class="px-6 py-4">
           '.$row['id'].'
@@ -595,7 +595,7 @@ HAVING phone_count > 0";
             $totalinstallmentamountpaidtilldate = [];
             $totalprincipalamountdue =[];
             $totalinstallmentamount = [];
-
+    $i = 1;
     while ($row = mysqli_fetch_assoc($result)) {
       $loan_type = $row['loan_type'];
 
@@ -635,7 +635,7 @@ HAVING phone_count > 0";
 
       echo '<tr class="border-b bg-gray-800 border-gray-700">
       <td class="px-6 py-4">
-          1
+      '.$i++.'
       </td>
       <td class="px-6 py-4">
           '.$row['id'].'

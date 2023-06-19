@@ -81,7 +81,7 @@ if($result){
             $totalinstallmentamountduetilldate = [];
             $totalinstallmentamount =[];
             $count = [];
-
+            $i= 1;
             while($row = mysqli_fetch_assoc($result)){
             $loan_type = $row['loan_type'];
             $paidamountsum[] = $row['amount_paid'];
@@ -90,7 +90,7 @@ if($result){
             $count[] =  $row['phone_count'];
                 echo '<tr class="border-b bg-gray-800 border-gray-700">
                                 <th scope="row" class="px-6 py-4 font-medium text-white whitespace-nowrap ">
-                                 1
+                                 '. $i++ .'
                                   </th>
                                 <th scope="row" class="px-6 py-4 font-medium text-white whitespace-nowrap ">
                                     '.$row['id'].'

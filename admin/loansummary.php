@@ -60,9 +60,14 @@ if (mysqli_num_rows($result) > 0) {
     $remprincipal = $row['principle']- $row["total_principal_paid"];
     $reminstallmentamount = $remprincipal*($row["roi"]/100);
 
-    echo '<div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-1">
+    echo '<div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-1 mb-4">
 <table class="w-full text-sm text-left font-bold text-gray-500 dark:text-gray-900">
 <tbody>
+<tr class="border-b border-gray-200 dark:border-gray-700">
+      <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700"> Loan ID </th>
+      <td class="px-6 py-2 border border-gray-700">' . $row['id'] . '
+      </td>
+    </tr>
 <tr class="border-b border-gray-200 dark:border-gray-700">
       <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700"> Loan Type </th>
       <td class="px-6 py-2 border border-gray-700">' . $loanname . '
@@ -101,11 +106,7 @@ if (mysqli_num_rows($result) > 0) {
 if($loan_type==1){  
 echo '<tr class="border-b border-gray-200 dark:border-gray-700">
 <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700"> Loan Amount Remaining (शेष ऋण राशि)</th>
-<td class="px-6 py-2 border border-gray-700 text-gray-900">' . $remprincipal . ' &nbsp; &nbsp; &nbsp; | Principal Paid :- '.$row["total_principal_paid"].' | Total Principal :- '.$row["principle"].'
-
-&nbsp;<button id="openprincipalpaidtable" class="text-black font-bold py-2 px-4 rounded">
-<i class="fa-solid fa-circle-info"></i>
-</button>
+<td class="px-6 py-2 border border-gray-700 text-gray-900">' . $remprincipal . ' &nbsp; &nbsp; &nbsp; | Principal Paid : '.$row["total_principal_paid"].' | Total Principal : '.$row["principle"].'
 
 </td>
 </tr>';
@@ -130,12 +131,13 @@ if($loan_type == 1){
   </td>
   </tr>';
 }
-
+if($loan_type != 1){
 echo '<tr class="border-b border-gray-200 dark:border-gray-700">
 <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700">Total Amount Due (कुल शेष राशि)</th>
 <td class="px-6 py-2 border border-gray-700 text-red-900">'.$row["total"].'
 </td>
 </tr>';
+}
 
 if($loan_type != 1){
   
@@ -183,35 +185,32 @@ if($loan_type != 1){
     </table>  
 </div>';
 
+echo '<button type="button" id="viewallemi" class="text-black bg-gradient-to-r from-cyan-400 via-cyan-500 to-cyan-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Click Here to View all EMI</button>';
+
 
 //Total EMI with date table modal here
-//have to do some work here
-
-echo '<div id="totalinstallmenttableModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
-<div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
-
-<div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
-<!-- Modal Content -->
-<div class="modal-content py-4 text-left px-6">
-  <!-- Close Button/Icon -->
-
-  <button id="closetotalinstallmenttableModal" class="close-button border bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded">
-  <i class="fa-solid fa-xmark"></i>
-</button>
-
-  <table class="text-left w-full">
-<thead class="bg-black flex text-white w-full">
-  <tr class="flex w-full">
-    <th class="p-4 w-1/2">Date</th>
-    <th class="p-4 w-1/2">Installment</th>
-  </tr>
-</thead>
-<!-- Remove the nasty inline CSS fixed height on production and replace it with a CSS class — this is just for demonstration purposes! -->
-<tbody class="bg-grey-light flex flex-col items-center justify-between overflow-y-scroll w-full" style="height: 30vh;">
-  ';
 
 
-require_once "../connect.php";
+echo '<div id="toggleemitable">
+<div class="relative overflow-x-auto mt-2 mb-4">
+            <table class="w-full text-sm text-left text-gray-400">
+                <thead class="text-medium uppercase bg-gray-700 text-white">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            S.No.
+                         </th>
+                        <th scope="col" class="px-6 py-3">
+                            Date of Loan
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Status
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>';
+
+
+require_once "../include/connect.php";
 if($loan_type == 2){
 
 // Fetch loan start date and last date from the loans table
@@ -262,19 +261,28 @@ if (array_key_exists($date, $alldates)) {
 }
 }
 // Display all payment dates with Status
+$i = 1;
 foreach ($alldates as $date => $status) {
 // echo $date . "<br>";
-echo '<tr class="flex w-full">
-<td class="p-4 w-1/2 font-bold">'.$date.'</td>';
+echo '<tr class="border-b bg-gray-800 border-gray-700">
+<th scope="row" class="px-6 py-4 font-medium text-white whitespace-nowrap ">'. $i++ .' </th>
+<td class="px-6 py-4">'.$date.'</td>';
 if($status == 'Pending'){
-  echo '<td class="p-4 w-1/2 text-red-900 font-bold">'.$status.'</td></tr>';
+  echo '<td class="px-6 py-4 text-red-400 font-bold">'.$status.'</td></tr>';
 }elseif($status == 'Coming'){
-  echo '<td class="p-4 w-1/2 text-yellow-900 font-bold">'.$status.'</td></tr>';
+  echo '<td class="px-6 py-4 text-yellow-400 font-bold">'.$status.'</td></tr>';
 }elseif($status == 'Paid'){
-  echo '<td class="p-4 w-1/2 text-green-900 font-bold">'.$status.'</td></tr>';
+  echo '<td class="px-6 py-4 text-green-400 font-bold">'.$status.'</td></tr>';
+}
+
 }
 }
-}elseif($loan_type ==3){
+
+
+
+
+
+elseif($loan_type ==3){
 // Fetch loan start date and last date from the loans table
 $sql4 = "SELECT dor, ldol FROM loans WHERE id =$loanid";
 $result4 = mysqli_query($conn, $sql4);
@@ -323,19 +331,28 @@ if (array_key_exists($date, $alldates)) {
 }
 }
 // Display all payment dates with Status
+$i = 1;
 foreach ($alldates as $date => $status) {
 // echo $date . "<br>";
-echo '<tr class="flex w-full">
-<td class="p-4 w-1/2 font-bold">'.$date.'</td>';
+echo '<tr class="border-b bg-gray-800 border-gray-700">
+<th scope="row" class="px-6 py-4 font-medium text-white whitespace-nowrap ">'. $i++ .' </th>
+<td class="px-6 py-4">'.$date.'</td>';
 if($status == 'Pending'){
-  echo '<td class="p-4 w-1/2 text-red-900 font-bold">'.$status.'</td></tr>';
+  echo '<td class="px-6 py-4 text-red-400 font-bold">'.$status.'</td></tr>';
 }elseif($status == 'Coming'){
-  echo '<td class="p-4 w-1/2 text-yellow-900 font-bold">'.$status.'</td></tr>';
+  echo '<td class="px-6 py-4 text-yellow-400 font-bold">'.$status.'</td></tr>';
 }elseif($status == 'Paid'){
-  echo '<td class="p-4 w-1/2 text-green-900 font-bold">'.$status.'</td></tr>';
+  echo '<td class="px-6 py-4 text-green-400 font-bold">'.$status.'</td></tr>';
 }
 }
-}elseif($loan_type == 4){
+}
+
+
+
+
+
+
+elseif($loan_type == 4){
 // Fetch loan start date and last date from the loans table
 $sql4 = "SELECT dor, ldol FROM loans WHERE id =$loanid";
 $result4 = mysqli_query($conn, $sql4);
@@ -384,44 +401,35 @@ if (array_key_exists($date, $alldates)) {
 }
 }
 // Display all payment dates with Status
+$i = 1;
 foreach ($alldates as $date => $status) {
 // echo $date . "<br>";
-echo '<tr class="flex w-full">
-<td class="p-4 w-1/2 font-bold">'.$date.'</td>';
+echo '<tr class="border-b bg-gray-800 border-gray-700">
+<th scope="row" class="px-6 py-4 font-medium text-white whitespace-nowrap ">'. $i++ .' </th>
+<td class="px-6 py-4">'.$date.'</td>';
 if($status == 'Pending'){
-  echo '<td class="p-4 w-1/2 text-red-900 font-bold">'.$status.'</td></tr>';
+  echo '<td class="px-6 py-4 text-red-400 font-bold">'.$status.'</td></tr>';
 }elseif($status == 'Coming'){
-  echo '<td class="p-4 w-1/2 text-yellow-900 font-bold">'.$status.'</td></tr>';
+  echo '<td class="px-6 py-4 text-yellow-400 font-bold">'.$status.'</td></tr>';
 }elseif($status == 'Paid'){
-  echo '<td class="p-4 w-1/2 text-green-900 font-bold">'.$status.'</td></tr>';
+  echo '<td class="px-6 py-4 text-green-400 font-bold">'.$status.'</td></tr>';
 }
+
 }
+
 }
 echo'</tbody>
 </table>
 </div>
 </div>
 </div>
+</div>
 </div>';
-
 
 }
-} else {
-  echo '<div class="flex p-4 mb-4 text-sm text-yellow-800 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300" role="alert">
-  <svg aria-hidden="true" class="flex-shrink-0 inline w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
-  <span class="sr-only">Info</span>
-  <div>
-    <span class="font-medium">Loan Not Found!</span> Enter Correct LoanID !
-  </div>
-</div>';
 }
 }
 ?>
-
-
-
-
-
 
 
 <?php 
