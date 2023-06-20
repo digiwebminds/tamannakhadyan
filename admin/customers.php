@@ -1,3 +1,9 @@
+<?php
+session_start();
+if (!isset($_SESSION['username'])){
+    header('location:adminlogin.php');
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -16,9 +22,10 @@
     <?php
     include "../include/navbar.php";
     ?>
-    <button href="add_user.php" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded"><a href="add_user.php">Add User</a></button>
-
-    <h1>List of Customers</h1>
+    <button href="add_user.php" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-1 border border-blue-700 rounded"><a href="add_user.php">Add User</a></button>
+<div class="bg-purple-500 item-center text-white font-bold text-xl p-3 border-gray-800 rounded">
+<h1>List of Customers</h1>
+</div>
 
     <div class="relative" id="pagination-result">
         <div id="overlay">

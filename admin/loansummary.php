@@ -1,3 +1,9 @@
+<?php
+session_start();
+if (!isset($_SESSION['username'])){
+    header('location:adminlogin.php');
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -205,13 +211,93 @@ echo '<div id="toggleemitable">
                         <th scope="col" class="px-6 py-3">
                             Status
                         </th>
+                        <th scope="col" class="px-6 py-3">
+                            Installment Amount
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Comment
+                        </th>
                     </tr>
                 </thead>
                 <tbody>';
 
 
 require_once "../include/connect.php";
-if($loan_type == 2){
+if($loan_type == 1){
+
+  // Fetch loan start date and last date from the loans table
+  $sql4 = "SELECT dor, ldol FROM loans WHERE id =$loanid";
+  $result4 = mysqli_query($conn, $sql4);
+  
+  $row4 = mysqli_fetch_assoc($result4);
+  
+  $loanStartDate = $row4['dor'];
+  $loanLastDate = $row4['ldol'];
+  
+  
+  // Fetch installment payment dates from the repayment table
+  $sql5 = "SELECT DORepayment,installment_amount,comment_repay FROM repayment WHERE loan_id = $loanid";
+  $result5 = mysqli_query($conn, $sql5);
+  $paidDates = [];
+  while ($row5 = mysqli_fetch_assoc($result5)) {
+  $paidDates[] = $row5['DORepayment'];
+  }
+  
+  // Calculate the missing payment dates
+  $startDate = strtotime($loanStartDate);
+  $startDate += 86400;   // adding 1 days to start days to exclude loan given date 
+  $endDate = strtotime($loanLastDate);
+  // $enddate2 = $endDate + 86400; // adding 1 day to include last date
+  $alldates = [];
+  
+  $missingDates = array();
+  $currentDate = $startDate;
+  //calculating the all emi dates
+  while ($currentDate <= time()){
+    $date = date('Y-m-d', $currentDate);
+    $alldates[$date] = 'Pending'; // Set initial status as 'Pending'
+    $currentDate = strtotime('+1 day', $currentDate);
+
+  }
+  
+  // Mark paid dates as 'Paid'
+  foreach ($paidDates as $date) {
+  if (array_key_exists($date, $alldates)) {
+    $alldates[$date] = 'Paid';
+  }
+  }
+  // Display all payment dates with Status
+  $i = 1;
+  foreach ($alldates as $date => $status) {
+  $sql6 = "SELECT installment_amount, comment_repay FROM repayment WHERE loan_id = $loanid AND DORepayment = '$date'";
+  $result6 = mysqli_query($conn, $sql6);
+  $row6 = mysqli_fetch_assoc($result6);
+  
+  if ($row6) {
+    $installmentAmount = $row6['installment_amount'];
+    $commentRepay = $row6['comment_repay'];
+  } else {
+    $installmentAmount = "Not Paid Yet";
+    $commentRepay = "Not Paid Yet";
+  }
+
+  echo '<tr class="border-b bg-gray-800 border-gray-700">
+  <th scope="row" class="px-6 py-4 font-medium text-white whitespace-nowrap ">'. $i++ .' </th>
+  <td class="px-6 py-4">'.$date.'</td>';
+  if($status == 'Pending'){
+    echo '<td class="px-6 py-4 text-red-400 font-bold">'.$status.'</td>
+    <td class="px-6 py-4 text-red-400 font-bold">'.$installmentAmount.'</td>
+    <td class="px-6 py-4 text-red-400 font-bold">'.$commentRepay.'</td>
+    </tr>';
+  }elseif($status == 'Paid'){
+    echo '<td class="px-6 py-4 text-green-400 font-bold">'.$status.'</td>
+    <td class="px-6 py-4 text-green-400 font-bold">'.$installmentAmount.'</td>
+    <td class="px-6 py-4 text-green-400 font-bold">'.$commentRepay.'</td>
+    </tr>';
+  }
+  
+  }
+  }elseif($loan_type == 2){
 
 // Fetch loan start date and last date from the loans table
 $sql4 = "SELECT dor, ldol FROM loans WHERE id =$loanid";
@@ -264,25 +350,38 @@ if (array_key_exists($date, $alldates)) {
 $i = 1;
 foreach ($alldates as $date => $status) {
 // echo $date . "<br>";
+$sql6 = "SELECT installment_amount, comment_repay FROM repayment WHERE loan_id = $loanid AND DORepayment = '$date'";
+$result6 = mysqli_query($conn, $sql6);
+$row6 = mysqli_fetch_assoc($result6);
+
+if ($row6) {
+  $installmentAmount = $row6['installment_amount'];
+  $commentRepay = $row6['comment_repay'];
+} else {
+  $installmentAmount = "Not Paid Yet";
+  $commentRepay = "Not Paid Yet";
+}
+
 echo '<tr class="border-b bg-gray-800 border-gray-700">
 <th scope="row" class="px-6 py-4 font-medium text-white whitespace-nowrap ">'. $i++ .' </th>
 <td class="px-6 py-4">'.$date.'</td>';
 if($status == 'Pending'){
-  echo '<td class="px-6 py-4 text-red-400 font-bold">'.$status.'</td></tr>';
+  echo '<td class="px-6 py-4 text-red-400 font-bold">'.$status.'</td>
+  <td class="px-6 py-4 text-red-400 font-bold">'.$installmentAmount.'</td>
+  <td class="px-6 py-4 text-red-400 font-bold">'.$commentRepay.'</td>
+  </tr>';
 }elseif($status == 'Coming'){
-  echo '<td class="px-6 py-4 text-yellow-400 font-bold">'.$status.'</td></tr>';
+  echo '<td class="px-6 py-4 text-yellow-400 font-bold">'.$status.'</td>
+  <td class="px-6 py-4 text-yellow-400 font-bold">'.$installmentAmount.'</td>
+  <td class="px-6 py-4 text-yellow-400 font-bold">'.$commentRepay.'</td></tr>';
 }elseif($status == 'Paid'){
-  echo '<td class="px-6 py-4 text-green-400 font-bold">'.$status.'</td></tr>';
+  echo '<td class="px-6 py-4 text-green-400 font-bold">'.$status.'</td>
+  <td class="px-6 py-4 text-green-400 font-bold">'.$installmentAmount.'</td>
+  <td class="px-6 py-4 text-green-400 font-bold">'.$commentRepay.'</td></tr>';
 }
 
 }
-}
-
-
-
-
-
-elseif($loan_type ==3){
+}elseif($loan_type ==3){
 // Fetch loan start date and last date from the loans table
 $sql4 = "SELECT dor, ldol FROM loans WHERE id =$loanid";
 $result4 = mysqli_query($conn, $sql4);
@@ -333,26 +432,39 @@ if (array_key_exists($date, $alldates)) {
 // Display all payment dates with Status
 $i = 1;
 foreach ($alldates as $date => $status) {
-// echo $date . "<br>";
-echo '<tr class="border-b bg-gray-800 border-gray-700">
-<th scope="row" class="px-6 py-4 font-medium text-white whitespace-nowrap ">'. $i++ .' </th>
-<td class="px-6 py-4">'.$date.'</td>';
-if($status == 'Pending'){
-  echo '<td class="px-6 py-4 text-red-400 font-bold">'.$status.'</td></tr>';
-}elseif($status == 'Coming'){
-  echo '<td class="px-6 py-4 text-yellow-400 font-bold">'.$status.'</td></tr>';
-}elseif($status == 'Paid'){
-  echo '<td class="px-6 py-4 text-green-400 font-bold">'.$status.'</td></tr>';
-}
-}
-}
-
-
-
-
-
-
-elseif($loan_type == 4){
+  // echo $date . "<br>";
+  $sql6 = "SELECT installment_amount, comment_repay FROM repayment WHERE loan_id = $loanid AND DORepayment = '$date'";
+  $result6 = mysqli_query($conn, $sql6);
+  $row6 = mysqli_fetch_assoc($result6);
+  
+  if ($row6) {
+    $installmentAmount = $row6['installment_amount'];
+    $commentRepay = $row6['comment_repay'];
+  } else {
+    $installmentAmount = "Not Paid Yet";
+    $commentRepay = "Not Paid Yet";
+  }
+  
+  echo '<tr class="border-b bg-gray-800 border-gray-700">
+  <th scope="row" class="px-6 py-4 font-medium text-white whitespace-nowrap ">'. $i++ .' </th>
+  <td class="px-6 py-4">'.$date.'</td>';
+  if($status == 'Pending'){
+    echo '<td class="px-6 py-4 text-red-400 font-bold">'.$status.'</td>
+    <td class="px-6 py-4 text-red-400 font-bold">'.$installmentAmount.'</td>
+    <td class="px-6 py-4 text-red-400 font-bold">'.$commentRepay.'</td>
+    </tr>';
+  }elseif($status == 'Coming'){
+    echo '<td class="px-6 py-4 text-yellow-400 font-bold">'.$status.'</td>
+    <td class="px-6 py-4 text-yellow-400 font-bold">'.$installmentAmount.'</td>
+    <td class="px-6 py-4 text-yellow-400 font-bold">'.$commentRepay.'</td></tr>';
+  }elseif($status == 'Paid'){
+    echo '<td class="px-6 py-4 text-green-400 font-bold">'.$status.'</td>
+    <td class="px-6 py-4 text-green-400 font-bold">'.$installmentAmount.'</td>
+    <td class="px-6 py-4 text-green-400 font-bold">'.$commentRepay.'</td></tr>';
+  }
+  
+  }
+}elseif($loan_type == 4){
 // Fetch loan start date and last date from the loans table
 $sql4 = "SELECT dor, ldol FROM loans WHERE id =$loanid";
 $result4 = mysqli_query($conn, $sql4);
@@ -403,19 +515,38 @@ if (array_key_exists($date, $alldates)) {
 // Display all payment dates with Status
 $i = 1;
 foreach ($alldates as $date => $status) {
-// echo $date . "<br>";
-echo '<tr class="border-b bg-gray-800 border-gray-700">
-<th scope="row" class="px-6 py-4 font-medium text-white whitespace-nowrap ">'. $i++ .' </th>
-<td class="px-6 py-4">'.$date.'</td>';
-if($status == 'Pending'){
-  echo '<td class="px-6 py-4 text-red-400 font-bold">'.$status.'</td></tr>';
-}elseif($status == 'Coming'){
-  echo '<td class="px-6 py-4 text-yellow-400 font-bold">'.$status.'</td></tr>';
-}elseif($status == 'Paid'){
-  echo '<td class="px-6 py-4 text-green-400 font-bold">'.$status.'</td></tr>';
-}
-
-}
+  // echo $date . "<br>";
+  $sql6 = "SELECT installment_amount, comment_repay FROM repayment WHERE loan_id = $loanid AND DORepayment = '$date'";
+  $result6 = mysqli_query($conn, $sql6);
+  $row6 = mysqli_fetch_assoc($result6);
+  
+  if ($row6) {
+    $installmentAmount = $row6['installment_amount'];
+    $commentRepay = $row6['comment_repay'];
+  } else {
+    $installmentAmount = "Not Paid Yet";
+    $commentRepay = "Not Paid Yet";
+  }
+  
+  echo '<tr class="border-b bg-gray-800 border-gray-700">
+  <th scope="row" class="px-6 py-4 font-medium text-white whitespace-nowrap ">'. $i++ .' </th>
+  <td class="px-6 py-4">'.$date.'</td>';
+  if($status == 'Pending'){
+    echo '<td class="px-6 py-4 text-red-400 font-bold">'.$status.'</td>
+    <td class="px-6 py-4 text-red-400 font-bold">'.$installmentAmount.'</td>
+    <td class="px-6 py-4 text-red-400 font-bold">'.$commentRepay.'</td>
+    </tr>';
+  }elseif($status == 'Coming'){
+    echo '<td class="px-6 py-4 text-yellow-400 font-bold">'.$status.'</td>
+    <td class="px-6 py-4 text-yellow-400 font-bold">'.$installmentAmount.'</td>
+    <td class="px-6 py-4 text-yellow-400 font-bold">'.$commentRepay.'</td></tr>';
+  }elseif($status == 'Paid'){
+    echo '<td class="px-6 py-4 text-green-400 font-bold">'.$status.'</td>
+    <td class="px-6 py-4 text-green-400 font-bold">'.$installmentAmount.'</td>
+    <td class="px-6 py-4 text-green-400 font-bold">'.$commentRepay.'</td></tr>';
+  }
+  
+  }
 
 }
 echo'</tbody>
