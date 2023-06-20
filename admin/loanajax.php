@@ -32,7 +32,7 @@ $perpageresult = $perPage->getAllPageLinks($_GET["rowcount"], $paginationlink);
 $output = '';
 $output .= '
 <div class="relative overflow-x-auto">
-<table class="mt-5 mb-2 w-full text-sm text-left text-gray-400">
+<table class="mb-2 w-full text-sm text-left text-gray-400">
 	<thead class="text-medium uppercase bg-gray-700 text-white">
 		<tr>
 			<th scope="col" class="py-2 px-2">

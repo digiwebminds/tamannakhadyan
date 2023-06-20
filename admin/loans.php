@@ -1,3 +1,9 @@
+<?php
+session_start();
+if (!isset($_SESSION['username'])){
+    header('location:adminlogin.php');
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,7 +19,11 @@
     <?php
     include ("../include/navbar.php");
     ?>
-    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded"><a href="add_loan.php">Add loan</a></button>
+    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-1 border border-blue-700 rounded"><a href="add_loan.php">Add loan</a></button>
+
+    <div class="bg-purple-500 item-center text-white font-bold text-xl p-3 border-gray-800 rounded">
+<h1>List of Loans</h1>
+</div>
 
     <div class="relative" id="pagination-result">
         <div id="overlay">
