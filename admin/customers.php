@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (!isset($_SESSION['username'])){
+if (!isset($_SESSION['username'])) {
     header('location:adminlogin.php');
 }
 ?>
@@ -14,7 +14,7 @@ if (!isset($_SESSION['username'])){
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
-    <title>Add User</title>
+    <title>Customers</title>
     <script src="../include/js/add_user.js"></script>
 </head>
 
@@ -23,9 +23,22 @@ if (!isset($_SESSION['username'])){
     include "../include/navbar.php";
     ?>
     <button href="add_user.php" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-1 border border-blue-700 rounded"><a href="add_user.php">Add User</a></button>
-<div class="bg-purple-500 item-center text-white font-bold text-xl p-3 border-gray-800 rounded">
-<h1>List of Customers</h1>
-</div>
+
+    <div class="bg-purple-500 item-center text-white font-bold text-xl p-3 border-gray-800 rounded">
+        <h1>List of Customers</h1>
+    </div>
+    <span>
+        <label for="searchvalue">Search</label>
+        <input type="text" id="searchvalue" name="searchvalue">
+        <label for="searchby">By</label>
+        <select id="searchby">
+            <option value="1">Customer Code</option>
+            <option value="2">Cust. Name</option>
+            <option value="3">Mobile No.</option>
+            <option value="4">Shop Name</option>
+        </select>
+        <button id="searchbutton">Search</button>
+    </span>
 
     <div class="relative" id="pagination-result">
         <div id="overlay">
@@ -61,6 +74,29 @@ if (!isset($_SESSION['username'])){
             });
         }
         getresult("custajax.php");
+        $(document).ready(function(){
+            $("#searchbutton").click(function(){
+                $("#pagination-result").html("");
+                var searchvalue = $("#searchvalue").val().trim();
+                var searchby = $("#searchby").val();
+
+                $.ajax({
+                    url: 'custajax.php',
+                    type: 'GET',
+                    data: { 'searchvalue': searchvalue, 'searchby' : searchby },
+                    beforeSend: function() {
+                    $("#overlay").show();
+                    },
+                    success: function(data) {
+                        $("#pagination-result").html(data);
+                        setInterval(function() {
+                            $("#overlay").hide();
+                        }, 500);
+                    }
+                });
+                // console.log(searchby+searchvalue);
+            });
+        });
     </script>
 
 
