@@ -24,6 +24,17 @@ if (!isset($_SESSION['username'])){
     <div class="bg-purple-500 item-center text-white font-bold text-xl p-3 border-gray-800 rounded">
 <h1>List of Loans</h1>
 </div>
+<span>
+        <label for="searchvalue">Search</label>
+        <input type="text" id="searchvalue" name="searchvalue">
+        <label for="searchby">By</label>
+        <select id="searchby">
+            <option value="1">Customer Code</option>
+            <option value="2">Loan Code</option>
+            <option value="3">Loan Type</option>
+        </select>
+        <button id="searchbutton">Search</button>
+    </span>
 
     <div class="relative" id="pagination-result">
         <div id="overlay">
@@ -59,6 +70,29 @@ if (!isset($_SESSION['username'])){
             });
         }
         getresult("loanajax.php");
+        $(document).ready(function(){
+            $("#searchbutton").click(function(){
+                $("#pagination-result").html("");
+                var searchvalue = $("#searchvalue").val().trim();
+                var searchby = $("#searchby").val();
+
+                $.ajax({
+                    url: 'loanajax.php',
+                    type: 'GET',
+                    data: { 'searchvalue': searchvalue, 'searchby' : searchby },
+                    beforeSend: function() {
+                    $("#overlay").show();
+                    },
+                    success: function(data) {
+                        $("#pagination-result").html(data);
+                        setInterval(function() {
+                            $("#overlay").hide();
+                        }, 500);
+                    }
+                });
+                // console.log(searchby+searchvalue);
+            });
+        });
     </script>
 
 </body>
