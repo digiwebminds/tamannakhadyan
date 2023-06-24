@@ -39,7 +39,10 @@ HAVING phone_count > 0";
                         Address
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Principal
+                       Initial Principal
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                       Remaining Principal
                     </th>
                     <th scope="col" class="px-6 py-3">
                         Installment
@@ -91,12 +94,13 @@ HAVING phone_count > 0";
       $reminstallmentamount = $remprincipal*($row["roi"]/100);
       $amountduetilltoday = $totalInstallmentstilldate*$row['installment'] - $row['amount_paid'];
 
-      $totalamountduetilldate[] = ($totalInstallmentstilldate*$row['installment'] - $row['amount_paid']);
+      $totalamountduetilldate[] = $amountduetilltoday;
       $totalprincipalamount[] = $row['principle'];
-      $totalprincipalamountpaidtilldate[] = $row['total_principal_paid'];
+      $totalprincipalamountpaid[] = $row['total_principal_paid'];
       $totalinstallmentamountpaidtilldate[] = $row['amount_paid'];
       $totalprincipalamountdue[] = $row['principle']-$row['total_principal_paid'];
       $totalinstallmentamount[] = $row['installment'];
+      $totalrem_principal[] = $remprincipal;
 
 
 
@@ -119,6 +123,9 @@ HAVING phone_count > 0";
       <td class="px-6 py-4">
       '.$row['principle'].'
       </td>
+        <td class="px-6 py-4">
+        '.$remprincipal.'
+        </td>
       <td class="px-6 py-4">
       '.$row['installment'].'
       </td>
@@ -153,16 +160,19 @@ echo '<tr class="border-b text-medium font-bold bg-gray-700 border-gray-700 text
       '.array_sum($totalprincipalamount).'
       </td>
       <td class="px-6 py-4">
+      '.array_sum($totalrem_principal).'
+      </td>
+      <td class="px-6 py-4">
       '.array_sum($totalinstallmentamount).'
       </td>
       <td class="px-6 py-4">
-      '.array_sum($totalprincipalamountpaidtilldate).'
+      '.array_sum($totalprincipalamountpaid).'
       </td>
       <td class="px-6 py-4">
       '.array_sum($totalinstallmentamountpaidtilldate).'
       </td>
       <td class="px-6 py-4">
-      '.array_sum($totalprincipalamountdue).'
+      '.array_sum($totalamountduetilldate).'
       </td>
   </tr>
 

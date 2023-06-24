@@ -37,19 +37,11 @@ if(isset($_POST['ccprincipal'])){
   }
 }
 
+///for rapayment  
 
 if (isset($_POST['loanid'])) {
 
   $loanid = $_POST['loanid'];
-
-  // $sql = "SELECT c.id AS cust_id, l.id, c.name, c.fname, c.city, COUNT(c.phone) AS phone_count,COUNT(re.loan_id) as emi_count, c.photo, l.principle, l.dor, l.loan_type, l.installment, l.roi
-  // FROM customers AS c
-  // JOIN loans AS l ON c.id = l.customer_id
-  // LEFT JOIN repayment AS re ON l.id = re.loan_id
-  // WHERE l.id = $loanid
-  // GROUP BY c.id, l.id, c.name, c.fname, c.city, c.photo, l.principle, l.dor, l.loan_type, l.installment, l.roi
-  // HAVING phone_count > 0;";
-
   $sql = "SELECT c.id AS cust_id, l.id,l.days_weeks_month,l.total, c.name, c.fname, c.city, COUNT(c.phone) AS phone_count, COUNT(re.loan_id) AS emi_count, c.photo, l.principle, l.dor, l.loan_type,l.dor,l.ldol, l.installment, l.roi,SUM(re.	installment_amount) as amount_paid,
   (SELECT SUM(repay_amount) FROM principle_repayment WHERE loan_id = l.id) AS total_principal_paid
 FROM customers AS c
@@ -129,7 +121,7 @@ HAVING phone_count > 0";
 if($loan_type==1){  
   echo '<tr class="border-b border-gray-200 dark:border-gray-700">
   <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700"> Loan Amount Remaining (शेष ऋण राशि)</th>
-  <td class="px-6 py-2 border border-gray-700 text-gray-900">' . $remprincipal . ' &nbsp; &nbsp; &nbsp; | Principal Paid :- '.$row["total_principal_paid"].' | Total Principal :- '.$row["principle"].'
+  <td class="px-6 py-2 border border-gray-700 text-gray-900">' . $remprincipal . ' &nbsp; &nbsp; &nbsp; | Principal Paid :- '.$row["total_principal_paid"].' | Initial Principal :- '.$row["principle"].'
 
   &nbsp;<button id="openprincipalpaidtable" class="text-black font-bold py-2 px-4 rounded">
   <i class="fa-solid fa-circle-info"></i>
@@ -226,18 +218,32 @@ if($loan_type==1){
         </td>
         </tr>';
       }
-      echo '
-      <tr class="border-b border-gray-200 dark:border-gray-700">
-        <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700"> Due Amount Till Today (बकाया राशि आज तक)</th>
-        <td class="px-6 py-2 border border-gray-700 text-red-900">' .$unpaidInstallments*$row['installment']. '
-        </td>
-      </tr>
+      if($loan_type == 1){
+      echo '<tr class="border-b border-gray-200 dark:border-gray-700">
+      <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700"> Due Amount Till Today (बकाया राशि आज तक)</th>
+      <td class="px-6 py-2 border border-gray-700 text-red-900">';
+      
+      include "../functions.php";
+      //calling function
+      totalEmiAmountDue_in_CCloan($loanid);
+      echo'
+      </td>
+      </tr>';
+    
+    }else{
+      echo '<tr class="border-b border-gray-200 dark:border-gray-700">
+      <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700"> Due Amount Till Today (बकाया राशि आज तक)</th>
+      <td class="px-6 py-2 border border-gray-700 text-red-900">' .$unpaidInstallments*$row['installment']. '
+      </td>
+      </tr>';
+    }
       
       
       
-      </tbody>
+      echo '</tbody>
       </table>  
 </div>';
+
 
 
 
