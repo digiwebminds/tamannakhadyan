@@ -1,6 +1,5 @@
 <?php
 function totalEmiAmountDue_in_CCloan($loanid){
-
     include 'connect.php';
 
     $sql4 = "SELECT * FROM loans WHERE id = $loanid";
@@ -52,7 +51,176 @@ function totalEmiAmountDue_in_CCloan($loanid){
       $previousDate += 86400; // Move to the next day (86400 seconds = 1 day)
     }
     return $Final_emi_cc_due = (array_sum($alldues) - $total_repayment_amount);
-    
+}
 
+
+function lateFineCalforCC_daily($loanid){
+  include "../connect.php";
+  $sqlloan = "SELECT * FROM loans WHERE id = $loanid";
+  $resultloan = mysqli_query($conn, $sqlloan);
+  $rowloan = mysqli_fetch_assoc($resultloan);
+  
+  $sqlrepayment = "SELECT * FROM repayment WHERE loan_id = $loanid ORDER BY DORepayment ASC";
+  $resultrepayment = mysqli_query($conn, $sqlrepayment);
+  
+  $paidDates = [];
+  while ($rowrepay = mysqli_fetch_assoc($resultrepayment)) {
+    $paidDates[] = strtotime($rowrepay['DORepayment']); // Convert repayment dates to epoch format and store in an array
+  }
+  
+  $loanStartDate = $rowloan['dor']; // Loan start date
+  $startDate = strtotime($loanStartDate); // Convert to epoch format
+  $startDate += 86400;
+  $lateFine = $rowloan['latefine'];
+  $lateFineAfter = $rowloan['latefineafter'];
+  $loanLastDate = time();
+  
+  $totalLateFine = [];
+  $previousDate = $startDate;
+  
+  foreach ($paidDates as $pd) {
+    $pdEpoch = $pd;
+    $lateFineAfterEpoch = 86400 * $lateFineAfter; // Convert days into seconds
+    $fineStartDate = $previousDate + $lateFineAfterEpoch; // Calculate the start date for late fine
+  
+    if ($fineStartDate <= $pdEpoch) {
+      $currentDate = $fineStartDate;
+      while ($currentDate <= $pdEpoch) {
+        $totalLateFine[date('Y-m-d', $currentDate)] = $lateFine; // Store the late fine for the date
+        $currentDate += 86400; // Move to the next day (86400 seconds = 1 day)
+      }
+    }
+  
+    $previousDate = $pdEpoch; // Move to the next repayment date
+  }
+  
+  // Calculate late fine from the last repayment date till the current date
+  $lateFineAfterEpoch = 86400 * $lateFineAfter; // Convert days into seconds
+  $fineStartDate = $previousDate + $lateFineAfterEpoch; // Calculate the start date for late fine
+  
+  if ($fineStartDate <= $loanLastDate) {
+    $currentDate = $fineStartDate;
+    while ($currentDate <= $loanLastDate) {
+      $totalLateFine[date('Y-m-d', $currentDate)] = $lateFine; // Store the late fine for the date
+      $currentDate += 86400; // Move to the next day (86400 seconds = 1 day)
+    }
+  }
+  
+  return array_sum($totalLateFine);
+}
+
+
+
+
+
+function lateFineCalforweekly($loanid){
+  include "../connect.php";
+  $sqlloan = "SELECT * FROM loans WHERE id = $loanid";
+  $resultloan = mysqli_query($conn, $sqlloan);
+  $rowloan = mysqli_fetch_assoc($resultloan);
+  
+  $sqlrepayment = "SELECT * FROM repayment WHERE loan_id = $loanid ORDER BY DORepayment ASC";
+  $resultrepayment = mysqli_query($conn, $sqlrepayment);
+  
+  $paidDates = [];
+  while ($rowrepay = mysqli_fetch_assoc($resultrepayment)) {
+    $paidDates[] = strtotime($rowrepay['DORepayment']); // Convert repayment dates to epoch format and store in an array
+  }
+  
+  $loanStartDate = $rowloan['dor']; // Loan start date
+  $startDate = strtotime($loanStartDate); // Convert to epoch format
+  $startDate += 86400;
+  $lateFine = $rowloan['latefine'];
+  $lateFineAfter = $rowloan['latefineafter'];
+  $loanLastDate = time();
+  
+  $totalLateFine = [];
+  $previousDate = $startDate;
+  
+  foreach ($paidDates as $pd) {
+    $pdEpoch = $pd;
+    $lateFineAfterEpoch = 86400 * $lateFineAfter * 7; // Convert days into seconds
+    $fineStartDate = $previousDate + $lateFineAfterEpoch; // Calculate the start date for late fine
+  
+    if ($fineStartDate <= $pdEpoch) {
+      $currentDate = $fineStartDate;
+      while ($currentDate <= $pdEpoch) {
+        $totalLateFine[date('Y-m-d', $currentDate)] = $lateFine; // Store the late fine for the date
+        $currentDate += 86400; // Move to the next day (86400 seconds = 1 day)
+      }
+    }
+  
+    $previousDate = $pdEpoch; // Move to the next repayment date
+  }
+  
+  // Calculate late fine from the last repayment date till the current date
+  $lateFineAfterEpoch = 86400 * $lateFineAfter * 7; // Convert days into seconds
+  $fineStartDate = $previousDate + $lateFineAfterEpoch; // Calculate the start date for late fine
+  
+  if ($fineStartDate <= $loanLastDate) {
+    $currentDate = $fineStartDate;
+    while ($currentDate <= $loanLastDate) {
+      $totalLateFine[date('Y-m-d', $currentDate)] = $lateFine; // Store the late fine for the date
+      $currentDate += 86400; // Move to the next day (86400 seconds = 1 day)
+    }
+  }
+  
+  return array_sum($totalLateFine);
+}
+
+
+function lateFineCalformonthly($loanid){
+  include "../connect.php";
+  $sqlloan = "SELECT * FROM loans WHERE id = $loanid";
+  $resultloan = mysqli_query($conn, $sqlloan);
+  $rowloan = mysqli_fetch_assoc($resultloan);
+  
+  $sqlrepayment = "SELECT * FROM repayment WHERE loan_id = $loanid ORDER BY DORepayment ASC";
+  $resultrepayment = mysqli_query($conn, $sqlrepayment);
+  
+  $paidDates = [];
+  while ($rowrepay = mysqli_fetch_assoc($resultrepayment)) {
+    $paidDates[] = strtotime($rowrepay['DORepayment']); // Convert repayment dates to epoch format and store in an array
+  }
+  
+  $loanStartDate = $rowloan['dor']; // Loan start date
+  $startDate = strtotime($loanStartDate); // Convert to epoch format
+  $startDate += 86400;
+  $lateFine = $rowloan['latefine'];
+  $lateFineAfter = $rowloan['latefineafter'];
+  $loanLastDate = time();
+  
+  $totalLateFine = [];
+  $previousDate = $startDate;
+  
+  foreach ($paidDates as $pd) {
+    $pdEpoch = $pd;
+    $lateFineAfterEpoch = 86400 * $lateFineAfter * 30; // Convert days into seconds
+    $fineStartDate = $previousDate + $lateFineAfterEpoch; // Calculate the start date for late fine
+  
+    if ($fineStartDate <= $pdEpoch) {
+      $currentDate = $fineStartDate;
+      while ($currentDate <= $pdEpoch) {
+        $totalLateFine[date('Y-m-d', $currentDate)] = $lateFine; // Store the late fine for the date
+        $currentDate += 86400; // Move to the next day (86400 seconds = 1 day)
+      }
+    }
+  
+    $previousDate = $pdEpoch; // Move to the next repayment date
+  }
+  
+  // Calculate late fine from the last repayment date till the current date
+  $lateFineAfterEpoch = 86400 * $lateFineAfter * 30; // Convert days into seconds
+  $fineStartDate = $previousDate + $lateFineAfterEpoch; // Calculate the start date for late fine
+  
+  if ($fineStartDate <= $loanLastDate) {
+    $currentDate = $fineStartDate;
+    while ($currentDate <= $loanLastDate) {
+      $totalLateFine[date('Y-m-d', $currentDate)] = $lateFine; // Store the late fine for the date
+      $currentDate += 86400; // Move to the next day (86400 seconds = 1 day)
+    }
+  }
+  
+  return array_sum($totalLateFine);
 }
 ?>
