@@ -13,6 +13,19 @@ $(document).ready(function () {
         });
     });
 
+    $(document).on("click", "#closebtncc", function() {
+        $("#ccduelistresult").hide();
+    });
+    $(document).on("click", "#closebtnd", function() {
+        $("#dailyduelistresult").hide();
+    });
+    $(document).on("click", "#closebtnw", function() {
+        $("#weeklyduelistresult").hide();
+    });
+    $(document).on("click", "#closebtnm", function() {
+        $("#monthlyduelistresult").hide();
+    });
+
     $("#dailyduelistbtn").click(function() {
         var daily = $(this).val();
         // alert(loantype);

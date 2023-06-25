@@ -51,7 +51,7 @@ function totalEmiAmountDue_in_CCloan($loanid){
       $alldues[date('Y-m-d', $previousDate)] = $installmentChange; // Store installment change for the date
       $previousDate += 86400; // Move to the next day (86400 seconds = 1 day)
     }
-    echo $Final_emi_cc_due = (array_sum($alldues) - $total_repayment_amount);
+    return $Final_emi_cc_due = (array_sum($alldues) - $total_repayment_amount);
     
 
 }

@@ -14,12 +14,16 @@ GROUP BY c.id, l.id, c.name, c.fname,c.phone,c.address, c.city, c.photo, l.princ
 HAVING phone_count > 0";
 
   $result = mysqli_query($conn, $sql);
-
   if (mysqli_num_rows($result) > 0) {
     echo '<div class="relative overflow-x-auto">
-    <div class="p-4 text-medium bg-gray-800 text-green-400 mb-1" role="alert">
-            <p class="font-medium">CC Loans Dues List ! (Active Loans only)</p> 
-            </div>
+    <div class="p-4 bg-gray-800 text-green-400 mb-1">
+    <p class="font-medium flex justify-between items-center">
+        <span>CC Loans Dues List! (Active Loans only)</span>
+        <button type="button" id="closebtncc" class="focus:outline-none text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-xs px-5 py-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Close</button>
+    </p>
+    </div>
+
+
         <table class="w-full text-sm text-left text-gray-400 mb-5">
             <thead class="text-medium uppercase bg-gray-700 text-white">
                 <tr>
@@ -67,10 +71,10 @@ HAVING phone_count > 0";
             $totalinstallmentamount = [];
     $i = 1;
     while ($row = mysqli_fetch_assoc($result)) {
-      $loan_type = $row['loan_type'];
-
-      $startDate = strtotime($row['dor']);
-      $today = strtotime(date('Y-m-d'));
+    $loan_type = $row['loan_type'];
+    $loanid = $row['id'];
+    $startDate = strtotime($row['dor']);
+    $today = strtotime(date('Y-m-d'));
       if ($loan_type == 1) {
         $loanname = 'CC Loan';
         $frequency = 1;
@@ -85,24 +89,23 @@ HAVING phone_count > 0";
         $frequency = 30;
       }
 
-      $totalInstallmentstilldate = floor(($today - $startDate) / (60 * 60 * 24 * $frequency)); //have to change this
+      $totalInstallmentstilldate = floor(($today - $startDate) / (60 * 60 * 24 * $frequency)); 
       $currentDate = $startDate;
       $paidInstallments = $row['emi_count'];
       $unpaidInstallments = $totalInstallmentstilldate - $paidInstallments;
 
       $remprincipal = $row['principle']- $row["total_principal_paid"];
       $reminstallmentamount = $remprincipal*($row["roi"]/100);
-      $amountduetilltoday = $totalInstallmentstilldate*$row['installment'] - $row['amount_paid'];
+      include "../functions.php";
+      $amountduetilltoday = totalEmiAmountDue_in_CCloan($loanid);
 
       $totalamountduetilldate[] = $amountduetilltoday;
       $totalprincipalamount[] = $row['principle'];
       $totalprincipalamountpaid[] = $row['total_principal_paid'];
       $totalinstallmentamountpaidtilldate[] = $row['amount_paid'];
       $totalprincipalamountdue[] = $row['principle']-$row['total_principal_paid'];
-      $totalinstallmentamount[] = $row['installment'];
+      $totalreminstallmentamount[] = $reminstallmentamount;
       $totalrem_principal[] = $remprincipal;
-
-
 
       echo '<tr class="border-b bg-gray-800 border-gray-700">
       <td class="px-6 py-4">
@@ -127,7 +130,7 @@ HAVING phone_count > 0";
         '.$remprincipal.'
         </td>
       <td class="px-6 py-4">
-      '.$row['installment'].'
+      '.$reminstallmentamount.'
       </td>
       <td class="px-6 py-4">
       '.$row['total_principal_paid'].'
@@ -163,7 +166,7 @@ echo '<tr class="border-b text-medium font-bold bg-gray-700 border-gray-700 text
       '.array_sum($totalrem_principal).'
       </td>
       <td class="px-6 py-4">
-      '.array_sum($totalinstallmentamount).'
+      '.array_sum($totalreminstallmentamount).'
       </td>
       <td class="px-6 py-4">
       '.array_sum($totalprincipalamountpaid).'
@@ -190,9 +193,6 @@ echo '<tr class="border-b text-medium font-bold bg-gray-700 border-gray-700 text
 
 
 
-
-
-
 if(isset($_POST['daily'])){
     // $loantype =$_POST['loantype'];
     // echo $loantype;
@@ -211,9 +211,12 @@ HAVING phone_count > 0";
 
   if (mysqli_num_rows($result) > 0) {
     echo '<div class="relative overflow-x-auto">
-    <div class="p-4 text-medium bg-gray-800 text-green-400 mb-1" role="alert">
-            <p class="font-medium">Daily Loans Dues List ! (Active Loans only)</p> 
-            </div>
+    <div class="p-4 bg-gray-800 text-green-400 mb-1">
+    <p class="font-medium flex justify-between items-center">
+        <span>Daily Loans Dues List! (Active Loans only)</span>
+        <button type="button" id="closebtnd" class="focus:outline-none text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-xs px-5 py-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Close</button>
+    </p>
+    </div>
         <table class="w-full text-sm text-left text-gray-400 mb-5">
             <thead class="text-medium uppercase bg-gray-700 text-white">
                 <tr>
@@ -365,11 +368,6 @@ echo '<tr class="border-b text-medium font-bold bg-gray-700 border-gray-700 text
 }
 
 
-
-
-
-
-
 if(isset($_POST['weekly'])){
     // $loantype =$_POST['loantype'];
     // echo $loantype;
@@ -388,9 +386,12 @@ HAVING phone_count > 0";
 
   if (mysqli_num_rows($result) > 0) {
     echo '<div class="relative overflow-x-auto">
-    <div class="p-4 text-medium bg-gray-800 text-green-400 mb-1" role="alert">
-            <p class="font-medium">Weekly Loans Dues List ! (Active Loans only)</p> 
-            </div>
+    <div class="p-4 bg-gray-800 text-green-400 mb-1">
+    <p class="font-medium flex justify-between items-center">
+        <span>Weekly Loans Dues List! (Active Loans only)</span>
+        <button type="button" id="closebtnw" class="focus:outline-none text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-xs px-5 py-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Close</button>
+    </p>
+    </div>
         <table class="w-full text-sm text-left text-gray-400 mb-5">
             <thead class="text-medium uppercase bg-gray-700 text-white">
                 <tr>
@@ -543,8 +544,6 @@ echo '<tr class="border-b text-medium font-bold bg-gray-700 border-gray-700 text
 
 
 
-
-
 if(isset($_POST['monthly'])){
     // $loantype =$_POST['loantype'];
     // echo $loantype;
@@ -563,9 +562,12 @@ HAVING phone_count > 0";
 
   if (mysqli_num_rows($result) > 0) {
     echo '<div class="relative overflow-x-auto">
-    <div class="p-4 text-medium bg-gray-800 text-green-400 mb-1" role="alert">
-            <p class="font-medium">Monthly Loans Dues List ! (Active Loans only)</p> 
-            </div>
+    <div class="p-4 bg-gray-800 text-green-400 mb-1">
+    <p class="font-medium flex justify-between items-center">
+        <span>Monthly Loans Dues List! (Active Loans only)</span>
+        <button type="button" id="closebtnm" class="focus:outline-none text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-xs px-5 py-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Close</button>
+    </p>
+    </div>
         <table class="w-full text-sm text-left text-gray-400 mb-5">
             <thead class="text-medium uppercase bg-gray-700 text-white">
                 <tr>

@@ -19,29 +19,34 @@ if (!isset($_SESSION['username'])){
     <?php
     include ("../include/navbar.php");
     ?>
-    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-1 border border-blue-700 rounded"><a href="add_loan.php">Add loan</a></button>
-
-    <div class="bg-purple-500 item-center text-white font-bold text-xl p-3 border-gray-800 rounded">
-<h1>List of Loans</h1>
+<!-- Title -->
+<div class="flex justify-between items-center">
+    <h1 class="flex-grow bg-gray-700 text-white text-xl p-3 border-gray-800 relative">
+        List of Loans
+        <button class="absolute top-1/2 right-0 transform -translate-y-1/2 bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 mr-3 border border-white rounded">
+            <a href="add_loan.php" class="text-white">Add loan</a>
+        </button>
+    </h1>
 </div>
-<span>
-        <label for="searchvalue">Search</label>
-        <input type="text" id="searchvalue" name="searchvalue">
-        <label for="searchby">By</label>
-        <select id="searchby">
-            <option value="1">Customer Code</option>
-            <option value="2">Loan Code</option>
-            <option value="3">Loan Type</option>
-        </select>
-        <button id="searchbutton">Search</button>
-    </span>
 
-    <div class="relative" id="pagination-result">
+<!-- Search Box -->
+<span class="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-2 my-2">
+    <label for="searchvalue" class="text-gray-700 font-bold">Search</label>
+    <input type="text" id="searchvalue" name="searchvalue" class="border border-gray-300 rounded px-2 py-1">
+    <label for="searchby" class="text-gray-700">By</label>
+    <select id="searchby" class="border border-gray-300 rounded px-2 py-1">
+        <option value="1">Customer Code</option>
+        <option value="2">Loan Code</option>
+        <option value="3">Loan Type</option>
+    </select>
+    <button id="searchbutton" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Search</button>
+</span>
+
+<div class="relative" id="pagination-result">
         <div id="overlay">
             <div><img src="../include/loading.gif" width="64px" height="64px" /></div>
         </div>
-
-    </div>
+</div>
 
     <?php
     include("../include/connect.php");

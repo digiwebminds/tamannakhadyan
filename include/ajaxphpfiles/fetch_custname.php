@@ -153,8 +153,11 @@ if($loan_type==1){
 
   echo '<tr class="border-b border-gray-200 dark:border-gray-700">
   <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700">Total Amount Due (कुल शेष राशि)(P+I)</th>
-  <td class="px-6 py-2 border border-gray-700 text-red-900">'.$row["total"].'
-  </td>
+  <td class="px-6 py-2 border border-gray-700 text-red-900">';
+  include "../functions.php";
+  $dueee = totalEmiAmountDue_in_CCloan($loanid);
+  echo ($dueee + $remprincipal);
+  echo '</td>
   </tr>';
 
   if($loan_type != 1){
@@ -222,10 +225,7 @@ if($loan_type==1){
       echo '<tr class="border-b border-gray-200 dark:border-gray-700">
       <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700"> Due Amount Till Today (बकाया राशि आज तक)</th>
       <td class="px-6 py-2 border border-gray-700 text-red-900">';
-      
-      include "../functions.php";
-      //calling function
-      totalEmiAmountDue_in_CCloan($loanid);
+      echo $dueee ;
       echo'
       </td>
       </tr>';

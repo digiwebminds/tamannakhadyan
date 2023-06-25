@@ -23,17 +23,17 @@ if (!isset($_SESSION['username'])){
     ?>
 <!-- <p>Click Button to get dues List</p> -->
 <div class="mb-4 mt-4">
-  <button id="ccduelistbtn" value="1" type="button" class="text-white focus:outline-none focus:ring-4 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 bg-blue-600 hover:bg-blue-700 focus:ring-blue-800">CC Loan Due List</button>
-  <div id="ccduelistresult"></div>
+  <button id="ccduelistbtn" value="1" type="button" class="text-white focus:outline-none focus:ring-4 rounded font-medium text-sm px-2.5 py-2.5 text-center ml-2 mb-2 bg-blue-600 hover:bg-blue-700 focus:ring-blue-800">CC Loan Due List</button>
+  <div id="ccduelistresult"></div> <div></div>
 
-  <button id="dailyduelistbtn" value="2" type="button" class="text-white focus:outline-none focus:ring-4 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 bg-blue-600 hover:bg-blue-700 focus:ring-blue-800">Daily Loan Due List</button>
-  <div id="dailyduelistresult"></div>
+  <button id="dailyduelistbtn" value="2" type="button" class="text-white focus:outline-none focus:ring-4 rounded font-medium text-sm px-2.5 py-2.5 text-center ml-2 mb-2 bg-blue-600 hover:bg-blue-700 focus:ring-blue-800">Daily Loan Due List</button>
+  <div id="dailyduelistresult"></div> <div></div>
 
-  <button id="weeklyduelistbtn" value="3" type="button" class="text-white focus:outline-none focus:ring-4 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 bg-blue-600 hover:bg-blue-700 focus:ring-blue-800">Weekly Loan Due List</button>
-  <div id="weeklyduelistresult"></div>
+  <button id="weeklyduelistbtn" value="3" type="button" class="text-white focus:outline-none focus:ring-4 rounded font-medium text-sm px-2.5 py-2.5 text-center ml-2 mb-2 bg-blue-600 hover:bg-blue-700 focus:ring-blue-800">Weekly Loan Due List</button>
+  <div id="weeklyduelistresult"></div> <div></div>
 
-  <button id="monthlyduelistbtn" value="4" type="button" class="text-white focus:outline-none focus:ring-4 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 bg-blue-600 hover:bg-blue-700 focus:ring-blue-800">Monthly Loan Due List</button>
-  <div id="monthlyduelistresult"></div>
+  <button id="monthlyduelistbtn" value="4" type="button" class="text-white focus:outline-none focus:ring-4 rounded font-medium text-sm px-2.5 py-2.5 text-center ml-2 mb-2 bg-blue-600 hover:bg-blue-700 focus:ring-blue-800">Monthly Loan Due List</button>
+  <div id="monthlyduelistresult"></div> <div></div>
 </div>
 
 <?php 
