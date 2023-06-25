@@ -96,7 +96,7 @@ HAVING phone_count > 0";
 
       $remprincipal = $row['principle']- $row["total_principal_paid"];
       $reminstallmentamount = $remprincipal*($row["roi"]/100);
-      include "../functions.php";
+      include_once "../functions.php";
       $amountduetilltoday = totalEmiAmountDue_in_CCloan($loanid);
 
       $totalamountduetilldate[] = $amountduetilltoday;
