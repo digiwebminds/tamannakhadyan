@@ -22,23 +22,29 @@ if (!isset($_SESSION['username'])) {
     <?php
     include "../include/navbar.php";
     ?>
-    <button href="add_user.php" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-1 border border-blue-700 rounded"><a href="add_user.php">Add User</a></button>
+<!-- Title -->
+<div class="flex justify-between items-center">
+    <h1 class="flex-grow bg-gray-700 text-white text-xl p-3 border-gray-800 relative">
+        List of Customers
+        <button class="absolute top-1/2 right-0 transform -translate-y-1/2 bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 mr-3 border border-white rounded">
+            <a href="add_user.php" class="text-white">Add Customer</a>
+        </button>
+    </h1>
+</div>
+<!-- Search Box -->
+    <span class="flex items-center space-x-2 my-2">
+    <label for="searchvalue" class="text-gray-700 font-bold">Search</label>
+    <input type="text" id="searchvalue" name="searchvalue" class="border border-gray-300 rounded px-2 py-1">
+    <label for="searchby" class="text-gray-700">By</label>
+    <select id="searchby" class="border border-gray-300 rounded px-2 py-1">
+        <option value="1">Customer Code</option>
+        <option value="2">Cust. Name</option>
+        <option value="3">Mobile No.</option>
+        <option value="4">Shop Name</option>
+    </select>
+    <button id="searchbutton" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Search</button>
+</span>
 
-    <div class="bg-purple-500 item-center text-white font-bold text-xl p-3 border-gray-800 rounded">
-        <h1>List of Customers</h1>
-    </div>
-    <span>
-        <label for="searchvalue">Search</label>
-        <input type="text" id="searchvalue" name="searchvalue">
-        <label for="searchby">By</label>
-        <select id="searchby">
-            <option value="1">Customer Code</option>
-            <option value="2">Cust. Name</option>
-            <option value="3">Mobile No.</option>
-            <option value="4">Shop Name</option>
-        </select>
-        <button id="searchbutton">Search</button>
-    </span>
 
     <div class="relative" id="pagination-result">
         <div id="overlay">
