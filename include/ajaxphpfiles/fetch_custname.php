@@ -37,7 +37,7 @@ if(isset($_POST['ccprincipal'])){
   }
 }
 
-///for rapayment  
+///for rapayment
 
 if (isset($_POST['loanid'])) {
 
@@ -121,7 +121,7 @@ HAVING phone_count > 0";
 if($loan_type==1){  
   echo '<tr class="border-b border-gray-200 dark:border-gray-700">
   <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700"> Loan Amount Remaining (शेष ऋण राशि)</th>
-  <td class="px-6 py-2 border border-gray-700 text-gray-900">' . $remprincipal . ' &nbsp; &nbsp; &nbsp; | Principal Paid :- '.$row["total_principal_paid"].' | Initial Principal :- '.$row["principle"].'
+  <td class="px-6 py-2 border border-gray-700 text-gray-900">' . $remprincipal . ' &nbsp; &nbsp; &nbsp; | Principal Paid : '.$row["total_principal_paid"].' | Initial Principal : '.$row["principle"].'
 
   &nbsp;<button id="openprincipalpaidtable" class="text-black font-bold py-2 px-4 rounded">
   <i class="fa-solid fa-circle-info"></i>
@@ -232,9 +232,17 @@ if($loan_type==1){
       </tr>';
       if ($loan_type == 1) {
         echo '<tr class="border-b border-gray-200 dark:border-gray-700">
-        <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700"> Repay Principle (मूलधन चुकाएं)</th>
+        <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700"> Repay Principal (मूलधन चुकाएं)</th>
         <td class="px-6 py-2 border border-gray-700">
         <button id="openModalprinciplerepay" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Pay Principle</button>
+        </td>
+        </tr>';
+      }
+      if ($loan_type == 1) {
+        echo '<tr class="border-b border-gray-200 dark:border-gray-700">
+        <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700"> Give More Principal </th>
+        <td class="px-6 py-2 border border-gray-700">
+        <button id="openModalprinciplelend" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Give More Principle</button>
         </td>
         </tr>';
       }
@@ -351,19 +359,7 @@ echo '<div id="myModalrepayprinciple" class="modal hidden fixed inset-0 flex ite
                   </div>
                   <div>
                       <label for="loantype" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-900">Loan Type</label>
-                      <input type="text" name="loantype" id="loantype" value="';
-
-      if ($loan_type == 1) {
-        echo "CC Loan";
-      } elseif ($loan_type == 2) {
-        echo "Daily Loan";
-      } elseif ($loan_type == 3) {
-        echo "Weekly Loan";
-      } else {
-        echo "Monthly Loan";
-      }
-
-      echo '" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required readonly>
+                      <input type="text" name="loantype" id="loantype" value="CC Loan" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required readonly>
                   </div>
                   <div>
                       <label for="principle-amount-repay" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-900">Principle Amount</label>
@@ -383,6 +379,46 @@ echo '<div id="myModalrepayprinciple" class="modal hidden fixed inset-0 flex ite
   
 </div>
 </div>';
+
+// lend again principle modal below
+
+echo '<div id="myModallendprinciple" class="modal hidden fixed inset-0 flex items-center justify-center z-50">
+// <div class="modal-overlay outsidemodal absolute w-full h-full bg-gray-900 opacity-50"></div>
+<div class="modal-content bg-white text-gray-800 rounded shadow-lg w-1/2">
+  
+<form action="" method="POST">
+              <div class="grid gap-4 sm:grid-cols-2 sm:gap-6 p-4">
+                  <div>
+                      <label for="dorepay-principall" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-900">D.O.Repayment</label>
+                      <input type="date" name="dorepay-principall" id="dorepay-principall" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required>
+                  </div>
+                  <div>
+                      <label for="loan_idl" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-900">Loan ID</label>
+                      <input type="number" name="loan_idl" id="loan_idl" value="' . $row['id'] . '" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required readonly>
+                  </div>
+                  <div>
+                      <label for="loantype" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-900">Loan Type</label>
+                      <input type="text" name="loantype" id="loantype" value="CC Loan" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required readonly>
+                  </div>
+                  <div>
+                      <label for="principle-amount-repayl" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-900">Principle Amount</label>
+                      <input type="number" name="principle-amount-repayl" id="principle-amount-repayl" value="" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required>
+                  </div>
+                  <div>
+                      <label for="comment_prirepayl" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-900">Comment</label>
+                      <input type="text" name="comment_prirepayl" id="comment_prirepayl" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required>
+                  </div>
+
+                  <div id="principlelendalert"></div>
+                  <button type="submit" id="lend-principle-submitbtnn" class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800">
+                      Give Principle
+                  </button>
+              </div>
+          </form>
+  
+</div>
+</div>';
+
 
 //paid installments table modal here
 
@@ -408,7 +444,6 @@ echo '<div id="paidinstallmentModal" class="fixed inset-0 flex items-center just
 		<tbody class="bg-grey-light flex flex-col items-center justify-between overflow-y-scroll w-full" style="height: 30vh;">
 			';
       require_once "../connect.php";
-      
       $sql2 = "SELECT DORepayment,installment_amount FROM `repayment` where loan_id=$loanid";
       $result2 = mysqli_query($conn,$sql2);
       if (mysqli_num_rows($result2) > 0) {
@@ -496,7 +531,6 @@ echo '<div id="unpaidinstallmenttableModal" class="fixed inset-0 flex items-cent
     <!-- Remove the nasty inline CSS fixed height on production and replace it with a CSS class — this is just for demonstration purposes! -->
 		<tbody class="bg-grey-light flex flex-col items-center justify-between overflow-y-scroll w-full" style="height: 30vh;">
 			';
-
 
 require_once "../connect.php";
 if($loan_type == 1){
@@ -977,6 +1011,43 @@ if (isset($_POST['dorepay']) && isset($_POST['loan_id']) && isset($_POST['princi
   if($result){
     echo '<div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
     <span class="font-medium">Success !</span> Repayment Done Successfully
+  </div>';
+  }else{
+    echo '<div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+    <span class="font-medium">Alert !</span> There is some problem Please try Again !
+  </div>';
+  }
+}
+
+// code to enter lend more principle details in database 
+
+if (isset($_POST['dorepayl']) && isset($_POST['loan_id']) && isset($_POST['principleamtl'])) {
+  require_once "../connect.php";
+  $dorepay = $_POST['dorepayl'];
+  $loan_id = $_POST['loan_id'];
+  $principleamt = $_POST['principleamtl'];
+  $comment = $_POST['commentl'];
+
+  if (is_numeric($principleamt)) {
+    $principleamt_in_minus = -($principleamt);
+    // Proceed with further calculations or database operations
+  } else {
+    // Convert non-numeric value to numeric value
+    $numericValue = intval($principleamt); // or intval($principleamt) if an integer is desired
+  
+    if (is_numeric($numericValue)) {
+      $principleamt_in_minus = -($numericValue);
+      // Proceed with further calculations or database operations
+    } else {
+      echo "Error: The value entered could not be converted to a numeric value.";
+    }
+  }
+
+  $sql = "INSERT INTO `principle_repayment` (`loan_id`, `dorepayment`, `repay_amount`,`comment_prirepay`) VALUES ('$loan_id', '$dorepay', '$principleamt_in_minus','$comment')";
+  $result = mysqli_query($conn,$sql);
+  if($result){
+    echo '<div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
+    <span class="font-medium">Success !</span> Lend Principal Done Successfully
   </div>';
   }else{
     echo '<div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">

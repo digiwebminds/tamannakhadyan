@@ -88,6 +88,83 @@ $(document).ready(function () {
     })
 
 
+    // this is for modalrepayment PRINCIPLE
+
+    // Open the modal when the button is clicked
+    $(document).on('click', '#openModalprinciplerepay', function () {
+        // Open the modal
+        $("#myModalrepayprinciple").removeClass("hidden");
+    });
+
+    // Close the modal when the close button or outside modal area is clicked
+    $(document).on('click', '.close, .modal-overlay', function () {
+        // Open the modal
+        $("#myModalrepayprinciple").addClass("hidden");
+    });
+
+    // Prevent modal from closing when the modal content is clicked
+    $(document).on('click', '.modal-content', function (e) {
+        // Open the modal
+        e.stopPropagation();
+    });
+
+    // Prevent modal from closing on submit button click
+    $(document).on('click', '#repayprinciplesubmitbtnn', function (e) {
+        // Open the modal
+        e.preventDefault();
+    });
+
+
+    //principle lend more entry 
+
+    $(document).on('click', '#lend-principle-submitbtnn', function (e) {
+        e.preventDefault();
+        var dorepayl = $("#dorepay-principall").val();
+        var loan_id = $("#loan_idl").val();
+        var principleamtl = $("#principle-amount-repayl").val();
+        var commentl = $("#comment_prirepayl").val();
+
+        $.ajax({
+            url: '../include/ajaxphpfiles/fetch_custname.php',
+            type: 'POST',
+            data: { 'dorepayl': dorepayl, 'loan_id': loan_id, 'principleamtl': principleamtl,'commentl': commentl},
+            success: function (data) {
+                $("#principlelendalert").html(data);
+                // window.setTimeout(function(){
+                //     $("#myModallendprinciple").addClass("hidden");
+                // }, 2000);
+            }
+        });
+    })
+
+
+    // this is for modal for Lend More PRINCIPLE
+
+      // Open the modal when the button is clicked
+      $(document).on('click', '#openModalprinciplelend', function () {
+        // Open the modal
+        $("#myModallendprinciple").removeClass("hidden");
+    });
+
+    // Close the modal when the close button or outside modal area is clicked
+    $(document).on('click', '.close, .modal-overlay', function () {
+        // Open the modal
+        $("#myModallendprinciple").addClass("hidden");
+    });
+
+    // Prevent modal from closing when the modal content is clicked
+    $(document).on('click', '.modal-content', function (e) {
+        // Open the modal
+        e.stopPropagation();
+    });
+
+    // Prevent modal from closing on submit button click
+    $(document).on('click', '#lendprinciplesubmitbtnn', function (e) {
+        // Open the modal
+        e.preventDefault();
+    });
+
+
 
 
     //all jquery for installment info modal
@@ -139,32 +216,6 @@ $(document).ready(function () {
 
 
 
-
-      // this is for modalrepayment PRINCIPLE
-
-      // Open the modal when the button is clicked
-    $(document).on('click', '#openModalprinciplerepay', function () {
-        // Open the modal
-        $("#myModalrepayprinciple").removeClass("hidden");
-    });
-
-    // Close the modal when the close button or outside modal area is clicked
-    $(document).on('click', '.close, .modal-overlay', function () {
-        // Open the modal
-        $("#myModalrepayprinciple").addClass("hidden");
-    });
-
-    // Prevent modal from closing when the modal content is clicked
-    $(document).on('click', '.modal-content', function (e) {
-        // Open the modal
-        e.stopPropagation();
-    });
-
-    // Prevent modal from closing on submit button click
-    $(document).on('click', '#repayprinciplesubmitbtnn', function (e) {
-        // Open the modal
-        e.preventDefault();
-    });
   
 
 });
