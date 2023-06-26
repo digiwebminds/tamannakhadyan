@@ -3,8 +3,6 @@ require_once "../connect.php";
 
 if(isset($_POST['custid'])){
     $custid = $_POST['custid'];
-//     $sql ="SELECT c.name,c.fname,c.phone, c.photo,c.gaddress,l.* FROM customers as c
-// JOIN loans as l ON c.id = l.customer_id where c.id = $custid";
 $sql = "SELECT * FROM customers where id= $custid";
 $result = mysqli_query($conn,$sql);
 if($result){
@@ -21,8 +19,8 @@ if($result){
             <p class="text-medium font-bold">Phone No: '.$row['phone'].'</p>
             <p class="text-medium font-bold">Address: '.$row['address'].'</p>
             </div>
-            </div>
-            ';
+            </div>';
+
             $sql ="SELECT c.id AS cust_id, l.id,l.days_weeks_month,l.total, c.name, c.fname, c.city, COUNT(c.phone) AS phone_count, COUNT(re.loan_id) AS emi_count, c.photo, l.principle, l.dor, l.loan_type,l.dor,l.ldol, l.installment, l.roi,SUM(re.	installment_amount) as amount_paid,
             (SELECT SUM(repay_amount) FROM principle_repayment WHERE loan_id = l.id) AS total_principal_paid
           FROM customers AS c
@@ -66,7 +64,13 @@ if($result){
                             Amount Paid
                         </th>
                         <th scope="col" class="px-6 py-3">
+                            Late Fine
+                        </th>
+                        <th scope="col" class="px-6 py-3">
                             Amount Due
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Amount Due with Late Fine
                         </th>
                         <th scope="col" class="px-6 py-3">
                             Loan Summary
@@ -81,8 +85,10 @@ if($result){
             $totalinstallmentamountduetilldate = [];
             $totalinstallmentamount =[];
             $count = [];
+            $totallatefine = [];
             $i= 1;
             while($row = mysqli_fetch_assoc($result)){
+            $loanid = $row['id'];
             $loan_type = $row['loan_type'];
             $paidamountsum[] = $row['amount_paid'];
             $totalprincipleamount[] = $row['principle'];
@@ -138,6 +144,20 @@ if($result){
                                 '.$row['amount_paid'].'
                                 </td>
                                 <td class="px-6 py-4">';
+                                include_once "../functions.php";
+                                if($loan_type == 1 or $loan_type ==2){
+                                   echo $latefine = lateFineCalforCC_daily($loanid);
+                                   $totallatefine[] = $latefine;
+                                }elseif($loan_type==3){
+                                   echo $latefine = lateFineCalforweekly($loanid);
+                                   $totallatefine[] = $latefine;
+                                }elseif($loan_type == 4){
+                                   echo $latefine = lateFineCalformonthly($loanid);
+                                   $totallatefine[] = $latefine;
+                                }
+
+                                echo '</td>
+                                <td class="px-6 py-4">';
                                 $startDate = strtotime($row['dor']);
                                 $today = strtotime(date('Y-m-d'));
                                 if ($loan_type == 1) {
@@ -163,6 +183,9 @@ if($result){
                                 $totalinstallmentamountduetilldate[] = ($totalInstallmentstilldate*$row['installment'] - $row['amount_paid']);
                                 
                                 echo '</td>
+                                <td class="px-6 py-4">
+                                Amount due with Late fine
+                                </td>
                                 <td class="px-6 py-4">
                                 
                                 <a href="loansummary.php?id='.$row['id'].'"><button type="button" class="text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Click</button></a>
@@ -199,8 +222,14 @@ if($result){
             <td class="px-6 py-4">
             '.array_sum($paidamountsum).'
             </td>
+            <td class="px-6 py-4">
+            '.array_sum($totallatefine).'
+            </td>
             <td class="px-6 py-4 text-xl">
             '.array_sum($totalinstallmentamountduetilldate).'
+            </td>
+            <td class="px-6 py-4">
+            --
             </td>
             <td class="px-6 py-4">
             --
