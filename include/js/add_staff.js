@@ -62,10 +62,6 @@ tailwind.config = {
         {
             $("#password").css("border","2px solid red");
         }
-        else if(passcheck.length < 8)
-        {
-            $("#password").css("border","2px solid red");
-        }
         else
         {
             $("#password").css("border","2px solid skyblue");

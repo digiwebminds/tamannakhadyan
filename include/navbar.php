@@ -27,6 +27,9 @@
           <a href="../admin/dashboard.php" class="block py-2 pl-3 pr-4 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0" aria-current="page">Home</a>
         </li>
         <li>
+          <a href="../admin/staffmembers.php" class="block py-2 pl-3 pr-4 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0">Staff</a>
+        </li>
+        <li>
           <a href="../admin/customers.php" class="block py-2 pl-3 pr-4 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0">Customers</a>
         </li>
         <li>
