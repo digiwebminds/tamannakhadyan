@@ -95,7 +95,7 @@ HAVING phone_count > 0";
         </td>
       </tr>
       <tr class="border-b border-gray-200 dark:border-gray-700">
-        <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700"> Start Date </th>
+        <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700">Loan Start Date </th>
         <td class="px-6 py-2 border border-gray-700">' . $row['dor'] . '
         </td>
       </tr>';
@@ -106,7 +106,6 @@ HAVING phone_count > 0";
         </td>
         </tr>';
       }
-
       echo '<tr class="border-b border-gray-200 dark:border-gray-700">
         <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700"> Father Name </th>
         <td class="px-6 py-2 border border-gray-700">' . $row['fname'] . '
@@ -118,10 +117,10 @@ HAVING phone_count > 0";
       </td>
       </tr>';
 
-if($loan_type==1){  
+if($loan_type==1){ 
   echo '<tr class="border-b border-gray-200 dark:border-gray-700">
   <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700"> Loan Amount Remaining (शेष ऋण राशि)</th>
-  <td class="px-6 py-2 border border-gray-700 text-gray-900">' . $remprincipal . ' &nbsp; &nbsp; &nbsp; | Principal Paid : '.$row["total_principal_paid"].' | Initial Principal : '.$row["principle"].'
+  <td class="px-6 py-2 border border-gray-700 text-gray-900">' . $remprincipal . ' &nbsp; &nbsp; | Principal Paid : '.$row["total_principal_paid"].' , Initial Principal : '.$row["principle"].'
 
   &nbsp;<button id="openprincipalpaidtable" class="text-black font-bold py-2 px-4 rounded">
   <i class="fa-solid fa-circle-info"></i>
@@ -151,12 +150,20 @@ if($loan_type==1){
     </tr>';
   }
   if($loan_type == 1){
-
     echo '<tr class="border-b border-gray-200 dark:border-gray-700">
-    <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700">Total Amount Due (कुल शेष राशि)(P+I)</th>
+    <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700">Interest Due Till Today (बकाया ऋण आज तक)</th>
     <td class="px-6 py-2 border border-gray-700 text-red-500">';
     include_once "../functions.php";
     $dueee = totalEmiAmountDue_in_CCloan($loanid);
+    echo $dueee ;
+    echo'
+    </td>
+    </tr>';
+  }
+  if($loan_type == 1){
+    echo '<tr class="border-b border-gray-200 dark:border-gray-700">
+    <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700">Amount Due (कुल शेष राशि) (P+I)</th>
+    <td class="px-6 py-2 border border-gray-700 text-red-500">';
     echo ($dueee + $remprincipal);
     echo '</td>
     </tr>';
@@ -176,11 +183,9 @@ if($loan_type==1){
     &nbsp;<button id="opentotalinstallmenttablemodal" class="text-black font-bold py-2 px-4 rounded">
       <i class="fa-solid fa-circle-info"></i>
       </button>
-
     </td>
     </tr>';
   }
-
       echo '<tr class="border-b border-gray-200 dark:border-gray-700">
       <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700"> Late Fine Till Date </th>
       <td class="px-6 py-2 border text-red-500 border-gray-700">';
@@ -211,7 +216,6 @@ if($loan_type==1){
       &nbsp;<button id="openpaidinstallmentinfo" class="text-black font-bold py-2 px-4 rounded">
       <i class="fa-solid fa-circle-info"></i>
       </button>
-      
       </td>
       </tr>
 
@@ -246,720 +250,56 @@ if($loan_type==1){
         </td>
         </tr>';
       }
-      if($loan_type == 1){
+      if($loan_type !=1){
       echo '<tr class="border-b border-gray-200 dark:border-gray-700">
-      <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700"> Due Amount Till Today (बकाया राशि आज तक)</th>
-      <td class="px-6 py-2 border border-gray-700 text-red-500">';
-      echo $dueee ;
-      echo'
-      </td>
-      </tr>';
-    
-    }else{
-      echo '<tr class="border-b border-gray-200 dark:border-gray-700">
-      <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700"> Due Amount Till Today (बकाया राशि आज तक)</th>
+      <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700">Amount Due Till Today (बकाया ऋण आज तक)</th>
       <td class="px-6 py-2 border border-gray-700 text-red-900">' .$unpaidInstallments*$row['installment']. '
       </td>
       </tr>';
+      //need to change this .\// need to change this
     }
-
-    echo '<tr class="border-b border-gray-200 dark:border-gray-700">
-      <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700"> Due Amount Till Today with Fine (बकाया राशि आज तक with Fine)</th>
-      <td class="px-6 py-2 border border-gray-700 text-red-600">'; if($loan_type != 1){
-        echo $lateFineSum + ($unpaidInstallments*$row['installment']);
-      }else{
-        echo ($dueee + $lateFineSum);
-      }
-       
+    if($loan_type == 1){
+      echo'
+      <tr class="border-b border-gray-200 dark:border-gray-700">
+      <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700">Total Due Amount (P + I + LateFine)</th>
+      <td class="px-6 py-2 border border-gray-700 text-red-900">';
+      echo ($dueee + $lateFineSum + $remprincipal);
       echo'</td>
       </tr>';
-      echo '</tbody>
+    }else{
+      echo'
+      <tr class="border-b border-gray-200 dark:border-gray-700">
+      <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700">Total Due Amount (P + I + LateFine)</th>
+      <td class="px-6 py-2 border border-gray-700 text-red-900">';
+      echo ($lateFineSum + ($unpaidInstallments*$row['installment']));
+      echo'</td>
+      </tr>';
+    }
+     echo '</tbody>
       </table>  
 </div>';
 
 
-
-
-
-      /// repayment modal below
-      echo '<div id="myModal" class="modal hidden fixed inset-0 flex items-center justify-center z-50">
-// <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
-<div class="modal-content bg-white text-gray-800 rounded shadow-lg w-1/2">
-  
-<form action="" method="POST">
-              <div class="grid gap-4 sm:grid-cols-2 sm:gap-6 p-4">
-                  
-                  <div>
-                      <label for="dorepay" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-900">D.O.Repayment</label>
-                      <input type="date" name="dorepay" id="dorepay" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required>
-                  </div>
-                  <div>
-                      <label for="loan_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-900">Loan ID</label>
-                      <input type="number" name="loan_id" id="loan_id" value="' . $row['id'] . '" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required readonly>
-                  </div>
-                  <div>
-                      <label for="loantype" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-900">Loan Type</label>
-                      <input type="text" name="loantype" id="loantype" value="';
-
-      if ($loan_type == 1) {
-        echo "CC Loan";
-      } elseif ($loan_type == 2) {
-        echo "Daily Loan";
-      } elseif ($loan_type == 3) {
-        echo "Weekly Loan";
-      } else {
-        echo "Monthly Loan";
-      }
-
-      echo '" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required readonly>
-                  </div>
-                  <div>
-                      <label for="install-amount" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-900">Installment Amount</label>
-                      <input type="number" name="install-amount" id="install-amount" value="';
-                      if($loan_type==1){
-
-                       echo $reminstallmentamount;  
-                      }else {
-                       echo $row['installment'];
-                      }
-                      
-                      echo '" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required>
-                  </div>
-
-                  <div>
-                      <label for="comment_repay" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-900">Comment</label>
-                      <input type="text" name="comment_repay" id="comment_repay" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required>
-                  </div>
-
-                  <div id="repaymentalert"></div>
-                  <button type="submit" id="repaysubmitbtnn" class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800">
-                      Pay Installment
-                  </button>
-              </div>
-          </form>
-</div>
-</div>';
-
+/// repayment modal below
+include_once "../modals/emi_repayment_modal.php";
 
 // repay principle modal below
+include_once "../modals/repay_principal_modal.php";
 
-echo '<div id="myModalrepayprinciple" class="modal hidden fixed inset-0 flex items-center justify-center z-50">
-// <div class="modal-overlay outsidemodal absolute w-full h-full bg-gray-900 opacity-50"></div>
-<div class="modal-content bg-white text-gray-800 rounded shadow-lg w-1/2">
-  
-<form action="" method="POST">
-              <div class="grid gap-4 sm:grid-cols-2 sm:gap-6 p-4">
-                  <div>
-                      <label for="dorepay-principal" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-900">D.O.Repayment</label>
-                      <input type="date" name="dorepay-principal" id="dorepay-principal" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required>
-                  </div>
-                  <div>
-                      <label for="loan_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-900">Loan ID</label>
-                      <input type="number" name="loan_id" id="loan_id" value="' . $row['id'] . '" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required readonly>
-                  </div>
-                  <div>
-                      <label for="loantype" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-900">Loan Type</label>
-                      <input type="text" name="loantype" id="loantype" value="CC Loan" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required readonly>
-                  </div>
-                  <div>
-                      <label for="principle-amount-repay" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-900">Principle Amount</label>
-                      <input type="number" name="principle-amount-repay" id="principle-amount-repay" value="" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required>
-                  </div>
-                  <div>
-                      <label for="comment_prirepay" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-900">Comment</label>
-                      <input type="text" name="comment_prirepay" id="comment_prirepay" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required>
-                  </div>
-
-                  <div id="principlerepayalert"></div>
-                  <button type="submit" id="repay-principle-submitbtnn" class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800">
-                      Pay Principle
-                  </button>
-              </div>
-          </form>
-  
-</div>
-</div>';
-
-// lend again principle modal below
-
-echo '<div id="myModallendprinciple" class="modal hidden fixed inset-0 flex items-center justify-center z-50">
-// <div class="modal-overlay outsidemodal absolute w-full h-full bg-gray-900 opacity-50"></div>
-<div class="modal-content bg-white text-gray-800 rounded shadow-lg w-1/2">
-  
-<form action="" method="POST">
-              <div class="grid gap-4 sm:grid-cols-2 sm:gap-6 p-4">
-                  <div>
-                      <label for="dorepay-principall" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-900">D.O.Repayment</label>
-                      <input type="date" name="dorepay-principall" id="dorepay-principall" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required>
-                  </div>
-                  <div>
-                      <label for="loan_idl" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-900">Loan ID</label>
-                      <input type="number" name="loan_idl" id="loan_idl" value="' . $row['id'] . '" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required readonly>
-                  </div>
-                  <div>
-                      <label for="loantype" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-900">Loan Type</label>
-                      <input type="text" name="loantype" id="loantype" value="CC Loan" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required readonly>
-                  </div>
-                  <div>
-                      <label for="principle-amount-repayl" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-900">Principle Amount</label>
-                      <input type="number" name="principle-amount-repayl" id="principle-amount-repayl" value="" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required>
-                  </div>
-                  <div>
-                      <label for="comment_prirepayl" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-900">Comment</label>
-                      <input type="text" name="comment_prirepayl" id="comment_prirepayl" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required>
-                  </div>
-
-                  <div id="principlelendalert"></div>
-                  <button type="submit" id="lend-principle-submitbtnn" class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800">
-                      Give Principle
-                  </button>
-              </div>
-          </form>
-  
-</div>
-</div>';
-
+// lend more principle modal below
+include_once "../modals/lend_more_principal_modal.php";
 
 //paid installments table modal here
-
-echo '<div id="paidinstallmentModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
-  <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
-  
-  <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
-    <!-- Modal Content -->
-    <div class="modal-content py-4 text-left px-6">
-      <!-- Close Button/Icon -->
-
-      <button id="closeInstallmentinfoModal" class="close-button border bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded">
-      <i class="fa-solid fa-xmark"></i>
-</button>
-      <table class="text-left w-full">
-		<thead class="bg-black flex text-white w-full">
-			<tr class="flex w-full mb-4">
-				<th class="p-4 w-1/4">Date</th>
-				<th class="p-4 w-1/4">Installment</th>
-			</tr>
-		</thead>
-    <!-- Remove the nasty inline CSS fixed height on production and replace it with a CSS class — this is just for demonstration purposes! -->
-		<tbody class="bg-grey-light flex flex-col items-center justify-between overflow-y-scroll w-full" style="height: 30vh;">
-			';
-      require_once "../connect.php";
-      $sql2 = "SELECT DORepayment,installment_amount FROM `repayment` where loan_id=$loanid";
-      $result2 = mysqli_query($conn,$sql2);
-      if (mysqli_num_rows($result2) > 0) {
-        while ($row2 = mysqli_fetch_assoc($result2)) {
-
-          echo '<tr class="flex w-full mb-4">
-          <td class="p-4 w-1/4 font-bold">'.$row2['DORepayment'].'</td>
-          <td class="p-4 w-1/4 font-bold">'.$row2['installment_amount'].'</td></tr>';
-
-            }
-          }
-				echo'</tbody>
-  </table>
-  </div>
-  </div>
-  </div>
-</div>';
-
+include_once "../modals/tables_modals/paid_emi_table_modal.php";
 
 //paid principal table modal here
-
-echo '<div id="paidprincipaltableModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
-  <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
-  
-  <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
-    <!-- Modal Content -->
-    <div class="modal-content py-4 text-left px-6">
-      <!-- Close Button/Icon -->
-
-      <button id="closeprincipaltableModal" class="close-button border bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded">
-      <i class="fa-solid fa-xmark"></i>
-</button>
-      <table class="text-left w-full">
-		<thead class="bg-black flex text-white w-full">
-			<tr class="flex w-full mb-4">
-				<th class="p-4 w-1/4">Date</th>
-				<th class="p-4 w-1/4">Installment</th>
-			</tr>
-		</thead>
-    <!-- Remove the nasty inline CSS fixed height on production and replace it with a CSS class — this is just for demonstration purposes! -->
-		<tbody class="bg-grey-light flex flex-col items-center justify-between overflow-y-scroll w-full" style="height: 30vh;">
-			';
-      require_once "../connect.php";
-      
-      $sql3 = "SELECT dorepayment,repay_amount FROM `principle_repayment` where loan_id=$loanid";
-      $result3 = mysqli_query($conn,$sql3);
-      if (mysqli_num_rows($result3) > 0) {
-        while ($row3 = mysqli_fetch_assoc($result3)) {
-
-          echo '<tr class="flex w-full mb-4">
-          <td class="p-4 w-1/4 font-bold">'.$row3['dorepayment'].'</td>
-          <td class="p-4 w-1/4 font-bold">'.$row3['repay_amount'].'</td></tr>';
-            }
-          }
-				echo'</tbody>
-  </table>
-  </div>
-  </div>
-  </div>
-</div>';
-
-
+include_once "../modals/tables_modals/principal_lend_paid_table.php";
 
 //unpaid Emi tilldate table modal here
-
-echo '<div id="unpaidinstallmenttableModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
-  <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
-  
-  <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
-    <!-- Modal Content -->
-    <div class="modal-content py-4 text-left px-6">
-      <!-- Close Button/Icon -->
-
-      <button id="closeunpaidinstallmenttableModal" class="close-button border bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded">
-      <i class="fa-solid fa-xmark"></i>
-</button>
-
-      <table class="text-left w-full">
-		<thead class="bg-black flex text-white w-full">
-			<tr class="flex w-full">
-				<th class="p-4 w-1/2">Date</th>
-				<th class="p-4 w-1/2">Installment</th>
-			</tr>
-		</thead>
-    <!-- Remove the nasty inline CSS fixed height on production and replace it with a CSS class — this is just for demonstration purposes! -->
-		<tbody class="bg-grey-light flex flex-col items-center justify-between overflow-y-scroll w-full" style="height: 30vh;">
-			';
-
-require_once "../connect.php";
-if($loan_type == 1){
-  // Fetch loan start date and last date from the loans table
-  $sql4 = "SELECT dor, ldol FROM loans WHERE id =$loanid";
-  $result4 = mysqli_query($conn, $sql4);
-  $row4 = mysqli_fetch_assoc($result4);
-  
-  $loanStartDate = $row4['dor'];
-  $loanLastDate = time();
-
-  
-  // Fetch installment payment dates from the repayment table
-  $sql5 = "SELECT DORepayment FROM repayment WHERE loan_id = $loanid";
-  $result5 = mysqli_query($conn, $sql5);
-  $paidDates = [];
-  while ($row5 = mysqli_fetch_assoc($result5)) {
-    $paidDates[] = $row5['DORepayment'];
-  }
-  
-  // Calculate the missing payment dates
-  $startDate = strtotime($loanStartDate);
-  $startDate += 86400;   // adding 1 days to start days to exclude loan given date 
-  $endDate = $loanLastDate;
-  $missingDates = array();
-  $currentDate = $startDate;
-  while ($currentDate <= $endDate) {
-
-      $date = date('Y-m-d', $currentDate);
-      if (!in_array($date, $paidDates)) {
-        $missingDates[$date] = 'Pending';
-      }
-      $currentDate = strtotime('+1 day', $currentDate);
-    
-  }
-  
-  // Display the missing payment dates
-  foreach ($missingDates as $date => $status) {
-    // echo $date . "<br>";
-    echo '<tr class="flex w-full">
-    <td class="p-4 w-1/2 font-bold">'.$date.'</td>';
-    if($status == 'Pending'){
-      echo '<td class="p-4 w-1/2 text-red-900 font-bold">'.$status.'</td></tr>';
-    }elseif($status == 'Coming'){
-      echo '<td class="p-4 w-1/2 text-yellow-900 font-bold">'.$status.'</td></tr>';
-    }
-  }
-}
-elseif($loan_type == 2){
-
-  // Fetch loan start date and last date from the loans table
-  $sql4 = "SELECT dor, ldol FROM loans WHERE id =$loanid";
-  $result4 = mysqli_query($conn, $sql4);
-  
-  $row4 = mysqli_fetch_assoc($result4);
-  
-  $loanStartDate = $row4['dor'];
-  $loanLastDate = $row4['ldol'];
-
-  
-  // Fetch installment payment dates from the repayment table
-  $sql5 = "SELECT DORepayment FROM repayment WHERE loan_id = $loanid";
-  $result5 = mysqli_query($conn, $sql5);
-  $paidDates = [];
-  while ($row5 = mysqli_fetch_assoc($result5)) {
-    $paidDates[] = $row5['DORepayment'];
-  }
-  
-  // Calculate the missing payment dates
-  $startDate = strtotime($loanStartDate);
-  $startDate += 86400;   // adding 1 days to start days to exclude loan given date 
-  $endDate = strtotime($loanLastDate);
-  $missingDates = array();
-  $currentDate = $startDate;
-  while ($currentDate <= $endDate) {
-    if($currentDate > time()){
-      
-      $date = date('Y-m-d', $currentDate);
-      $missingDates[$date] = 'Coming';
-      $currentDate = strtotime('+1 day', $currentDate);
-    }else{
-      $date = date('Y-m-d', $currentDate);
-      if (!in_array($date, $paidDates)) {
-        $missingDates[$date] = 'Pending';
-      }
-      $currentDate = strtotime('+1 day', $currentDate);
-    }
-  }
-  
-  // Display the missing payment dates
-  foreach ($missingDates as $date => $status) {
-    // echo $date . "<br>";
-    echo '<tr class="flex w-full">
-    <td class="p-4 w-1/2 font-bold">'.$date.'</td>';
-    if($status == 'Pending'){
-      echo '<td class="p-4 w-1/2 text-red-900 font-bold">'.$status.'</td></tr>';
-    }elseif($status == 'Coming'){
-      echo '<td class="p-4 w-1/2 text-yellow-900 font-bold">'.$status.'</td></tr>';
-    }
-  }
-}elseif($loan_type == 3){
-  // Fetch loan start date and last date from the loans table
-  $sql4 = "SELECT dor, ldol FROM loans WHERE id =$loanid";
-  $result4 = mysqli_query($conn, $sql4);
-  
-  $row4 = mysqli_fetch_assoc($result4);
-  
-  $loanStartDate = $row4['dor'];
-  $loanLastDate = $row4['ldol'];
-
-  
-  // Fetch installment payment dates from the repayment table
-  $sql5 = "SELECT DORepayment FROM repayment WHERE loan_id = $loanid";
-  $result5 = mysqli_query($conn, $sql5);
-  $paidDates = [];
-  while ($row5 = mysqli_fetch_assoc($result5)) {
-    $paidDates[] = $row5['DORepayment'];
-  }
-  
-  // Calculate the missing payment dates
-  $startDate = strtotime($loanStartDate); 
-  $startDate += 86400*7; // adding 7 days to start days to exclude loan given date 
-  $endDate = strtotime($loanLastDate);
-  $missingDates = array();
-  $currentDate = $startDate;
-  while ($currentDate <= $endDate) {
-    if($currentDate > time()){
-      
-      $date = date('Y-m-d', $currentDate);
-      $missingDates[$date] = 'Coming';
-      $currentDate = strtotime('+7 day', $currentDate);
-    }else{
-      $date = date('Y-m-d', $currentDate);
-      if (!in_array($date, $paidDates)) {
-        $missingDates[$date] = 'Pending';
-      }
-      $currentDate = strtotime('+7 day', $currentDate);
-    }
-  }
-  
-  // Display the missing payment dates
-  foreach ($missingDates as $date => $status) {
-    // echo $date . "<br>";
-    echo '<tr class="flex w-full">
-    <td class="p-4 w-1/2 font-bold">'.$date.'</td>';
-    if($status == 'Pending'){
-      echo '<td class="p-4 w-1/2 text-red-900 font-bold">'.$status.'</td></tr>';
-    }elseif($status == 'Coming'){
-      echo '<td class="p-4 w-1/2 text-yellow-900 font-bold">'.$status.'</td></tr>';
-    }
-  }
-}elseif($loan_type == 4){
-  // Fetch loan start date and last date from the loans table
-  $sql4 = "SELECT dor, ldol FROM loans WHERE id =$loanid";
-  $result4 = mysqli_query($conn, $sql4);
-  
-  $row4 = mysqli_fetch_assoc($result4);
-  
-  $loanStartDate = $row4['dor'];
-  $loanLastDate = $row4['ldol'];
-
-  
-  // Fetch installment payment dates from the repayment table
-  $sql5 = "SELECT DORepayment FROM repayment WHERE loan_id = $loanid";
-  $result5 = mysqli_query($conn, $sql5);
-  $paidDates = [];
-  while ($row5 = mysqli_fetch_assoc($result5)) {
-    $paidDates[] = $row5['DORepayment'];
-  }
-  
-  // Calculate the missing payment dates
-  $startDate = strtotime($loanStartDate); 
-  $startDate += 86400*30; // adding 7 days to start days to exclude loan given date 
-  $endDate = strtotime($loanLastDate);
-  $missingDates = array();
-  $currentDate = $startDate;
-  while ($currentDate <= $endDate) {
-    if($currentDate > time()){
-      
-      $date = date('Y-m-d', $currentDate);
-      $missingDates[$date] = 'Coming';
-      $currentDate = strtotime('+30 day', $currentDate);
-    }else{
-      $date = date('Y-m-d', $currentDate);
-      if (!in_array($date, $paidDates)) {
-        $missingDates[$date] = 'Pending';
-      }
-      $currentDate = strtotime('+30 day', $currentDate);
-    }
-  }
-  
-  // Display the missing payment dates
-  foreach ($missingDates as $date => $status) {
-    // echo $date . "<br>";
-    echo '<tr class="flex w-full">
-    <td class="p-4 w-1/2 font-bold">'.$date.'</td>';
-    if($status == 'Pending'){
-      echo '<td class="p-4 w-1/2 text-red-900 font-bold">'.$status.'</td></tr>';
-    }elseif($status == 'Coming'){
-      echo '<td class="p-4 w-1/2 text-yellow-900 font-bold">'.$status.'</td></tr>';
-    }
-  }
-}
-  echo'</tbody>
-  </table>
-  </div>
-  </div>
-  </div>
-  </div>';
+include_once "../modals/tables_modals/unpaid_emi_table.php";
 
 //Total EMI with date table modal here
-
-echo '<div id="totalinstallmenttableModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
-<div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
-
-<div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
-  <!-- Modal Content -->
-  <div class="modal-content py-4 text-left px-6">
-    <!-- Close Button/Icon -->
-
-    <button id="closetotalinstallmenttableModal" class="close-button border bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded">
-    <i class="fa-solid fa-xmark"></i>
-</button>
-
-    <table class="text-left w-full">
-  <thead class="bg-black flex text-white w-full">
-    <tr class="flex w-full">
-      <th class="p-4 w-1/2">Date</th>
-      <th class="p-4 w-1/2">Installment</th>
-    </tr>
-  </thead>
-  <!-- Remove the nasty inline CSS fixed height on production and replace it with a CSS class — this is just for demonstration purposes! -->
-  <tbody class="bg-grey-light flex flex-col items-center justify-between overflow-y-scroll w-full" style="height: 30vh;">
-    ';
-
-
-require_once "../connect.php";
-if($loan_type == 2){
-
-// Fetch loan start date and last date from the loans table
-$sql4 = "SELECT dor, ldol FROM loans WHERE id =$loanid";
-$result4 = mysqli_query($conn, $sql4);
-
-$row4 = mysqli_fetch_assoc($result4);
-
-$loanStartDate = $row4['dor'];
-$loanLastDate = $row4['ldol'];
-
-
-// Fetch installment payment dates from the repayment table
-$sql5 = "SELECT DORepayment FROM repayment WHERE loan_id = $loanid";
-$result5 = mysqli_query($conn, $sql5);
-$paidDates = [];
-while ($row5 = mysqli_fetch_assoc($result5)) {
-  $paidDates[] = $row5['DORepayment'];
-}
-
-// Calculate the missing payment dates
-$startDate = strtotime($loanStartDate);
-$startDate += 86400;   // adding 1 days to start days to exclude loan given date 
-$endDate = strtotime($loanLastDate);
-// $enddate2 = $endDate + 86400; // adding 1 day to include last date
-$alldates = [];
-
-$missingDates = array();
-$currentDate = $startDate;
-//calculating the all emi dates
-while ($currentDate <= $endDate){
-  if($currentDate > time()){
-    $date = date('Y-m-d', $currentDate);
-  $alldates[$date] = 'Coming'; // Set initial status as 'Pending'
-  $currentDate = strtotime('+1 day', $currentDate);
-  }else{
-    $date = date('Y-m-d', $currentDate);
-    // $alldates[] = $date;
-    $alldates[$date] = 'Pending'; // Set initial status as 'Pending'
-    $currentDate = strtotime('+1 day', $currentDate);
-  }
-}
-
-// Mark paid dates as 'Paid'
-foreach ($paidDates as $date) {
-  if (array_key_exists($date, $alldates)) {
-    $alldates[$date] = 'Paid';
-  }
-}
-// Display all payment dates with Status
-foreach ($alldates as $date => $status) {
-  // echo $date . "<br>";
-  echo '<tr class="flex w-full">
-  <td class="p-4 w-1/2 font-bold">'.$date.'</td>';
-  if($status == 'Pending'){
-    echo '<td class="p-4 w-1/2 text-red-900 font-bold">'.$status.'</td></tr>';
-  }elseif($status == 'Coming'){
-    echo '<td class="p-4 w-1/2 text-yellow-900 font-bold">'.$status.'</td></tr>';
-  }elseif($status == 'Paid'){
-    echo '<td class="p-4 w-1/2 text-green-900 font-bold">'.$status.'</td></tr>';
-  }
-}
-}elseif($loan_type ==3){
-  // Fetch loan start date and last date from the loans table
-$sql4 = "SELECT dor, ldol FROM loans WHERE id =$loanid";
-$result4 = mysqli_query($conn, $sql4);
-
-$row4 = mysqli_fetch_assoc($result4);
-
-$loanStartDate = $row4['dor'];
-$loanLastDate = $row4['ldol'];
-
-
-// Fetch installment payment dates from the repayment table
-$sql5 = "SELECT DORepayment FROM repayment WHERE loan_id = $loanid";
-$result5 = mysqli_query($conn, $sql5);
-$paidDates = [];
-while ($row5 = mysqli_fetch_assoc($result5)) {
-  $paidDates[] = $row5['DORepayment'];
-}
-
-// Calculate the missing payment dates
-$startDate = strtotime($loanStartDate);
-$startDate += 86400*7;   // adding 1 days to start days to exclude loan given date 
-$endDate = strtotime($loanLastDate);
-// $enddate2 = $endDate + 86400; // adding 1 day to include last date
-$alldates = [];
-
-$missingDates = array();
-$currentDate = $startDate;
-//calculating the all emi dates
-while ($currentDate <= $endDate){
-  if($currentDate > time()){
-    $date = date('Y-m-d', $currentDate);
-  $alldates[$date] = 'Coming'; // Set initial status as 'Pending'
-  $currentDate = strtotime('+7 day', $currentDate);
-  }else{
-    $date = date('Y-m-d', $currentDate);
-    // $alldates[] = $date;
-    $alldates[$date] = 'Pending'; // Set initial status as 'Pending'
-    $currentDate = strtotime('+7 day', $currentDate);
-  }
-}
-
-// Mark paid dates as 'Paid'
-foreach ($paidDates as $date) {
-  if (array_key_exists($date, $alldates)) {
-    $alldates[$date] = 'Paid';
-  }
-}
-// Display all payment dates with Status
-foreach ($alldates as $date => $status) {
-  // echo $date . "<br>";
-  echo '<tr class="flex w-full">
-  <td class="p-4 w-1/2 font-bold">'.$date.'</td>';
-  if($status == 'Pending'){
-    echo '<td class="p-4 w-1/2 text-red-900 font-bold">'.$status.'</td></tr>';
-  }elseif($status == 'Coming'){
-    echo '<td class="p-4 w-1/2 text-yellow-900 font-bold">'.$status.'</td></tr>';
-  }elseif($status == 'Paid'){
-    echo '<td class="p-4 w-1/2 text-green-900 font-bold">'.$status.'</td></tr>';
-  }
-}
-}elseif($loan_type == 4){
-  // Fetch loan start date and last date from the loans table
-$sql4 = "SELECT dor, ldol FROM loans WHERE id =$loanid";
-$result4 = mysqli_query($conn, $sql4);
-
-$row4 = mysqli_fetch_assoc($result4);
-
-$loanStartDate = $row4['dor'];
-$loanLastDate = $row4['ldol'];
-
-
-// Fetch installment payment dates from the repayment table
-$sql5 = "SELECT DORepayment FROM repayment WHERE loan_id = $loanid";
-$result5 = mysqli_query($conn, $sql5);
-$paidDates = [];
-while ($row5 = mysqli_fetch_assoc($result5)) {
-  $paidDates[] = $row5['DORepayment'];
-}
-
-// Calculate the missing payment dates
-$startDate = strtotime($loanStartDate);
-$startDate += 86400*30;   // adding 1 days to start days to exclude loan given date 
-$endDate = strtotime($loanLastDate);
-// $enddate2 = $endDate + 86400; // adding 1 day to include last date
-$alldates = [];
-
-$missingDates = array();
-$currentDate = $startDate;
-//calculating the all emi dates
-while ($currentDate <= $endDate){
-  if($currentDate > time()){
-    $date = date('Y-m-d', $currentDate);
-  $alldates[$date] = 'Coming'; // Set initial status as 'Pending'
-  $currentDate = strtotime('+30 day', $currentDate);
-  }else{
-    $date = date('Y-m-d', $currentDate);
-    // $alldates[] = $date;
-    $alldates[$date] = 'Pending'; // Set initial status as 'Pending'
-    $currentDate = strtotime('+30 day', $currentDate);
-  }
-}
-
-// Mark paid dates as 'Paid'
-foreach ($paidDates as $date) {
-  if (array_key_exists($date, $alldates)) {
-    $alldates[$date] = 'Paid';
-  }
-}
-// Display all payment dates with Status
-foreach ($alldates as $date => $status) {
-  // echo $date . "<br>";
-  echo '<tr class="flex w-full">
-  <td class="p-4 w-1/2 font-bold">'.$date.'</td>';
-  if($status == 'Pending'){
-    echo '<td class="p-4 w-1/2 text-red-900 font-bold">'.$status.'</td></tr>';
-  }elseif($status == 'Coming'){
-    echo '<td class="p-4 w-1/2 text-yellow-900 font-bold">'.$status.'</td></tr>';
-  }elseif($status == 'Paid'){
-    echo '<td class="p-4 w-1/2 text-green-900 font-bold">'.$status.'</td></tr>';
-  }
-}
-}
-
-echo'</tbody>
-</table>
-</div>
-</div>
-</div>
-</div>';
+include_once "../modals/tables_modals/total_emi_table.php";
 
   
 }
@@ -1056,25 +396,6 @@ if (isset($_POST['dorepayl']) && isset($_POST['loan_id']) && isset($_POST['princ
   }
 }
 
-
-//interdependent code of last date of repayment and number of days
-
-// commenting this if other is not worked 
-
-// if(isset($_POST['dor'])){
-//   if(isset($_POST['days'])){
-//     $dor = strtotime($_POST['dor']);
-//     $days = $_POST['days'] * 86400;
-//     $ldorloan = $dor + $days;
-//     echo date("Y-m-d",$ldorloan);
-//   }
-//   if(isset($_POST['ldorloan'])){
-//     $dor = strtotime($_POST['dor']);
-//     $ldorloan = strtotime($_POST['ldorloan']);
-//     $days = $ldorloan - $dor;
-//     echo date("j",$days);
-//   }
-// }
 
 //this code is for interdependent no. of days/weeks/month & last day of repayment
 

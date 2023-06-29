@@ -42,8 +42,6 @@ $(document).ready(function () {
     });
 
 
-
-
     //repayment installment entry 
 
     $(document).on('click', '#repaysubmitbtnn', function (e) {
@@ -115,7 +113,7 @@ $(document).ready(function () {
     });
 
 
-    //principle lend more entry 
+    //principle lend more entry
 
     $(document).on('click', '#lend-principle-submitbtnn', function (e) {
         e.preventDefault();
@@ -213,10 +211,6 @@ $(document).ready(function () {
         $('#totalinstallmenttableModal').addClass('hidden');
         })
 
-
-
-
-  
 
 });
 

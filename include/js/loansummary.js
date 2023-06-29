@@ -7,5 +7,4 @@ $("#viewallemi").click(function() {
     $("#toggleemitable").toggle();
 });
 
-
 })

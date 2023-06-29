@@ -1,4 +1,6 @@
 <?php
+
+// total emi amount due in cc loan , according to current principal amount left
 function totalEmiAmountDue_in_CCloan($loanid){
     include 'connect.php';
 
@@ -108,7 +110,6 @@ function lateFineCalforCC_daily($loanid){
       $currentDate += 86400; // Move to the next day (86400 seconds = 1 day)
     }
   }
-  
   return array_sum($totalLateFine);
 }
 
