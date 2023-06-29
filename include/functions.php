@@ -89,14 +89,16 @@ function lateFineCalforCC_daily($loanid){
     $fineStartDate = $previousDate + $lateFineAfterEpoch; // Calculate the start date for late fine
   
     if ($fineStartDate <= $pdEpoch) {
-      $currentDate = $fineStartDate;
-      while ($currentDate <= $pdEpoch) {
+      $currentDate = $previousDate;
+      while ($currentDate < $pdEpoch) {
         $totalLateFine[date('Y-m-d', $currentDate)] = $lateFine; // Store the late fine for the date
+        // echo date('Y-m-d',$currentDate);
+        // echo "<br/>";
         $currentDate += 86400; // Move to the next day (86400 seconds = 1 day)
       }
     }
   
-    $previousDate = $pdEpoch; // Move to the next repayment date
+    $previousDate = $pdEpoch + 86400; // Move to the next repayment date
   }
   
   // Calculate late fine from the last repayment date till the current date
@@ -104,13 +106,16 @@ function lateFineCalforCC_daily($loanid){
   $fineStartDate = $previousDate + $lateFineAfterEpoch; // Calculate the start date for late fine
   
   if ($fineStartDate <= $loanLastDate) {
-    $currentDate = $fineStartDate;
-    while ($currentDate <= $loanLastDate) {
+    $currentDate = $previousDate;
+    while ($currentDate < $loanLastDate) {
       $totalLateFine[date('Y-m-d', $currentDate)] = $lateFine; // Store the late fine for the date
+      // echo date('Y-m-d',$currentDate);
+      //   echo "<br/>";
       $currentDate += 86400; // Move to the next day (86400 seconds = 1 day)
     }
   }
-  return array_sum($totalLateFine);
+  // return array_sum($totalLateFine);
+  return $totalLateFine;
 }
 
 
@@ -146,14 +151,16 @@ function lateFineCalforweekly($loanid){
     $fineStartDate = $previousDate + $lateFineAfterEpoch; // Calculate the start date for late fine
   
     if ($fineStartDate <= $pdEpoch) {
-      $currentDate = $fineStartDate;
-      while ($currentDate <= $pdEpoch) {
+      $currentDate = $previousDate;
+      while ($currentDate < $pdEpoch) {
         $totalLateFine[date('Y-m-d', $currentDate)] = $lateFine; // Store the late fine for the date
+        // echo date('Y-m-d',$currentDate);
+        // echo "<br/>";
         $currentDate += 86400; // Move to the next day (86400 seconds = 1 day)
       }
     }
   
-    $previousDate = $pdEpoch; // Move to the next repayment date
+    $previousDate = $pdEpoch + 86400; // Move to the next repayment date
   }
   
   // Calculate late fine from the last repayment date till the current date
@@ -161,14 +168,16 @@ function lateFineCalforweekly($loanid){
   $fineStartDate = $previousDate + $lateFineAfterEpoch; // Calculate the start date for late fine
   
   if ($fineStartDate <= $loanLastDate) {
-    $currentDate = $fineStartDate;
-    while ($currentDate <= $loanLastDate) {
+    $currentDate = $previousDate;
+    while ($currentDate < $loanLastDate) {
       $totalLateFine[date('Y-m-d', $currentDate)] = $lateFine; // Store the late fine for the date
+      // echo date('Y-m-d',$currentDate);
+      //   echo "<br/>";
       $currentDate += 86400; // Move to the next day (86400 seconds = 1 day)
     }
   }
-  
-  return array_sum($totalLateFine);
+  // return array_sum($totalLateFine);
+  return $totalLateFine;
 }
 
 // to calculate late Fine for Monthly Loans
@@ -203,14 +212,16 @@ function lateFineCalformonthly($loanid){
     $fineStartDate = $previousDate + $lateFineAfterEpoch; // Calculate the start date for late fine
   
     if ($fineStartDate <= $pdEpoch) {
-      $currentDate = $fineStartDate;
-      while ($currentDate <= $pdEpoch) {
+      $currentDate = $previousDate;
+      while ($currentDate < $pdEpoch) {
         $totalLateFine[date('Y-m-d', $currentDate)] = $lateFine; // Store the late fine for the date
+        // echo date('Y-m-d',$currentDate);
+        // echo "<br/>";
         $currentDate += 86400; // Move to the next day (86400 seconds = 1 day)
       }
     }
   
-    $previousDate = $pdEpoch; // Move to the next repayment date
+    $previousDate = $pdEpoch + 86400; // Move to the next repayment date
   }
   
   // Calculate late fine from the last repayment date till the current date
@@ -218,13 +229,15 @@ function lateFineCalformonthly($loanid){
   $fineStartDate = $previousDate + $lateFineAfterEpoch; // Calculate the start date for late fine
   
   if ($fineStartDate <= $loanLastDate) {
-    $currentDate = $fineStartDate;
-    while ($currentDate <= $loanLastDate) {
+    $currentDate = $previousDate;
+    while ($currentDate < $loanLastDate) {
       $totalLateFine[date('Y-m-d', $currentDate)] = $lateFine; // Store the late fine for the date
+      // echo date('Y-m-d',$currentDate);
+      //   echo "<br/>";
       $currentDate += 86400; // Move to the next day (86400 seconds = 1 day)
     }
   }
-  
-  return array_sum($totalLateFine);
+  // return array_sum($totalLateFine);
+  return $totalLateFine;
 }
 ?>

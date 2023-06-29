@@ -210,6 +210,16 @@ $(document).ready(function () {
     $(document).on('click','#closetotalinstallmenttableModal', function(){
         $('#totalinstallmenttableModal').addClass('hidden');
         })
+        
+    //all jquery for total installment table modal
+
+    $(document).on('click','#openlateFineTableModalbtn', function(){
+        $('#lateFineTableModal').removeClass('hidden');
+   })
+  
+    $(document).on('click','#closeLateFineTableModal', function(){
+        $('#lateFineTableModal').addClass('hidden');
+        })
 
 
 });
