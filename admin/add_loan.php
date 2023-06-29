@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $days_weeks_months = $_POST['days'];
         $ldol = $_POST['ldorloan'];
 
-        $sql = "INSERT INTO `loans` (`customer_id`, `principle`, `comment`, `dor`, `loan_type`, `installment`,`total`,`days_weeks_month`,`timestamp`,`ldol`,`latefine`,`latefineafter`) VALUES ('$customerid', '$principle', '$comment', '$dorloan', '$loancategory', '$installment',$total,$days_weeks_months,$timestamp,$ldol,$latefine,$latefineafter)";
+        $sql = "INSERT INTO `loans` (`customer_id`, `principle`, `comment`, `dor`, `loan_type`, `installment`,`total`,`days_weeks_month`,`timestamp`,`ldol`,`latefine`,`latefineafter`) VALUES ('$customerid', '$principle', '$comment', '$dorloan', '$loancategory', '$installment',$total,$days_weeks_months,$timestamp,'$ldol',$latefine,$latefineafter)";
 
         $result = mysqli_query($conn, $sql);
     
