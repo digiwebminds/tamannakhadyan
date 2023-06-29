@@ -190,16 +190,24 @@ if($loan_type==1){
       <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700"> Late Fine Till Date </th>
       <td class="px-6 py-2 border text-red-500 border-gray-700">';
       include_once "../functions.php";
-      $lateFineSum = lateFineCalforCC_daily($loanid);
-  // calculating late fees
-  if ($loan_type == 1 ){
-    echo $lateFineSum;
+      $lateFinearray = lateFineCalforCC_daily($loanid);
+      $lateFinesum = array_sum($lateFinearray);
+      // calculating late fees
+  if ($loan_type == 1){
+    $lateFinearray = lateFineCalforCC_daily($loanid);
+    echo $lateFinesum = array_sum($lateFinearray);
+    echo '&nbsp;<button id="openlateFineTableModalbtn" class="text-black font-bold py-2 px-4 rounded">
+    <i class="fa-solid fa-circle-info"></i>
+    </button>';
   }elseif($loan_type == 2){
-    echo $lateFineSum;
+    $lateFinearray = lateFineCalforCC_daily($loanid);
+    echo $lateFinesum = array_sum($lateFinearray);
   }elseif($loan_type ==3){
-    echo $lateFineSum = lateFineCalforweekly($loanid);
+    $lateFinearray = lateFineCalforweekly($loanid);
+    echo $lateFinesum = array_sum($lateFinearray);
   }elseif($loan_type ==4){
-    echo $lateFineSum = lateFineCalformonthly($loanid);
+    $lateFinearray = lateFineCalformonthly($loanid);
+    echo $lateFinesum = array_sum($lateFinearray);
   }
       echo'</td>
       </tr>
@@ -258,12 +266,36 @@ if($loan_type==1){
       </tr>';
       //need to change this .\// need to change this
     }
-    if($loan_type == 1){
+
+
+    if($loan_type == 1 ){
       echo'
       <tr class="border-b border-gray-200 dark:border-gray-700">
       <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700">Total Due Amount (P + I + LateFine)</th>
       <td class="px-6 py-2 border border-gray-700 text-red-900">';
-      echo ($dueee + $lateFineSum + $remprincipal);
+      $lateFinearray = lateFineCalforCC_daily($loanid);
+      $lateFinesum = array_sum($lateFinearray);
+      echo ($dueee + $lateFinesum + $remprincipal);
+      echo'</td>
+      </tr>';
+    }elseif($loan_type == 2){
+      echo'
+      <tr class="border-b border-gray-200 dark:border-gray-700">
+      <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700">Total Due Amount (P + I + LateFine)</th>
+      <td class="px-6 py-2 border border-gray-700 text-red-900">';
+      $lateFinearray = lateFineCalforCC_daily($loanid);
+      $lateFinesum = array_sum($lateFinearray);
+      echo ($lateFinesum + ($unpaidInstallments*$row['installment']));
+      echo'</td>
+      </tr>';
+    }elseif($loan_type == 3){
+      echo'
+      <tr class="border-b border-gray-200 dark:border-gray-700">
+      <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700">Total Due Amount (P + I + LateFine)</th>
+      <td class="px-6 py-2 border border-gray-700 text-red-900">';
+      $lateFinearray = lateFineCalforweekly($loanid);
+      $lateFinesum = array_sum($lateFinearray);
+      echo ($lateFinesum + ($unpaidInstallments*$row['installment']));
       echo'</td>
       </tr>';
     }else{
@@ -271,10 +303,14 @@ if($loan_type==1){
       <tr class="border-b border-gray-200 dark:border-gray-700">
       <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700">Total Due Amount (P + I + LateFine)</th>
       <td class="px-6 py-2 border border-gray-700 text-red-900">';
-      echo ($lateFineSum + ($unpaidInstallments*$row['installment']));
+      $lateFinearray = lateFineCalformonthly($loanid);
+      $lateFinesum = array_sum($lateFinearray);
+      echo ($lateFinesum + ($unpaidInstallments*$row['installment']));
       echo'</td>
       </tr>';
     }
+
+
      echo '</tbody>
       </table>  
 </div>';
@@ -300,6 +336,9 @@ include_once "../modals/tables_modals/unpaid_emi_table.php";
 
 //Total EMI with date table modal here
 include_once "../modals/tables_modals/total_emi_table.php";
+
+// LateFineTable modal here
+include_once "../modals/tables_modals/lateFineWithDates.php";
 
   
 }

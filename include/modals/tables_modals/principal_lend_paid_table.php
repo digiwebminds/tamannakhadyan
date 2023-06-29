@@ -14,8 +14,9 @@ echo '<div id="paidprincipaltableModal" class="fixed inset-0 flex items-center j
       <table class="text-left w-full">
 		<thead class="bg-black flex text-white w-full">
 			<tr class="flex w-full mb-4">
-				<th class="p-4 w-1/4">Date</th>
-				<th class="p-4 w-1/4">Installment</th>
+				<th class="p-1 w-1/4">Date</th>
+				<th class="p-1 w-1/4">Installment</th>
+        <th class="p-1 w-1/4">Type</th>
 			</tr>
 		</thead>
     <!-- Remove the nasty inline CSS fixed height on production and replace it with a CSS class — this is just for demonstration purposes! -->
@@ -23,14 +24,23 @@ echo '<div id="paidprincipaltableModal" class="fixed inset-0 flex items-center j
 			';
       require_once "../connect.php";
       
-      $sql3 = "SELECT dorepayment,repay_amount FROM `principle_repayment` where loan_id=$loanid";
+      $sql3 = "SELECT dorepayment,repay_amount,info FROM `principle_repayment` where loan_id=$loanid";
       $result3 = mysqli_query($conn,$sql3);
       if (mysqli_num_rows($result3) > 0) {
         while ($row3 = mysqli_fetch_assoc($result3)) {
+          $info = $row3['info'];
 
           echo '<tr class="flex w-full mb-4">
-          <td class="p-4 w-1/4 font-bold">'.$row3['dorepayment'].'</td>
-          <td class="p-4 w-1/4 font-bold">'.$row3['repay_amount'].'</td></tr>';
+          <td class="p-1 w-1/4 font-bold">'.$row3['dorepayment'].'</td>
+          <td class="p-1 w-1/4 font-bold">'.$row3['repay_amount'].'</td>
+          <td class="p-1 w-1/4 font-bold">';
+          if($info == 0){
+            echo "Received Principal";
+          }elseif($info == 1){
+            echo "Given Principal";
+          }
+          echo'</td>
+          </tr>';
             }
           }
 				echo'</tbody>
