@@ -6,7 +6,7 @@ if(isset($_POST['custid'])){
 $sql = "SELECT * FROM customers where id= $custid";
 $result = mysqli_query($conn,$sql);
 if($result){
-    if(mysqli_num_rows($result) > 0){  
+    if(mysqli_num_rows($result) > 0){
         while($row = mysqli_fetch_assoc($result)){
 
             echo '<div class="border border-gray-400 p-4 flex">
@@ -86,114 +86,128 @@ if($result){
             $totalinstallmentamount =[];
             $count = [];
             $totallatefine = [];
+            $totalDueWithLateFine = [];
             $i= 1;
             while($row = mysqli_fetch_assoc($result)){
             $loanid = $row['id'];
             $loan_type = $row['loan_type'];
             $paidamountsum[] = $row['amount_paid'];
-            $totalprincipleamount[] = $row['principle'];
-            $totalinstallmentamount[] = $row['installment'];
+
+            $remprincipal = $row['principle']- $row["total_principal_paid"];
+            $reminstallmentamount = $remprincipal*($row["roi"]/100);
+            
             $count[] =  $row['phone_count'];
                 echo '<tr class="border-b bg-gray-800 border-gray-700">
-                                <th scope="row" class="px-6 py-4 font-medium text-white whitespace-nowrap ">
-                                 '. $i++ .'
-                                  </th>
-                                <th scope="row" class="px-6 py-4 font-medium text-white whitespace-nowrap ">
-                                    '.$row['id'].'
-                                </th>
-                                <td class="px-6 py-4">
-                                '.$row['dor'].'  
-                                </td>
-                                <td class="px-6 py-4">';
-                                if ($loan_type == 1) {
-                                    echo 'CC Loan';
-                                  } elseif ($loan_type == 2) {
-                                    echo 'Daily Loan';
-                                  } elseif ($loan_type == 3) {
-                                    echo 'Weekly Loan';
-                                  } else {
-                                    echo 'Monthly Loan';
-                                  }
-                                echo '</td>
-                                <td class="px-6 py-4">
-                                '.$row['principle'].' 
-                                </td>';
-                                if($loan_type != 1 ){
-                                    echo '<td class="px-6 py-4">
-                                    '.$row['total'].' 
-                                    </td>';
-                                }else{
-                                    echo '<td class="px-6 py-4">
-                                    Not Applicable 
-                                    </td>';
-                                } 
-
-                                if ($loan_type != 1){
-                                     echo '<td class="px-6 py-4">
-                                    '.$row['days_weeks_month'].'
-                                    </td>';
-                                }else {
-                                    echo '<td class="px-6 py-4">
-                                    Not Applicable 
-                                    </td>';
-                                }
-                                echo '<td class="px-6 py-4">
-                                '.$row['installment'].'
-                                </td>
-                                <td class="px-6 py-4">
-                                '.$row['amount_paid'].'
-                                </td>
-                                <td class="px-6 py-4">';
-                                include_once "../functions.php";
-                                if($loan_type == 1 or $loan_type ==2){
-                                   echo $latefine = lateFineCalforCC_daily($loanid);
-                                   $totallatefine[] = $latefine;
-                                }elseif($loan_type==3){
-                                   echo $latefine = lateFineCalforweekly($loanid);
-                                   $totallatefine[] = $latefine;
-                                }elseif($loan_type == 4){
-                                   echo $latefine = lateFineCalformonthly($loanid);
-                                   $totallatefine[] = $latefine;
-                                }
-
-                                echo '</td>
-                                <td class="px-6 py-4">';
-                                $startDate = strtotime($row['dor']);
-                                $today = strtotime(date('Y-m-d'));
-                                if ($loan_type == 1) {
-                                    $frequency = 1;
-                                }elseif ($loan_type == 2) {
-                                    $frequency = 1;
-                                } elseif ($loan_type == 3) {
-                                    $frequency = 7;
-                                } else {
-                                    $frequency = 30;
-                                }
-                                $totalInstallmentstilldate = floor(($today - $startDate) / (60 * 60 * 24 * $frequency)); 
-                                $currentDate = $startDate;
-                                $paidInstallments = $row['emi_count'];
-                                $unpaidInstallments = $totalInstallmentstilldate - $paidInstallments;
-
-                                // $remprincipal = $row['principle']- $row["total_principal_paid"];
-                                // $reminstallmentamount = $remprincipal*($row["roi"]/100);
-
-                                echo $totalInstallmentstilldate*$row['installment'] - $row['amount_paid'];
-                                //some changes may needs to calculate for CC loan type
-
-                                $totalinstallmentamountduetilldate[] = ($totalInstallmentstilldate*$row['installment'] - $row['amount_paid']);
-                                
-                                echo '</td>
-                                <td class="px-6 py-4">
-                                Amount due with Late fine
-                                </td>
-                                <td class="px-6 py-4">
-                                
-                                <a href="loansummary.php?id='.$row['id'].'"><button type="button" class="text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Click</button></a>
-
-                                </td>
-                                </tr>';
+                 <th scope="row" class="px-6 py-4 font-medium text-white whitespace-nowrap ">
+                  '. $i++ .'
+                   </th>
+                 <th scope="row" class="px-6 py-4 font-medium text-white whitespace-nowrap ">
+                     '.$row['id'].'
+                 </th>
+                 <td class="px-6 py-4">
+                 '.$row['dor'].'  
+                 </td>
+                 <td class="px-6 py-4">';
+                 if ($loan_type == 1) {
+                     echo 'CC Loan';
+                   } elseif ($loan_type == 2) {
+                     echo 'Daily Loan';
+                   } elseif ($loan_type == 3) {
+                     echo 'Weekly Loan';
+                   } else {
+                     echo 'Monthly Loan';
+                   }
+                 echo '</td>
+                 <td class="px-6 py-4">';
+                 if($loan_type != 1 ){
+                    echo  $row['principle'];
+                    $totalprincipleamount[] = $row['principle'];
+                 }else{
+                     echo $remprincipal;
+                     $totalprincipleamount[] = $remprincipal;
+                 }
+                 echo'</td>';
+                 if($loan_type != 1 ){
+                     echo '<td class="px-6 py-4">
+                     '.$row['total'].' 
+                     </td>';
+                 }else{
+                     echo '<td class="px-6 py-4">
+                     NA
+                     </td>';
+                 } 
+                 if ($loan_type != 1){
+                      echo '<td class="px-6 py-4">
+                     '.$row['days_weeks_month'].'
+                     </td>';
+                 }else {
+                     echo '<td class="px-6 py-4">
+                     NA
+                     </td>';
+                 }
+                 echo '<td class="px-6 py-4">';
+                 if($loan_type != 1){
+                     echo $row['installment'];
+                     $totalinstallmentamount[] = $row['installment'];
+                 }else{
+                    echo $reminstallmentamount;
+                    $totalinstallmentamount[] = $reminstallmentamount;
+                 }
+                 echo '</td>
+                 <td class="px-6 py-4">
+                 '.$row['amount_paid'].'
+                 </td>
+                 <td class="px-6 py-4">';
+                 include_once "../functions.php";
+                 if($loan_type == 1 or $loan_type ==2){
+                    $latefine = lateFineCalforCC_daily($loanid);
+                    echo $l = array_sum($latefine);
+                    $totallatefine[] = $l;
+                 }elseif($loan_type==3){
+                     $latefine = lateFineCalforweekly($loanid);
+                     echo $l = array_sum($latefine);
+                      $totallatefine[] = $l;
+                  }elseif($loan_type == 4){
+                      $latefine = lateFineCalformonthly($loanid);
+                      echo $l = array_sum($latefine);
+                      $totallatefine[] = $l;
+                  }
+                  echo '</td>
+                  <td class="px-6 py-4">';
+                  $startDate = strtotime($row['dor']);
+                  $today = strtotime(date('Y-m-d'));
+                  if ($loan_type == 1) {
+                      $frequency = 1;
+                  }elseif ($loan_type == 2) {
+                      $frequency = 1;
+                  } elseif ($loan_type == 3) {
+                      $frequency = 7;
+                  } else {
+                      $frequency = 30;
+                  }
+            $totalInstallmentstilldate = floor(($today - $startDate) / (60 * 60 * 24 * $frequency)); 
+            $currentDate = $startDate;
+            $paidInstallments = $row['emi_count'];
+            $unpaidInstallments = $totalInstallmentstilldate - $paidInstallments;
+            if($loan_type != 1){
+                echo $amountDue = $totalInstallmentstilldate*$row['installment'] - $row['amount_paid'];
+                $totalinstallmentamountduetilldate[] = $amountDue;
+            }else{
+                include_once "../functions.php";
+                echo $amountDue = totalEmiAmountDue_in_CCloan($loanid);
+                $totalinstallmentamountduetilldate[] = $amountDue;
             }
-            // print_r($paidamountsum);
+            //some changes may needs to calculate for CC loan type
+            echo '</td>
+            <td class="px-6 py-4">';
+            echo ($amountDue + $l);
+            $totalDueWithLateFine[] = ($amountDue + $l);
+            echo '</td>
+            <td class="px-6 py-4">     
+            <a href="loansummary.php?id='.$row['id'].'"><button type="button" class="text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Click</button></a>
+            </td>
+            </tr>';
+            }
             echo '<tr class="text-medium font-bold uppercase bg-gray-700 text-white">
             <td class="px-6 py-4">
             Total
@@ -229,14 +243,12 @@ if($result){
             '.array_sum($totalinstallmentamountduetilldate).'
             </td>
             <td class="px-6 py-4">
-            --
+            '.array_sum($totalDueWithLateFine).'
             </td>
             <td class="px-6 py-4">
             --
             </td>
             </tr>
-            
-            
             </tbody>
             </table>
             <div class="font-bold border border-black p-4 md:p-8">

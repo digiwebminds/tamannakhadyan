@@ -41,9 +41,7 @@ $(document).ready(function () {
         e.preventDefault();
     });
 
-
     //repayment installment entry 
-
     $(document).on('click', '#repaysubmitbtnn', function (e) {
         e.preventDefault();
         var dorepay = $("#dorepay").val();

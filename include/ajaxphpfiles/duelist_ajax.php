@@ -9,7 +9,7 @@ if(isset($_POST['cc'])){
 FROM customers AS c
 JOIN loans AS l ON c.id = l.customer_id
 LEFT JOIN repayment AS re ON l.id = re.loan_id
-WHERE l.loan_type = 1
+WHERE l.loan_type = 1 and status = 1
 GROUP BY c.id, l.id, c.name, c.fname,c.phone,c.address, c.city, c.photo, l.principle,l.total, l.dor, l.loan_type,l.dor,l.ldol, l.installment, l.roi
 HAVING phone_count > 0";
 
@@ -22,8 +22,6 @@ HAVING phone_count > 0";
         <button type="button" id="closebtncc" class="focus:outline-none text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-xs px-5 py-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Close</button>
     </p>
     </div>
-
-
         <table class="w-full text-sm text-left text-gray-400 mb-5">
             <thead class="text-medium uppercase bg-gray-700 text-white">
                 <tr>
@@ -49,16 +47,22 @@ HAVING phone_count > 0";
                        Remaining Principal
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Installment
+                        Installment Amount
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Principal Paid Till Today
+                        Principal Paid
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Amount Paid Till Today
+                        Installment Amount Paid
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Due Amount ( आज तक )
+                        Installment Due Amount
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Late Fine
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Total Amount Due (P + I + Latefine )
                     </th>
                 </tr>
             </thead>
@@ -69,6 +73,8 @@ HAVING phone_count > 0";
             $totalinstallmentamountpaidtilldate = [];
             $totalprincipalamountdue =[];
             $totalinstallmentamount = [];
+            $totalLateFine = [];
+            $totalAmountduewithLatefineall = [];
     $i = 1;
     while ($row = mysqli_fetch_assoc($result)) {
     $loan_type = $row['loan_type'];
@@ -141,6 +147,14 @@ HAVING phone_count > 0";
       <td class="px-6 py-4">
           '.$amountduetilltoday.'
       </td>
+      <td class="px-6 py-4">';
+      $latefinearray = lateFineCalforCC_daily($loanid);
+      echo $l = array_sum($latefinearray);
+      $totalLateFine[] = $l;
+      echo'</td>
+      <td class="px-6 py-4">
+          '.($totalAmountduewithLatefineall[] = $remprincipal + $amountduetilltoday + $l).'
+      </td>
   </tr>';
     }
 echo '<tr class="border-b text-medium font-bold bg-gray-700 border-gray-700 text-white">
@@ -177,11 +191,16 @@ echo '<tr class="border-b text-medium font-bold bg-gray-700 border-gray-700 text
       <td class="px-6 py-4">
       '.array_sum($totalamountduetilldate).'
       </td>
+      <td class="px-6 py-4">
+      '.array_sum($totalLateFine).'
+      </td>
+      <td class="px-6 py-4">
+      '.array_sum($totalAmountduewithLatefineall).'
+      </td>
   </tr>
 
 </tbody>
 </table>
-
 <div class="font-bold border border-black p-4 mb-4">
 <p class="text-red-900">Total Principal Amount Due: '.array_sum($totalprincipalamountdue).'</p>
 <p class="text-red-900">Total Installment Amount Due (आज तक): '.array_sum($totalamountduetilldate).'</p>
@@ -239,13 +258,22 @@ HAVING phone_count > 0";
                         Principal
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Installment
+                        Installment Amount
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Amount Paid Till Today
+                        No. of Installments
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Due Amount ( आज तक )
+                        Late Fine
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Amount Paid
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Due Amount
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Due Amount (Emi + Latefine)
                     </th>
                 </tr>
             </thead>
@@ -256,10 +284,12 @@ HAVING phone_count > 0";
             $totalinstallmentamountpaidtilldate = [];
             $totalprincipalamountdue =[];
             $totalinstallmentamount = [];
+            $totalLateFine = [];
+            $totalamountDueWithLateFine = [];
     $i = 1;
     while ($row = mysqli_fetch_assoc($result)) {
       $loan_type = $row['loan_type'];
-
+    $loanid = $row['id'];
       $startDate = strtotime($row['dor']);
       $today = strtotime(date('Y-m-d'));
       if ($loan_type == 1) {
@@ -317,11 +347,24 @@ HAVING phone_count > 0";
       '.$row['installment'].'
       </td>
       <td class="px-6 py-4">
+      '.$row['days_weeks_month'].'
+      </td>
+      <td class="px-6 py-4">';
+      include_once "../functions.php";
+      $latefinearray = lateFineCalforCC_daily($loanid);
+      echo $l = array_sum($latefinearray);
+      $totalLateFine[] = $l;
+      echo '</td>
+      <td class="px-6 py-4">
       '.$row['amount_paid'].'
       </td>
       <td class="px-6 py-4">
           '.$amountduetilltoday.'
       </td>
+      <td class="px-6 py-4">';
+      echo $amountDueWithLateFine = $amountduetilltoday + $l;
+      $totalamountDueWithLateFine[] = $amountDueWithLateFine;
+      echo '</td>
   </tr>';
     }
 echo '<tr class="border-b text-medium font-bold bg-gray-700 border-gray-700 text-white">
@@ -347,10 +390,19 @@ echo '<tr class="border-b text-medium font-bold bg-gray-700 border-gray-700 text
       '.array_sum($totalinstallmentamount).'
       </td>
       <td class="px-6 py-4">
+      --
+      </td>
+      <td class="px-6 py-4">'.
+      array_sum($totalLateFine)
+      .'</td>
+      <td class="px-6 py-4">
       '.array_sum($totalinstallmentamountpaidtilldate).'
       </td>
       <td class="px-6 py-4">
       '.array_sum($totalamountduetilldate).'
+      </td>
+      <td class="px-6 py-4">
+      '.array_sum($totalamountDueWithLateFine).'
       </td>
   </tr>
 
@@ -417,10 +469,19 @@ HAVING phone_count > 0";
                         Installment
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Amount Paid Till Today
+                        No. of Installments
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Due Amount ( आज तक )
+                        Late Fine
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Amount Paid
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Due Amount
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Due Amounts (Emi + Latefine)
                     </th>
                 </tr>
             </thead>
@@ -431,10 +492,12 @@ HAVING phone_count > 0";
             $totalinstallmentamountpaidtilldate = [];
             $totalprincipalamountdue =[];
             $totalinstallmentamount = [];
+            $totalLateFine = [];
+            $totalDueWithLateFine = [];
     $i = 1;
     while ($row = mysqli_fetch_assoc($result)) {
       $loan_type = $row['loan_type'];
-
+        $loanid = $row['id'];
       $startDate = strtotime($row['dor']);
       $today = strtotime(date('Y-m-d'));
       if ($loan_type == 1) {
@@ -467,8 +530,6 @@ HAVING phone_count > 0";
       $totalprincipalamountdue[] = $row['principle']-$row['total_principal_paid'];
       $totalinstallmentamount[] = $row['installment'];
 
-
-
       echo '<tr class="border-b bg-gray-800 border-gray-700">
       <td class="px-6 py-4">
       '.$i++.'
@@ -492,11 +553,24 @@ HAVING phone_count > 0";
       '.$row['installment'].'
       </td>
       <td class="px-6 py-4">
+      '.$row['days_weeks_month'].'
+      </td>
+      <td class="px-6 py-4">';
+      include_once "../functions.php";
+      $latefinearray = lateFineCalforweekly($loanid);
+      echo $l = array_sum($latefinearray);
+      $totalLateFine[] = $l;
+      echo'</td>
+      <td class="px-6 py-4">
       '.$row['amount_paid'].'
       </td>
       <td class="px-6 py-4">
           '.$amountduetilltoday.'
       </td>
+      <td class="px-6 py-4">';
+      echo $duewithLateFine = $amountduetilltoday + $l;
+      $totalDueWithLateFine[] = $duewithLateFine;
+      echo '</td>
   </tr>';
     }
 echo '<tr class="border-b text-medium font-bold bg-gray-700 border-gray-700 text-white">
@@ -522,10 +596,19 @@ echo '<tr class="border-b text-medium font-bold bg-gray-700 border-gray-700 text
       '.array_sum($totalinstallmentamount).'
       </td>
       <td class="px-6 py-4">
+      --
+      </td>
+      <td class="px-6 py-4">
+      '.array_sum($totalLateFine).'
+      </td>
+      <td class="px-6 py-4">
       '.array_sum($totalinstallmentamountpaidtilldate).'
       </td>
       <td class="px-6 py-4">
       '.array_sum($totalamountduetilldate).'
+      </td>
+      <td class="px-6 py-4">
+      '.array_sum($totalDueWithLateFine).'
       </td>
   </tr>
 
@@ -590,13 +673,22 @@ HAVING phone_count > 0";
                         Principal
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Installment
+                        Installment Amount
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Amount Paid Till Today
+                        No . of Installments
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Due Amount ( आज तक )
+                        Late fine
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Amount Paid
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Due Amount
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Due Amount (Emi + LateFine) 
                     </th>
                 </tr>
             </thead>
@@ -607,9 +699,12 @@ HAVING phone_count > 0";
             $totalinstallmentamountpaidtilldate = [];
             $totalprincipalamountdue =[];
             $totalinstallmentamount = [];
+            $totalDuewithLateFine = [];
+            $totalLateFine = [];
     $i = 1;
     while ($row = mysqli_fetch_assoc($result)) {
       $loan_type = $row['loan_type'];
+      $loanid = $row['id'];
 
       $startDate = strtotime($row['dor']);
       $today = strtotime(date('Y-m-d'));
@@ -643,8 +738,6 @@ HAVING phone_count > 0";
       $totalprincipalamountdue[] = $row['principle']-$row['total_principal_paid'];
       $totalinstallmentamount[] = $row['installment'];
 
-
-
       echo '<tr class="border-b bg-gray-800 border-gray-700">
       <td class="px-6 py-4">
       '.$i++.'
@@ -668,11 +761,24 @@ HAVING phone_count > 0";
       '.$row['installment'].'
       </td>
       <td class="px-6 py-4">
+      '.$row['days_weeks_month'].'
+      </td>
+      <td class="px-6 py-4">';
+      include_once "../functions.php";
+      $latefinearray = lateFineCalformonthly($loanid);
+      echo $l = array_sum($latefinearray);
+      $totalLateFine[] = $l;
+      echo '</td>
+      <td class="px-6 py-4">
       '.$row['amount_paid'].'
       </td>
       <td class="px-6 py-4">
           '.$amountduetilltoday.'
       </td>
+      <td class="px-6 py-4">';
+      echo $duewithLateFine = $amountduetilltoday + $l;
+      $totalDuewithLateFine[]  = $duewithLateFine;
+      echo '</td>
   </tr>';
     }
 echo '<tr class="border-b text-medium font-bold bg-gray-700 border-gray-700 text-white">
@@ -698,10 +804,19 @@ echo '<tr class="border-b text-medium font-bold bg-gray-700 border-gray-700 text
       '.array_sum($totalinstallmentamount).'
       </td>
       <td class="px-6 py-4">
+      -
+      </td>
+      <td class="px-6 py-4">
+      '.array_sum($totalLateFine).'
+      </td>
+      <td class="px-6 py-4">
       '.array_sum($totalinstallmentamountpaidtilldate).'
       </td>
       <td class="px-6 py-4">
       '.array_sum($totalamountduetilldate).'
+      </td>
+      <td class="px-6 py-4">
+      '.array_sum($totalDuewithLateFine).'
       </td>
   </tr>
 

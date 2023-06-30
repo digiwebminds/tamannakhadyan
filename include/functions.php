@@ -60,7 +60,7 @@ function totalEmiAmountDue_in_CCloan($loanid){
 // to calculate late Fine for CC and Daily Loans
 
 function lateFineCalforCC_daily($loanid){
-  include "../connect.php";
+  include "connect.php";
   $sqlloan = "SELECT * FROM loans WHERE id = $loanid";
   $resultloan = mysqli_query($conn, $sqlloan);
   $rowloan = mysqli_fetch_assoc($resultloan);
@@ -122,7 +122,7 @@ function lateFineCalforCC_daily($loanid){
 
 // to calculate late Fine for Weekly Loans
 function lateFineCalforweekly($loanid){
-  include "../connect.php";
+  include "connect.php";
   $sqlloan = "SELECT * FROM loans WHERE id = $loanid";
   $resultloan = mysqli_query($conn, $sqlloan);
   $rowloan = mysqli_fetch_assoc($resultloan);
@@ -183,7 +183,7 @@ function lateFineCalforweekly($loanid){
 // to calculate late Fine for Monthly Loans
 
 function lateFineCalformonthly($loanid){
-  include "../connect.php";
+  include "connect.php";
   $sqlloan = "SELECT * FROM loans WHERE id = $loanid";
   $resultloan = mysqli_query($conn, $sqlloan);
   $rowloan = mysqli_fetch_assoc($resultloan);
