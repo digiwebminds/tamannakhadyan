@@ -14,7 +14,6 @@ if (!isset($_SESSION['username'])){
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="../include/js/loansummary.js"></script>
     <script src="https://kit.fontawesome.com/0ef3c59d0f.js" crossorigin="anonymous"></script>
-
 </head>
 <body>
 <?php
