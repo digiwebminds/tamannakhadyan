@@ -315,14 +315,12 @@ HAVING phone_count > 0";
       $reminstallmentamount = $remprincipal*($row["roi"]/100);
       $amountduetilltoday = $totalInstallmentstilldate*$row['installment'] - $row['amount_paid'];
 
-      $totalamountduetilldate[] = ($totalInstallmentstilldate*$row['installment'] - $row['amount_paid']);
+      $totalamountduetilldate[] = $amountduetilltoday;
       $totalprincipalamount[] = $row['principle'];
       $totalprincipalamountpaidtilldate[] = $row['total_principal_paid'];
       $totalinstallmentamountpaidtilldate[] = $row['amount_paid'];
       $totalprincipalamountdue[] = $row['principle']-$row['total_principal_paid'];
       $totalinstallmentamount[] = $row['installment'];
-
-
 
       echo '<tr class="border-b bg-gray-800 border-gray-700">
       <td class="px-6 py-4">

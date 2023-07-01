@@ -20,14 +20,13 @@ if($result){
             <p class="text-medium font-bold">Address: '.$row['address'].'</p>
             </div>
             </div>';
-
-            $sql ="SELECT c.id AS cust_id, l.id,l.days_weeks_month,l.total, c.name, c.fname, c.city, COUNT(c.phone) AS phone_count, COUNT(re.loan_id) AS emi_count, c.photo, l.principle, l.dor, l.loan_type,l.dor,l.ldol, l.installment, l.roi,SUM(re.	installment_amount) as amount_paid,
+            $sql ="SELECT c.id AS cust_id,l.status, l.id,l.days_weeks_month,l.total, c.name, c.fname, c.city, COUNT(c.phone) AS phone_count, COUNT(re.loan_id) AS emi_count, c.photo, l.principle, l.dor, l.loan_type,l.dor,l.ldol, l.installment, l.roi,SUM(re.	installment_amount) as amount_paid,
             (SELECT SUM(repay_amount) FROM principle_repayment WHERE loan_id = l.id) AS total_principal_paid
           FROM customers AS c
           JOIN loans AS l ON c.id = l.customer_id
           LEFT JOIN repayment AS re ON l.id = re.loan_id
           WHERE c.id = $custid
-          GROUP BY c.id, l.id, c.name, c.fname, c.city, c.photo, l.principle,l.total, l.dor, l.loan_type,l.dor,l.ldol, l.installment, l.roi
+          GROUP BY c.id, l.id, c.name, c.fname,l.status, c.city, c.photo, l.principle,l.total, l.dor, l.loan_type,l.dor,l.ldol, l.installment, l.roi
           HAVING phone_count > 0";
           
            $result = mysqli_query($conn,$sql);
@@ -43,7 +42,10 @@ if($result){
                             Loan ID
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Loan Date
+                            Loan Start Date
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Loan End Date
                         </th>
                         <th scope="col" class="px-6 py-3">
                             Loan Type
@@ -71,6 +73,9 @@ if($result){
                         </th>
                         <th scope="col" class="px-6 py-3">
                             Amount Due with Late Fine
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                        Loan Status
                         </th>
                         <th scope="col" class="px-6 py-3">
                             Loan Summary
@@ -106,6 +111,9 @@ if($result){
                  </th>
                  <td class="px-6 py-4">
                  '.$row['dor'].'  
+                 </td>
+                 <td class="px-6 py-4">
+                 '.$row['ldol'].'  
                  </td>
                  <td class="px-6 py-4">';
                  if ($loan_type == 1) {
@@ -203,6 +211,13 @@ if($result){
             echo ($amountDue + $l);
             $totalDueWithLateFine[] = ($amountDue + $l);
             echo '</td>
+            <td class="px-6 py-4">';
+            if($row['status'] == 1){
+                echo "Active";
+            }else{
+                echo "Closed";
+            }
+            echo '</td>
             <td class="px-6 py-4">     
             <a href="loansummary.php?id='.$row['id'].'"><button type="button" class="text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Click</button></a>
             </td>
@@ -218,6 +233,9 @@ if($result){
             <td class="px-6 py-4">
             -
             </td>
+            <td class="px-6 py-4">
+                 --  
+                 </td>
             <td class="px-6 py-4">
             - 
             </td>
@@ -244,6 +262,9 @@ if($result){
             </td>
             <td class="px-6 py-4">
             '.array_sum($totalDueWithLateFine).'
+            </td>
+            <td class="px-6 py-4">
+            --
             </td>
             <td class="px-6 py-4">
             --
