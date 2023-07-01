@@ -76,7 +76,7 @@ foreach ($faq as $k => $v) {
 	} else {
 		$image = "../uploaded/defaultcustomer.png";
 	}
-	$output .= "<tr class='border-b bg-gray-800 border-gray-700'>
+	$output .= "<tr class='border-b bg-gray-800 text-gray-200 border-gray-700'>
 		<th>" . $i . "</th>
 		<td>" . $faq[$k]['name'] . "</td>
         <td>" . $faq[$k]['fname'] . "</td>
@@ -86,8 +86,8 @@ foreach ($faq as $k => $v) {
 		<td>" . $faq[$k]['username'] . "</td>
 		<td>" . $faq[$k]['password'] . "</td>
 		<td><img src='$image' style='object-fit:fill; width:60px; height:60px;'></td>
-		<td>" . '<button> <a href="add_staff.php?id='.$faq[$k]['id'].'">Update</a></button></td>
-		<td><button><a href="delete.php?sid='.$faq[$k]['id'].'" >Delete</a></button>
+		<td>" . '<button class="bg-blue-700 py-1 px-2 rounded"><a href="add_staff.php?id='.$faq[$k]['id'].'">Update</a></button></td>
+		<td><button class="bg-blue-700 py-1 px-2 rounded"><a href="delete.php?sid='.$faq[$k]['id'].'" >Delete</a></button>
 			</tr>';
 }
 $output .= '</tbody>

@@ -112,7 +112,7 @@ $output .= '
 $i = $start * 1;
 foreach ($faq as $k => $v) {
 	$i++;
-	$output .= "<tr class='border-b bg-gray-800 border-gray-700'>
+	$output .= "<tr class='border-b text-gray-200 bg-gray-800 border-gray-700'>
 		<th class='py-2 px-2'>" . $i . "</th>
 		<td class='py-2 px-2'>" . $faq[$k]['id'] . "</td>";
 		if($faq[$k]['loan_type'] == 1){
@@ -141,7 +141,7 @@ foreach ($faq as $k => $v) {
 		<td class='py-2 px-2'>" . $faq[$k]['installment'] . "</td>
 		<td class='py-2 px-2'>" . $faq[$k]['dor'] . "</td>
 		<td class='py-2 px-2'>" . $faq[$k]['ldol'] . "</td>
-		<td class='py-2 px-2'>" . '<button> <a href="add_loan.php?lid=' . $faq[$k]['id'] . '" > Update</a></button> <button><a href="delete.php?lid=' . $faq[$k]['id'] . '" > Delete </a> </button></td>
+		<td class='py-2 px-2'>" . '<button class="bg-blue-700 py-1 px-2 rounded"> <a href="add_loan.php?lid=' . $faq[$k]['id'] . '" > Update</a></button> <button class="bg-blue-700 py-1 px-2 rounded"><a href="delete.php?lid=' . $faq[$k]['id'] . '" > Delete </a> </button></td>
 		</tr>
 		';
 }

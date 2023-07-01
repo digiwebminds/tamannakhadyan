@@ -47,7 +47,7 @@ if (isset($_POST['loanid'])) {
 FROM customers AS c
 JOIN loans AS l ON c.id = l.customer_id
 LEFT JOIN repayment AS re ON l.id = re.loan_id
-WHERE l.id = $loanid
+WHERE l.id = $loanid and l.status=1
 GROUP BY c.id, l.id,l.latefine,l.latefineafter, c.name, c.fname, c.city, c.photo, l.principle,l.total, l.dor, l.loan_type,l.dor,l.ldol, l.installment, l.roi
 HAVING phone_count > 0";
 
@@ -258,11 +258,11 @@ if($loan_type==1){
         </td>
         </tr>';
       }
+      $duetilldate = ($totalInstallmentstilldate*$row['installment']-$row["amount_paid"]);
       if($loan_type !=1){
       echo '<tr class="border-b border-gray-200 dark:border-gray-700">
       <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700">Amount Due Till Today (बकाया ऋण आज तक)</th>
-      <td class="px-6 py-2 border border-gray-700 text-red-900">' .$unpaidInstallments*$row['installment']. '
-      </td>
+      <td class="px-6 py-2 border border-gray-700 text-red-900">'.$duetilldate.'</td>
       </tr>';
       //need to change this .\// need to change this
     }
@@ -285,7 +285,7 @@ if($loan_type==1){
       <td class="px-6 py-2 border border-gray-700 text-red-900">';
       $lateFinearray = lateFineCalforCC_daily($loanid);
       $lateFinesum = array_sum($lateFinearray);
-      echo ($lateFinesum + ($unpaidInstallments*$row['installment']));
+      echo ($lateFinesum + $duetilldate);
       echo'</td>
       </tr>';
     }elseif($loan_type == 3){
@@ -295,7 +295,7 @@ if($loan_type==1){
       <td class="px-6 py-2 border border-gray-700 text-red-900">';
       $lateFinearray = lateFineCalforweekly($loanid);
       $lateFinesum = array_sum($lateFinearray);
-      echo ($lateFinesum + ($unpaidInstallments*$row['installment']));
+      echo ($lateFinesum + $duetilldate);
       echo'</td>
       </tr>';
     }else{
@@ -305,15 +305,13 @@ if($loan_type==1){
       <td class="px-6 py-2 border border-gray-700 text-red-900">';
       $lateFinearray = lateFineCalformonthly($loanid);
       $lateFinesum = array_sum($lateFinearray);
-      echo ($lateFinesum + ($unpaidInstallments*$row['installment']));
+      echo ($lateFinesum + $duetilldate);
       echo'</td>
       </tr>';
     }
-
-
      echo '</tbody>
       </table>  
-</div>';
+    </div>';
 
 
 /// repayment modal below
