@@ -20,17 +20,17 @@ if (!isset($_SESSION['username'])) {
 
 <body>
     <?php
-    include "../include/navbar.php";
+        include "../include/navbar.php";
     ?>
-<!-- Title -->
-<div class="flex justify-between items-center">
-    <h1 class="flex-grow bg-gray-700 text-white text-xl p-3 border-gray-800 relative">
-        List of Staff Members
-        <button class="absolute top-1/2 right-0 transform -translate-y-1/2 bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 mr-3 border border-white rounded">
-            <a href="add_staff.php" class="text-white">Add Staff Member</a>
-        </button>
-    </h1>
-</div>
+    <!-- Title -->
+    <div class="flex justify-between items-center">
+        <h1 class="flex-grow bg-gray-700 text-white text-xl p-3 border-gray-800 relative">
+            List of Staff Members
+            <button class="absolute top-1/2 right-0 transform -translate-y-1/2 bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 mr-3 border border-white rounded">
+                <a href="add_staff.php" class="text-white">Add Staff Member</a>
+            </button>
+        </h1>
+    </div>
 
     <div class="relative" id="pagination-result">
         <div id="overlay">
@@ -46,6 +46,7 @@ if (!isset($_SESSION['username'])) {
     $rowcount = mysqli_num_rows($result);
     echo '<input type="hidden" name="rowcount" id="rowcount" value=' . $rowcount . '>';
     ?>
+    
     <script>
         function getresult(url) {
             $.ajax({
@@ -68,6 +69,9 @@ if (!isset($_SESSION['username'])) {
         getresult("staffajax.php");
     </script>
 
+    <?php 
+        include "../include/footer.php"; 
+    ?>
 
 </body>
 

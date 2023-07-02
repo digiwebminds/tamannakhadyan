@@ -37,7 +37,109 @@ if (!isset($_SESSION['username'])){
 </div>
 
 <?php 
-    include "../include/footer.php"; 
+    include "../include/footer.php";
+    include("../include/connect.php");
+
+    $query = "SELECT c.id AS cust_id, l.id,l.days_weeks_month,l.total, c.name,c.address, c.fname,c.phone, c.city, COUNT(c.phone) AS phone_count, COUNT(re.loan_id) AS emi_count, c.photo, l.principle, l.dor, l.loan_type,l.dor,l.ldol, l.installment, l.roi,SUM(re.installment_amount) as amount_paid,
+    (SELECT SUM(repay_amount) FROM principle_repayment WHERE loan_id = l.id) AS total_principal_paid
+    FROM customers AS c
+    JOIN loans AS l ON c.id = l.customer_id
+    LEFT JOIN repayment AS re ON l.id = re.loan_id
+    WHERE l.loan_type = 1 and status = 1
+    GROUP BY c.id, l.id, c.name, c.fname,c.phone,c.address, c.city, c.photo, l.principle,l.total, l.dor, l.loan_type,l.dor,l.ldol, l.installment, l.roi
+    HAVING phone_count > 0";
+    $result  = mysqli_query($conn, $query);
+    $rowcount = mysqli_num_rows($result);
+    echo '<input type="hidden" id="ccrowcount" value=' . $rowcount . '>';
+
+    $query = "SELECT c.id AS cust_id, l.id,l.days_weeks_month,l.total, c.name,c.address, c.fname,c.phone, c.city, COUNT(c.phone) AS phone_count, COUNT(re.loan_id) AS emi_count, c.photo, l.principle, l.dor, l.loan_type,l.dor,l.ldol, l.installment, l.roi,SUM(re.installment_amount) as amount_paid,
+    (SELECT SUM(repay_amount) FROM principle_repayment WHERE loan_id = l.id) AS total_principal_paid
+    FROM customers AS c
+    JOIN loans AS l ON c.id = l.customer_id
+    LEFT JOIN repayment AS re ON l.id = re.loan_id
+    WHERE l.loan_type = 2
+    GROUP BY c.id, l.id, c.name, c.fname,c.phone,c.address, c.city, c.photo, l.principle,l.total, l.dor, l.loan_type,l.dor,l.ldol, l.installment, l.roi
+    HAVING phone_count > 0";
+    $result  = mysqli_query($conn, $query);
+    $rowcount = mysqli_num_rows($result);
+    echo '<input type="hidden" id="drowcount" value=' . $rowcount . '>';
+
+    $query = "SELECT c.id AS cust_id, l.id,l.days_weeks_month,l.total, c.name,c.address, c.fname,c.phone, c.city, COUNT(c.phone) AS phone_count, COUNT(re.loan_id) AS emi_count, c.photo, l.principle, l.dor, l.loan_type,l.dor,l.ldol, l.installment, l.roi,SUM(re.installment_amount) as amount_paid,
+    (SELECT SUM(repay_amount) FROM principle_repayment WHERE loan_id = l.id) AS total_principal_paid
+    FROM customers AS c
+    JOIN loans AS l ON c.id = l.customer_id
+    LEFT JOIN repayment AS re ON l.id = re.loan_id
+    WHERE l.loan_type = 3
+    GROUP BY c.id, l.id, c.name, c.fname,c.phone,c.address, c.city, c.photo, l.principle,l.total, l.dor, l.loan_type,l.dor,l.ldol, l.installment, l.roi
+    HAVING phone_count > 0";
+    $result  = mysqli_query($conn, $query);
+    $rowcount = mysqli_num_rows($result);
+    echo '<input type="hidden" id="wrowcount" value=' . $rowcount . '>';
+
+    $query = "SELECT c.id AS cust_id, l.id,l.days_weeks_month,l.total, c.name,c.address, c.fname,c.phone, c.city, COUNT(c.phone) AS phone_count, COUNT(re.loan_id) AS emi_count, c.photo, l.principle, l.dor, l.loan_type,l.dor,l.ldol, l.installment, l.roi,SUM(re.installment_amount) as amount_paid,
+    (SELECT SUM(repay_amount) FROM principle_repayment WHERE loan_id = l.id) AS total_principal_paid
+    FROM customers AS c
+    JOIN loans AS l ON c.id = l.customer_id
+    LEFT JOIN repayment AS re ON l.id = re.loan_id
+    WHERE l.loan_type = 4
+    GROUP BY c.id, l.id, c.name, c.fname,c.phone,c.address, c.city, c.photo, l.principle,l.total, l.dor, l.loan_type,l.dor,l.ldol, l.installment, l.roi
+    HAVING phone_count > 0";
+    $result  = mysqli_query($conn, $query);
+    $rowcount = mysqli_num_rows($result);
+    echo '<input type="hidden" id="mrowcount" value=' . $rowcount . '>';
 ?>
+<script>
+    function getresult(url) {
+        if(url.indexOf("ccdueajax.php") != -1){
+            $.ajax({
+                url: url,
+                type: "GET",
+                data: {
+                    rowcount: $("#ccrowcount").val()
+                },
+                success: function(data) {
+                    $("#ccduelistresult").html(data);
+                }
+            });
+        }else if(url.indexOf("ddueajax.php") != -1){
+            $.ajax({
+            url: url,
+            type: "GET",
+            data: {
+                rowcount: $("#drowcount").val()
+            },
+            success: function(data) {
+                $("#dailyduelistresult").html(data);
+            }
+        });
+        }else if(url.indexOf("wdueajax.php") != -1){
+            $.ajax({
+            url: url,
+            type: "GET",
+            data: {
+                rowcount: $("#wrowcount").val()
+            },
+            success: function(data) {
+                $("#weeklyduelistresult").html(data);
+            }
+        });
+        }else if(url.indexOf("mdueajax.php") != -1){
+            $.ajax({
+            url: url,
+            type: "GET",
+            data: {
+                rowcount: $("#mrowcount").val()
+            },
+            success: function(data) {
+                $("#monthlyduelistresult").html(data);
+            }
+        });
+        }
+    }
+    getresult("ccdueajax.php");
+    getresult("ddueajax.php");
+    getresult("wdueajax.php");
+    getresult("mdueajax.php");
+</script>
 </body>
 </html>

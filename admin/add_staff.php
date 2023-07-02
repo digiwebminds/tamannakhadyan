@@ -20,14 +20,16 @@ if(isset($_POST['submit'])){
     $fname = $_POST['fname'];
     $address = $_POST['address'];
     $phone = $_POST['phone'];
-    $photo = $_FILES['photo'];
+    if(isset($_FILES['photo'])){
+        $photo = $_FILES['photo'];
+    }
     $salary = $_POST['salary'];
     $username = $_POST['username'];
     $password = $_POST['password'];
     $cpassword = $_POST['cpassword'];
 
     $imageupload = null;
-    if($photo){
+    if(isset($_FILES['photo'])){
         $imagefilename = $photo['name'];
         $imagetemp = $photo['tmp_name'];
         $imageerror = $photo['error'];
