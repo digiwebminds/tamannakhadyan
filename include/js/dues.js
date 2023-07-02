@@ -1,16 +1,20 @@
 $(document).ready(function () {
+    $("#ccduelistresult").hide();
+    $("#dailyduelistresult").hide();
+    $("#weeklyduelistresult").hide();
+    $("#monthlyduelistresult").hide();
 
     $("#ccduelistbtn").click(function() {
-        var cc = $(this).val();
-        // alert(loantype);
-        $.ajax({
-            url: '../include/ajaxphpfiles/duelist_ajax.php',
-            type: 'POST',
-            data: { 'cc': cc },
-            success: function(data) {
-                $("#ccduelistresult").html(data);
-            }
-        });
+        $("#ccduelistresult").show();
+    });
+    $("#dailyduelistbtn").click(function() {
+        $("#dailyduelistresult").show();
+    });
+    $("#weeklyduelistbtn").click(function() {
+        $("#weeklyduelistresult").show();
+    });
+    $("#monthlyduelistbtn").click(function() {
+        $("#monthlyduelistresult").show();
     });
 
     $(document).on("click", "#closebtncc", function() {
@@ -25,44 +29,4 @@ $(document).ready(function () {
     $(document).on("click", "#closebtnm", function() {
         $("#monthlyduelistresult").hide();
     });
-
-    $("#dailyduelistbtn").click(function() {
-        var daily = $(this).val();
-        // alert(loantype);
-        $.ajax({
-            url: '../include/ajaxphpfiles/duelist_ajax.php',
-            type: 'POST',
-            data: { 'daily': daily },
-            success: function(data) {
-                $("#dailyduelistresult").html(data);
-            }
-        });
-    });
-
-    $("#weeklyduelistbtn").click(function() {
-        var weekly = $(this).val();
-        // alert(loantype);
-        $.ajax({
-            url: '../include/ajaxphpfiles/duelist_ajax.php',
-            type: 'POST',
-            data: { 'weekly': weekly },
-            success: function(data) {
-                $("#weeklyduelistresult").html(data);
-            }
-        });
-    });
-
-    $("#monthlyduelistbtn").click(function() {
-        var monthly = $(this).val();
-        // alert(loantype);
-        $.ajax({
-            url: '../include/ajaxphpfiles/duelist_ajax.php',
-            type: 'POST',
-            data: { 'monthly': monthly },
-            success: function(data) {
-                $("#monthlyduelistresult").html(data);
-            }
-        });
-    });
-
 });

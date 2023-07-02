@@ -13,7 +13,7 @@ if (isset($_POST['submit'])) {
   $username = $_POST['username'];
   $password = $_POST['password'];
 
-  $sql = "SELECT * FROM staff WHERE username='$username' and password='$password'";
+  $sql = "SELECT * FROM staff WHERE username='$username' AND password='$password' AND deleted=0";
 
   $result = mysqli_query($conn, $sql);
   if ($result) {

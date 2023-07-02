@@ -22,18 +22,22 @@ if(isset($_POST['submit'])){
     $address = $_POST['address'];
     $city = $_POST['city'];
     $phone = $_POST['phone'];
-    $photo = $_FILES['photo'];
+    if(isset($_FILES['photo'])){
+        $photo = $_FILES['photo'];
+    }
     $gname = $_POST['gname'];
     $gfname = $_POST['gfname'];
     $gaddress = $_POST['gaddress'];
     $gcity = $_POST['gcity'];
     $gphone = $_POST['gphone'];
-    $gphoto = $_FILES['gphoto'];
+    if(isset($_FILES['gphoto'])){
+        $gphoto = $_FILES['gphoto'];
+    }
     $sname = $_POST['sname'];
     $documents = $_POST['documents'];
 
     $imageupload = null;
-    if($photo){
+    if(isset($_FILES['photo'])){
         $imagefilename = $photo['name'];
         $imagetemp = $photo['tmp_name'];
         $imageerror = $photo['error'];
@@ -46,7 +50,7 @@ if(isset($_POST['submit'])){
         }
     }
     $gimageupload = null;
-    if($gphoto){
+    if(isset($_FILES['gphoto'])){
         $gimagefilename = $gphoto['name'];
         $gimagetemp = $gphoto['tmp_name'];
         $gimageerror = $gphoto['error'];
@@ -59,7 +63,12 @@ if(isset($_POST['submit'])){
         }
     }
 
-    $sql = "INSERT INTO `customers` (dor,name,fname,address,city,phone,photo,gname,gfname,gaddress,gcity,gphone,gphoto,sname,documents) VALUES ('$dor','$name','$fname','$address','$city','$phone','$imageupload','$gname','$gfname','$gaddress','$gcity','$gphone','$gimageupload','$sname','$documents')";
+    if(isset($_GET['id'])){
+        $uid = $_GET['id'];
+        $sql = "UPDATE customers SET dor='$dor', name='$name', fname='$fname', address='$address', city='$city', phone='$phone', gname='$gname', gfname='$gfname', gaddress='$gaddress', gcity='$gcity', gphone='$gphone', sname='$sname', documents='$documents' WHERE id='$uid'";
+    }else{
+        $sql = "INSERT INTO `customers` (dor,name,fname,address,city,phone,photo,gname,gfname,gaddress,gcity,gphone,gphoto,sname,documents) VALUES ('$dor','$name','$fname','$address','$city','$phone','$imageupload','$gname','$gfname','$gaddress','$gcity','$gphone','$gimageupload','$sname','$documents')";
+    }
 
     $result = mysqli_query($conn,$sql);
 
