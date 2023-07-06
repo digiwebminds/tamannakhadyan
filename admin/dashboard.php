@@ -1,8 +1,17 @@
 <?php
 session_start();
-if (!isset($_SESSION['username'])) {
-    header('location: adminlogin.php');
-    exit(); // Make sure to exit after redirecting
+
+if (isset($_SESSION['username'])){
+    $role = $_SESSION['role'];
+    if($role == 0){
+      header('location:loans.php') ;
+    }elseif($role == 1){
+      header('location:loans.php') ;
+    }elseif($role == 2){
+    //   header('location:dashboard.php') ;
+    }
+}else{
+      header('location: ../index.php');
 }
 
 ?>

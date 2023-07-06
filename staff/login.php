@@ -4,7 +4,13 @@ error_reporting(E_ALL);
 
 session_start();
 if (isset($_SESSION['username'])){
-header('location:../index.php') ;
+  if($_SESSION['role'] == 0){
+    header('location:../admin/loans.php') ;
+  }elseif($_SESSION['role'] == 1){
+    header('location:../admin/loans.php') ;
+  }elseif($_SESSION['role'] == 2){
+    header('location:../admin/dashboard.php') ;
+  }
     // echo "Some error";
 }else{
 
@@ -26,8 +32,7 @@ header('location:../index.php') ;
       session_start();
       $_SESSION['username']=$username;
       $_SESSION['role']=$row2['emptype'];
-      // echo $_SESSION['emptype'];
-      // // $_SESSION['email']=$email;
+      
       header('location:../admin/loans.php');
     } else {
       echo "<script>alert('Invalid Username & Password'); </script>";

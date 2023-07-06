@@ -23,12 +23,24 @@
     </div>
     <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
       <ul class="flex flex-col p-4 md:p-0 mt-4 font-medium text-sm border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 bg-gray-900">
-        <li>
-          <a href="../admin/dashboard.php" class="block py-2 pl-3 pr-4 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0" aria-current="page">Home</a>
-        </li>
-        <li>
-          <a href="../admin/staffmembers.php" class="block py-2 pl-3 pr-4 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0">Staff</a>
-        </li>
+
+        <?php 
+          if($_SESSION['role'] == 2){
+            echo '<li>
+            <a href="../admin/dashboard.php" class="block py-2 pl-3 pr-4 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0" aria-current="page">Home</a>
+          </li>';
+          }
+          ?>
+
+        <?php 
+          if($_SESSION['role'] == 2){
+            echo '<li>
+            <a href="../admin/staffmembers.php" class="block py-2 pl-3 pr-4 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0">Staff</a>
+          </li>';
+          }
+          ?>
+          
+        
         <li>
           <a href="../admin/customers.php" class="block py-2 pl-3 pr-4 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0">Customers</a>
         </li>
@@ -38,9 +50,15 @@
           <li>
             <a href="../admin/repayment.php" class="block py-2 pl-3 pr-4 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0">Repayments</a>
           </li>
-          <li>
+
+          <?php 
+          if($_SESSION['role'] == 2){
+            echo '<li>
             <a href="../admin/dues.php" class="block py-2 pl-3 pr-4 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0">Dues List</a>
-          </li>
+          </li>';
+          }
+          ?>
+          
           <li>
             <a href="../admin/reports.php" class="block py-2 pl-3 pr-4 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0">Reports</a>
           </li>
@@ -54,6 +72,9 @@
     </div>
     </div>
   </nav>
+  <?php 
+  echo '<div class="bg-purple-500 text-white font-sm font-bold border rounded px-5 py-1 "><span>Welcome back : '. $_SESSION["username"].'</span><span></span></div>';
+  ?>
 
   <script>
   document.addEventListener('DOMContentLoaded', function() {
