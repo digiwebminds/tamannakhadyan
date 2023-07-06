@@ -2,9 +2,15 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 session_start();
-if (isset($_SESSION['username'])) {
-    header('location:dashboard.php');
-}else{
+if (isset($_SESSION['username'])){
+    if($_SESSION['role'] == 0){
+      header('location:loans.php') ;
+    }elseif($_SESSION['role'] == 1){
+      header('location:loans.php') ;
+    }elseif($_SESSION['role'] == 2){
+      header('location:dashboard.php') ;
+    }
+  }else{
 
     if (isset($_POST['submit'])) {
 
