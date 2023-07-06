@@ -175,7 +175,7 @@ foreach ($faq as $k => $v) {
           '.$amountduetilltoday.'
       </td>
       <td class="px-6 py-4">';
-      $latefinearray = lateFineCalforCC_daily($loanid);
+      $latefinearray = lateFineCalforCC($loanid);
       $l = array_sum($latefinearray);
       $output .= $l;
       $totalLateFine[] = $l;

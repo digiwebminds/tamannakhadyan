@@ -167,11 +167,16 @@ if($result){
                  </td>
                  <td class="px-6 py-4">';
                  include_once "../functions.php";
-                 if($loan_type == 1 or $loan_type ==2){
-                    $latefine = lateFineCalforCC_daily($loanid);
+                 if($loan_type == 1){
+                    $latefine = lateFineCalforCC($loanid);
                     echo $l = array_sum($latefine);
                     $totallatefine[] = $l;
-                 }elseif($loan_type==3){
+                 }elseif($loan_type ==2){
+                    $latefine = lateFineCalfordaily($loanid);
+                    echo $l = array_sum($latefine);
+                    $totallatefine[] = $l;
+                 }
+                 elseif($loan_type==3){
                      $latefine = lateFineCalforweekly($loanid);
                      echo $l = array_sum($latefine);
                       $totallatefine[] = $l;
