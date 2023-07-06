@@ -179,7 +179,6 @@ if($loan_type==1){
     echo '<tr class="border-b border-gray-200 dark:border-gray-700">
     <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700"> Total Installment (कुल किश्त)</th>
     <td class="px-6 py-2 border border-gray-700">' . $row['days_weeks_month'] . '
-
     &nbsp;<button id="opentotalinstallmenttablemodal" class="text-black font-bold py-2 px-4 rounded">
       <i class="fa-solid fa-circle-info"></i>
       </button>
@@ -231,7 +230,7 @@ if($loan_type==1){
 
       <tr class="border-b border-gray-200 dark:border-gray-700">
       <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700"> UnPaid Installments (बिना भारी किस्त)</th>
-      <td class="px-6 py-2 border border-gray-700">'.$unpaidInstallments.'&nbsp;(Due:'.$dueee.')<button id="openunpaidinstallmenttablemodal" class="text-black font-bold py-2 px-4 rounded">
+      <td class="px-6 py-2 border border-gray-700">'.$unpaidInstallments.'&nbsp<button id="openunpaidinstallmenttablemodal" class="text-black font-bold py-2 px-4 rounded">
       <i class="fa-solid fa-circle-info"></i>
       </button>
 

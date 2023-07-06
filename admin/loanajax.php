@@ -22,7 +22,7 @@ if(isset($_GET["searchvalue"]) && isset($_GET["searchby"])){
 			$searchvalue = 4;
 		}
 	}
-	$sql = "SELECT * FROM loans WHERE status = 1 AND $searchby LIKE '$searchvalue' ORDER BY id DESC";
+	$sql = "SELECT * FROM loans WHERE status = 1 and delete_status = 0 AND $searchby LIKE '$searchvalue' ORDER BY id DESC";
 	$result  = mysqli_query($conn, $sql);
     $rowcount = mysqli_num_rows($result);
 	if($rowcount > 0){
@@ -43,7 +43,7 @@ if(isset($_GET["searchvalue"]) && isset($_GET["searchby"])){
 	}
 }
 else{
-$sql = "SELECT * from loans WHERE status = 1 ORDER BY id DESC";
+$sql = "SELECT * from loans WHERE status = 1 and delete_status = 0 ORDER BY id DESC";
 }
 
 $paginationlink = "loanajax.php?page=";

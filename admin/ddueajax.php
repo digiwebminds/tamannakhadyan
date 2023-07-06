@@ -164,7 +164,7 @@ foreach ($faq as $k => $v) {
       </td>
       <td class="px-6 py-4">';
       include_once "../include/functions.php";
-      $latefinearray = lateFineCalforCC_daily($loanid);
+      $latefinearray = lateFineCalfordaily($loanid);
       $l = array_sum($latefinearray);
       $output .= $l;
       $totalLateFine[] = $l;
