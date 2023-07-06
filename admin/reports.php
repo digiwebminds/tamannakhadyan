@@ -3,6 +3,9 @@ session_start();
 if (!isset($_SESSION['username'])){
     header('location:adminlogin.php');
 }
+if (!isset($_SESSION['username_staff'])){
+    header('location:../staff/login.php');
+  }
 ?>
 <!DOCTYPE html>
 <html lang="en">

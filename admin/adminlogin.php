@@ -1,11 +1,10 @@
 <?php
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
-
 session_start();
 if (isset($_SESSION['username'])) {
     header('location:dashboard.php');
-} else {
+}else{
 
     if (isset($_POST['submit'])) {
 
@@ -18,9 +17,11 @@ if (isset($_SESSION['username'])) {
         if ($result) {
             $num2 = mysqli_num_rows($result);
             if ($num2 > 0) {
-                echo "User Verified";
+                // echo "User Verified";
                 session_start();
                 $_SESSION['username'] = $username;
+                $_SESSION['role'] = 2;
+                // print_r($num2['username']) ;
                 // // $_SESSION['email']=$email;
                 header('location:dashboard.php');
             } else {

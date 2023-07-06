@@ -1,8 +1,10 @@
 <?php
 session_start();
-if (!isset($_SESSION['username'])){
-    header('location:adminlogin.php');
+if (!isset($_SESSION['username'])) {
+    header('location: adminlogin.php');
+    exit(); // Make sure to exit after redirecting
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

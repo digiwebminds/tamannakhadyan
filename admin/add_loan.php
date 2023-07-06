@@ -1,8 +1,23 @@
 <?php
 session_start();
-if (!isset($_SESSION['username'])){
-    header('location:adminlogin.php');
+if (!isset($_SESSION['username'])) {
+    header('location: adminlogin.php');
+    exit(); // Make sure to exit after redirecting
 }
+
+// Check if the staff is logged in
+if (!isset($_SESSION['username_staff'])) {
+    header('location: ../staff/login.php');
+    exit(); // Make sure to exit after redirecting
+}
+
+// At this point, both admin and staff are logged in
+
+if ($_SESSION['emptype'] == 0) {
+    header('location: loans.php');
+    exit(); // Make sure to exit after redirecting
+}
+
 ?>
 <?php
 
