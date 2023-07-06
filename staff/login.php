@@ -2,35 +2,40 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-// session_start();
-// if (isset($_SESSION['username'])){
-// header('location:home.php') ;
-//     echo "Some error";
-// } else
-if (isset($_POST['submit'])) {
+session_start();
+if (isset($_SESSION['username'])){
+header('location:../index.php') ;
+    // echo "Some error";
+}else{
 
+  if (isset($_POST['submit'])) {
+    
   include '../include/connect.php';
   $username = $_POST['username'];
   $password = $_POST['password'];
 
   $sql = "SELECT * FROM staff WHERE username='$username' AND password='$password' AND deleted=0";
-
+  
   $result = mysqli_query($conn, $sql);
   if ($result) {
     $num2 = mysqli_num_rows($result);
     if ($num2 > 0) {
-      echo "<script>alert('Login Successful !'); </script>";
+      $row2 = mysqli_fetch_assoc($result);
+      // echo "<script>alert('Login Successful !'); </script>";
       // echo "User Verified";
-      // session_start();
-      // $_SESSION['username']=$username;
+      session_start();
+      $_SESSION['username']=$username;
+      $_SESSION['role']=$row2['emptype'];
+      // echo $_SESSION['emptype'];
       // // $_SESSION['email']=$email;
-      // header('location:../admin/customers.php');
+      header('location:../admin/loans.php');
     } else {
       echo "<script>alert('Invalid Username & Password'); </script>";
       // echo '<script>alert("Your message here");</script>';
       // header ('location:signup.php');
     }
   }
+}
 }
 ?>
 
@@ -42,7 +47,7 @@ if (isset($_POST['submit'])) {
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Customers Login</title>
+  <title>Staff Login</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <!--google font start-->
   <link rel="preconnect" href="https://fonts.googleapis.com">

@@ -3,6 +3,13 @@ session_start();
 if (!isset($_SESSION['username'])){
     header('location:adminlogin.php');
 }
+if (!isset($_SESSION['username_staff'])){
+    header('location:../staff/login.php');
+}else{
+    if($_SESSION['emptype'] == 0){
+        header('location:loans.php');
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">

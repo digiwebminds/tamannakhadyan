@@ -3,6 +3,13 @@ session_start();
 if (!isset($_SESSION['username'])) {
     header('location:adminlogin.php');
 }
+if (!isset($_SESSION['username_staff'])){
+    header('location:../staff/login.php');
+}else{
+    if($_SESSION['emptype'] == 0){
+        header('location:loans.php');
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -25,9 +32,9 @@ if (!isset($_SESSION['username'])) {
     <!-- Title -->
     <div class="flex justify-between items-center">
         <h1 class="flex-grow bg-gray-700 text-white text-xl p-3 border-gray-800 relative">
-            List of Staff Members
+            List of Employees
             <button class="absolute top-1/2 right-0 transform -translate-y-1/2 bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 mr-3 border border-white rounded">
-                <a href="add_staff.php" class="text-white">Add Staff Member</a>
+                <a href="add_staff.php" class="text-white">Add Employee</a>
             </button>
         </h1>
     </div>
