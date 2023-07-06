@@ -190,22 +190,24 @@ if($loan_type==1){
       <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700"> Late Fine Till Date </th>
       <td class="px-6 py-2 border text-red-500 border-gray-700">';
       include_once "../functions.php";
-      $lateFinearray = lateFineCalforCC_daily($loanid);
-      $lateFinesum = array_sum($lateFinearray);
       // calculating late fees
   if ($loan_type == 1){
-    $lateFinearray = lateFineCalforCC_daily($loanid);
+    include_once "../functions.php";
+    $lateFinearray = lateFineCalforCC($loanid);
     echo $lateFinesum = array_sum($lateFinearray);
     echo '&nbsp;<button id="openlateFineTableModalbtn" class="text-black font-bold py-2 px-4 rounded">
     <i class="fa-solid fa-circle-info"></i>
     </button>';
   }elseif($loan_type == 2){
-    $lateFinearray = lateFineCalforCC_daily($loanid);
+    include_once "../functions.php";
+    $lateFinearray = lateFineCalfordaily($loanid);
     echo $lateFinesum = array_sum($lateFinearray);
   }elseif($loan_type ==3){
+    include_once "../functions.php";
     $lateFinearray = lateFineCalforweekly($loanid);
     echo $lateFinesum = array_sum($lateFinearray);
   }elseif($loan_type ==4){
+    include_once "../functions.php";
     $lateFinearray = lateFineCalformonthly($loanid);
     echo $lateFinesum = array_sum($lateFinearray);
   }
@@ -229,7 +231,7 @@ if($loan_type==1){
 
       <tr class="border-b border-gray-200 dark:border-gray-700">
       <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700"> UnPaid Installments (बिना भारी किस्त)</th>
-      <td class="px-6 py-2 border border-gray-700">'.$unpaidInstallments.'&nbsp;<button id="openunpaidinstallmenttablemodal" class="text-black font-bold py-2 px-4 rounded">
+      <td class="px-6 py-2 border border-gray-700">'.$unpaidInstallments.'&nbsp;(Due:'.$dueee.')<button id="openunpaidinstallmenttablemodal" class="text-black font-bold py-2 px-4 rounded">
       <i class="fa-solid fa-circle-info"></i>
       </button>
 
@@ -273,7 +275,7 @@ if($loan_type==1){
       <tr class="border-b border-gray-200 dark:border-gray-700">
       <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700">Total Due Amount (P + I + LateFine)</th>
       <td class="px-6 py-2 border border-gray-700 text-red-900">';
-      $lateFinearray = lateFineCalforCC_daily($loanid);
+      $lateFinearray = lateFineCalforCC($loanid);
       $lateFinesum = array_sum($lateFinearray);
       echo ($dueee + $lateFinesum + $remprincipal);
       echo'</td>
@@ -283,7 +285,7 @@ if($loan_type==1){
       <tr class="border-b border-gray-200 dark:border-gray-700">
       <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800 border border-gray-700">Total Due Amount (P + I + LateFine)</th>
       <td class="px-6 py-2 border border-gray-700 text-red-900">';
-      $lateFinearray = lateFineCalforCC_daily($loanid);
+      $lateFinearray = lateFineCalfordaily($loanid);
       $lateFinesum = array_sum($lateFinearray);
       echo ($lateFinesum + $duetilldate);
       echo'</td>
