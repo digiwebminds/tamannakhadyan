@@ -57,9 +57,101 @@ function totalEmiAmountDue_in_CCloan($loanid){
 
 
 
-// to calculate late Fine for CC and Daily Loans
+// to calculate late Fine for CC and enter into Principal
 
-function lateFineCalforCC_daily($loanid){
+function lateFineCalforCC($loanid){
+  include "connect.php";
+  $sqlloan = "SELECT * FROM loans WHERE id = $loanid";
+  $resultloan = mysqli_query($conn, $sqlloan);
+  $rowloan = mysqli_fetch_assoc($resultloan);
+  
+  $sqlrepayment = "SELECT * FROM repayment WHERE loan_id = $loanid ORDER BY DORepayment ASC";
+  $resultrepayment = mysqli_query($conn, $sqlrepayment);
+  
+  $paidDates = [];
+  while ($rowrepay = mysqli_fetch_assoc($resultrepayment)) {
+    $paidDates[] = strtotime($rowrepay['DORepayment']); // Convert repayment dates to epoch format and store in an array
+  }
+  
+  $loanStartDate = $rowloan['dor']; // Loan start date
+  $startDate = strtotime($loanStartDate); // Convert to epoch format
+  $startDate += 86400;
+  $lateFine = $rowloan['latefine'];
+  $lateFineAfter = $rowloan['latefineafter'];
+  $loanLastDate = time();
+  
+  $totalLateFine = [];
+  $previousDate = $startDate;
+  
+  foreach ($paidDates as $pd) {
+    $pdEpoch = $pd;
+    $lateFineAfterEpoch = 86400 * $lateFineAfter; // Convert days into seconds
+    $fineStartDate = $previousDate + $lateFineAfterEpoch; // Calculate the start date for late fine
+  
+    if ($fineStartDate <= $pdEpoch) {
+      $currentDate = $previousDate;
+      while ($currentDate < $pdEpoch) {
+        $dateKey = date('Y-m-d', $currentDate);
+        // Check if the late fine for the date has already been added to the principal repayment table
+        $sqlCheck = "SELECT * FROM principle_repayment WHERE loan_id = $loanid AND dorepayment = '$dateKey'";
+        $resultCheck = mysqli_query($conn, $sqlCheck);
+        $existingRow = mysqli_fetch_assoc($resultCheck);
+        
+        if (!$existingRow) {
+          $lateFine = -$lateFine;
+          // Add the late fine to the principal repayment table
+          $sqlInsert = "INSERT INTO principle_repayment (loan_id, dorepayment,repay_amount) VALUES ($loanid, '$dateKey', $lateFine)";
+          mysqli_query($conn, $sqlInsert);
+          $lateFine = -$lateFine;
+          $totalLateFine[$dateKey] = $lateFine; // Store the late fine for the date
+          
+        }else{
+          $totalLateFine[$dateKey] = $lateFine;
+        }
+        
+        $currentDate += 86400; // Move to the next day (86400 seconds = 1 day)
+      }
+    }
+  
+    $previousDate = $pdEpoch + 86400; // Move to the next repayment date
+  }
+  
+  // Calculate late fine from the last repayment date till the current date
+  $lateFineAfterEpoch = 86400 * $lateFineAfter; // Convert days into seconds
+  $fineStartDate = $previousDate + $lateFineAfterEpoch; // Calculate the start date for late fine
+  
+  if ($fineStartDate <= $loanLastDate) {
+    $currentDate = $previousDate;
+    while ($currentDate < $loanLastDate) {
+      $dateKey = date('Y-m-d', $currentDate);
+      // Check if the late fine for the date has already been added to the principal repayment table
+      $sqlCheck = "SELECT * FROM principle_repayment WHERE loan_id = $loanid AND dorepayment = '$dateKey'";
+      $resultCheck = mysqli_query($conn, $sqlCheck);
+      $existingRow = mysqli_fetch_assoc($resultCheck);
+      
+      if (!$existingRow) {
+        $lateFine = -$lateFine;
+        // Add the late fine to the principal repayment table
+        $sqlInsert = "INSERT INTO principle_repayment (loan_id, dorepayment,repay_amount) VALUES ($loanid, '$dateKey', $lateFine)";
+        mysqli_query($conn, $sqlInsert);
+        $lateFine = -$lateFine;
+        $totalLateFine[$dateKey] = $lateFine; // Store the late fine for the date
+      }else{
+        $totalLateFine[$dateKey] = $lateFine;
+      }
+      
+      $currentDate += 86400; // Move to the next day (86400 seconds = 1 day)
+    }
+  }
+  
+  return $totalLateFine;
+}
+
+
+
+// to calculate late Fine for Daily Loans
+
+function lateFineCalfordaily($loanid){
   include "connect.php";
   $sqlloan = "SELECT * FROM loans WHERE id = $loanid";
   $resultloan = mysqli_query($conn, $sqlloan);
