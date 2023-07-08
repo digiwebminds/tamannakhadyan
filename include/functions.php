@@ -105,9 +105,10 @@ function lateFineCalforCC($loanid){
           $lateFine = -$lateFine;
           $totalLateFine[$dateKey] = $lateFine; // Store the late fine for the date
           
-        }else{
-          $totalLateFine[$dateKey] = $lateFine;
         }
+        // else{
+        //   $totalLateFine[$dateKey] = $lateFine;
+        // }
         
         $currentDate += 86400; // Move to the next day (86400 seconds = 1 day)
       }
@@ -136,9 +137,10 @@ function lateFineCalforCC($loanid){
         mysqli_query($conn, $sqlInsert);
         $lateFine = -$lateFine;
         $totalLateFine[$dateKey] = $lateFine; // Store the late fine for the date
-      }else{
-        $totalLateFine[$dateKey] = $lateFine;
       }
+      // else{
+      //   $totalLateFine[$dateKey] = $lateFine;
+      // }
       
       $currentDate += 86400; // Move to the next day (86400 seconds = 1 day)
     }

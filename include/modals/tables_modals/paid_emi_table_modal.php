@@ -16,21 +16,26 @@ echo '<div id="paidinstallmentModal" class="fixed inset-0 flex items-center just
 			<tr class="flex w-full mb-1 border">
 				<th class="p-4 w-1/2">Date</th>
 				<th class="p-4 w-1/2">Installment</th>
+        <th class="p-4 w-1/2">Comment</th>
+        <th class="p-4 w-1/2">Entry By</th>
 			</tr>
 		</thead>
     <!-- Remove the nasty inline CSS fixed height on production and replace it with a CSS class — this is just for demonstration purposes! -->
 		<tbody class="bg-grey-light flex flex-col items-center justify-between overflow-y-scroll w-full" style="height: 30vh;">
 			';
       require_once "../connect.php";
-      $sql2 = "SELECT DORepayment,installment_amount FROM `repayment` where loan_id=$loanid";
+      $sql2 = "SELECT * FROM `repayment` where loan_id=$loanid";
       $result2 = mysqli_query($conn,$sql2);
       if (mysqli_num_rows($result2) > 0) {
         while ($row2 = mysqli_fetch_assoc($result2)) {
 
           echo '<tr class="flex w-full mb-1 border">
           <td class="p-4 w-1/2 font-bold border">'.$row2['DORepayment'].'</td>
-          <td class="p-4 w-1/2 font-bold border">'.$row2['installment_amount'].'</td></tr>';
-
+          <td class="p-4 w-1/2 font-bold border">'.$row2['installment_amount'].'</td>
+          <td class="p-4 w-1/2 font-bold border">'.$row2['comment_repay'].'</td>
+          <td class="p-4 w-1/2 font-bold border">'.$row2['entryby'].'</td>
+          
+          </tr>';
             }
           }
 				echo'</tbody>

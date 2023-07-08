@@ -12,6 +12,14 @@ if (isset($_SESSION['username'])){
 }else{
       header('location: ../index.php');
 }
+if(time() - $_SESSION['logintime'] > 600) { //subtract new timestamp from the old one
+    unset($_SESSION['username'], $_SESSION['logintime']);
+    // $_SESSION['logged_in'] = false;
+    header("Location:../index.php"); //redirect to index.php
+    exit;
+  } else {
+    $_SESSION['logintime'] = time(); //set new timestamp
+  }
 ?>
 <!DOCTYPE html>
 <html lang="en">
