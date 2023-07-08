@@ -41,6 +41,7 @@ $(document).ready(function () {
         e.preventDefault();
     });
 
+
     //repayment installment entry 
     $(document).on('click', '#repaysubmitbtnn', function (e) {
         e.preventDefault();
@@ -48,6 +49,7 @@ $(document).ready(function () {
         var loan_id = $("#loan_id").val();
         var installmentamt = $("#install-amount").val();
         var comment = $("#comment_repay").val();
+        // var entryby = $("#entryby").val();
 
         $.ajax({
             url: '../include/ajaxphpfiles/fetch_custname.php',
@@ -69,6 +71,7 @@ $(document).ready(function () {
         var loan_id = $("#loan_id").val();
         var principleamt = $("#principle-amount-repay").val();
         var comment = $("#comment_prirepay").val();
+        // var entryby = $("#entryby").val();
 
         $.ajax({
             url: '../include/ajaxphpfiles/fetch_custname.php',

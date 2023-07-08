@@ -27,6 +27,7 @@ if (isset($_SESSION['username'])){
                 session_start();
                 $_SESSION['username'] = $username;
                 $_SESSION['role'] = 2;
+                $_SESSION['logintime'] = time();
                 // print_r($num2['username']) ;
                 // // $_SESSION['email']=$email;
                 header('location:dashboard.php');

@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 include "../connect.php";
 
 if (isset($_POST['customer_id'])) {
@@ -361,8 +363,9 @@ if (isset($_POST['dorepay']) && isset($_POST['loan_id']) && isset($_POST['instal
   $loan_id = $_POST['loan_id'];
   $installmentamt = $_POST['installmentamt'];
   $comment = $_POST['comment'];
+  $entryby = $_SESSION['username'];
 
-  $sql = "INSERT INTO `repayment` (`loan_id`, `DORepayment`, `installment_amount`,`comment_repay`) VALUES ('$loan_id', '$dorepay', '$installmentamt','$comment')";
+  $sql = "INSERT INTO `repayment` (`loan_id`, `DORepayment`, `installment_amount`,`comment_repay`,`entryby`) VALUES ('$loan_id', '$dorepay', '$installmentamt','$comment','$entryby')";
   $result = mysqli_query($conn,$sql);
   if($result){
     echo '<div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
@@ -383,8 +386,10 @@ if (isset($_POST['dorepay']) && isset($_POST['loan_id']) && isset($_POST['princi
   $loan_id = $_POST['loan_id'];
   $principleamt = $_POST['principleamt'];
   $comment = $_POST['comment'];
+  $info = 0;
+  $entryby = $_SESSION['username'];
 
-  $sql = "INSERT INTO `principle_repayment` (`loan_id`, `dorepayment`, `repay_amount`,`comment_prirepay`) VALUES ('$loan_id', '$dorepay', '$principleamt','$comment')";
+  $sql = "INSERT INTO `principle_repayment` (`loan_id`, `dorepayment`, `repay_amount`,`comment_prirepay`,`entryby`,`info`) VALUES ('$loan_id', '$dorepay', '$principleamt','$comment','$entryby','$info')";
   $result = mysqli_query($conn,$sql);
   if($result){
     echo '<div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
@@ -405,23 +410,11 @@ if (isset($_POST['dorepayl']) && isset($_POST['loan_id']) && isset($_POST['princ
   $loan_id = $_POST['loan_id'];
   $principleamt = $_POST['principleamtl'];
   $comment = $_POST['commentl'];
+  $entryby = $_SESSION['username'];
+  $info = 1;
+  $principleamt = -$principleamt;
 
-  if (is_numeric($principleamt)) {
-    $principleamt_in_minus = -($principleamt);
-    // Proceed with further calculations or database operations
-  } else {
-    // Convert non-numeric value to numeric value
-    $numericValue = intval($principleamt); // or intval($principleamt) if an integer is desired
-  
-    if (is_numeric($numericValue)) {
-      $principleamt_in_minus = -($numericValue);
-      // Proceed with further calculations or database operations
-    } else {
-      echo "Error: The value entered could not be converted to a numeric value.";
-    }
-  }
-
-  $sql = "INSERT INTO `principle_repayment` (`loan_id`, `dorepayment`, `repay_amount`,`comment_prirepay`) VALUES ('$loan_id', '$dorepay', '$principleamt_in_minus','$comment')";
+  $sql = "INSERT INTO `principle_repayment` (`loan_id`, `dorepayment`, `repay_amount`,`comment_prirepay`,`entryby`,`info`) VALUES ('$loan_id', '$dorepay', '$principleamt','$comment','$entryby','$info')";
   $result = mysqli_query($conn,$sql);
   if($result){
     echo '<div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">

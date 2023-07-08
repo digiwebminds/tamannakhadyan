@@ -32,6 +32,7 @@ if (isset($_SESSION['username'])){
       session_start();
       $_SESSION['username']=$username;
       $_SESSION['role']=$row2['emptype'];
+      $_SESSION['logintime'] = time();
       
       header('location:../admin/loans.php');
     } else {
