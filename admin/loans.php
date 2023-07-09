@@ -30,7 +30,7 @@ if(time() - $_SESSION['logintime'] > 600) { //subtract new timestamp from the ol
     <title>Loans</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-
+    <script src="../include/js/loans.js"></script>
 </head>
 <body>
     <?php
@@ -58,6 +58,7 @@ if(time() - $_SESSION['logintime'] > 600) { //subtract new timestamp from the ol
     </select>
     <button id="searchbutton" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Search</button>
 </span>
+<!-- Search Box -->
 
 <div class="relative" id="pagination-result">
         <div id="overlay">
@@ -112,7 +113,6 @@ if(time() - $_SESSION['logintime'] > 600) { //subtract new timestamp from the ol
                         }, 500);
                     }
                 });
-                // console.log(searchby+searchvalue);
             });
         });
     </script>

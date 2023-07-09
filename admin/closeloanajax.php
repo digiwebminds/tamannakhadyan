@@ -46,7 +46,7 @@ else{
 $sql = "SELECT * from loans WHERE status = 1 and delete_status = 0 ORDER BY id DESC";
 }
 
-$paginationlink = "loanajax.php?page=";
+$paginationlink = "closeloanajax.php?page=";
 
 $page = 1;
 if (!empty($_GET["page"])) {
@@ -141,7 +141,7 @@ foreach ($faq as $k => $v) {
 		<td class='py-2 px-2'>" . $faq[$k]['installment'] . "</td>
 		<td class='py-2 px-2'>" . $faq[$k]['dor'] . "</td>
 		<td class='py-2 px-2'>" . $faq[$k]['ldol'] . "</td>
-		<td class='py-2 px-2'>" . '<a id="deleteloan" class="bg-red-700 py-1 px-2 rounded" href="" value="'.$faq[$k]['id'].'">Delete</a></td>
+		<td class='py-2 px-2'>" . '<a id="closeloan" class="bg-red-700 py-1 px-2 rounded" href="" value="'.$faq[$k]['id'].'">Close</a></td>
 		</tr>
 		';
 }

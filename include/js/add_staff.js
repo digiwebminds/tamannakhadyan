@@ -94,4 +94,22 @@ tailwind.config = {
         }        
     }
 
+    $(document).on("click", "#deletestaff", function(e) {
+      e.preventDefault();
+      if(confirm("Delete Employee ?") == true){
+        var empid = $(this).attr('value');
+    
+        $.ajax({
+            url: 'delete.php',
+            type: 'GET',
+            data: { 'empid': empid },
+            success: function(data) {
+                if(data == 1){
+                  window.location.replace("staffmembers.php");
+                }
+            }
+        });
+      }
+    });
+
   });

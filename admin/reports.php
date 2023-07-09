@@ -30,7 +30,7 @@ if(time() - $_SESSION['logintime'] > 600) { //subtract new timestamp from the ol
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> Reports </title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="../include/js/reports.js"></script>
     <script src="https://kit.fontawesome.com/0ef3c59d0f.js" crossorigin="anonymous"></script>
 </head>
