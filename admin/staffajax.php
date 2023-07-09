@@ -95,8 +95,8 @@ foreach ($faq as $k => $v) {
 		<td>" . $faq[$k]['password'] . "</td>
 		<td><img src='$image' style='object-fit:fill; width:60px; height:60px;'></td>
 		<td>".$faq[$k]['emptype']."</td>
-		<td>" . '<button class="bg-blue-700 py-1 px-2 rounded"><a href="add_staff.php?id='.$faq[$k]['id'].'">Update</a></button></td>
-		<td><button class="bg-blue-700 py-1 px-2 rounded"><a href="delete.php?sid='.$faq[$k]['id'].'" >Delete</a></button>
+		<td>" . '<a class="bg-blue-700 py-1 px-2 rounded" href="add_staff.php?id='.$faq[$k]['id'].'">Update</a></td>
+		<td><a id="deletestaff" class="bg-red-700 py-1 px-2 rounded" href="" value="'.$faq[$k]['id'].'">Delete</a>
 			</tr>';
 }
 $output .= '</tbody>

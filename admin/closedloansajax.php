@@ -22,7 +22,7 @@ if(isset($_GET["searchvalue"]) && isset($_GET["searchby"])){
 			$searchvalue = 4;
 		}
 	}
-	$sql = "SELECT * FROM loans WHERE status = 1 and delete_status = 0 AND $searchby LIKE '$searchvalue' ORDER BY id DESC";
+	$sql = "SELECT * FROM loans WHERE status = 0 AND $searchby LIKE '$searchvalue' ORDER BY id DESC";
 	$result  = mysqli_query($conn, $sql);
     $rowcount = mysqli_num_rows($result);
 	if($rowcount > 0){
@@ -43,10 +43,10 @@ if(isset($_GET["searchvalue"]) && isset($_GET["searchby"])){
 	}
 }
 else{
-$sql = "SELECT * from loans WHERE status = 1 and delete_status = 0 ORDER BY id DESC";
+$sql = "SELECT * from loans WHERE status = 0 ORDER BY id DESC";
 }
 
-$paginationlink = "loanajax.php?page=";
+$paginationlink = "closedloansajax.php?page=";
 
 $page = 1;
 if (!empty($_GET["page"])) {
@@ -103,9 +103,6 @@ $output .= '
 			<th scope="col" class="py-2 px-2">
 				Loan End Date
 			</th>
-			<th scope="col" class="py-2 px-2">
-			Action
-			</th>
 		</tr>
 	</thead>
 	<tbody>';
@@ -141,9 +138,8 @@ foreach ($faq as $k => $v) {
 		<td class='py-2 px-2'>" . $faq[$k]['installment'] . "</td>
 		<td class='py-2 px-2'>" . $faq[$k]['dor'] . "</td>
 		<td class='py-2 px-2'>" . $faq[$k]['ldol'] . "</td>
-		<td class='py-2 px-2'>" . '<a id="deleteloan" class="bg-red-700 py-1 px-2 rounded" href="" value="'.$faq[$k]['id'].'">Delete</a></td>
 		</tr>
-		';
+		";
 }
 $output .= '</tbody>
        		</table>

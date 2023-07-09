@@ -34,6 +34,7 @@ if (isset($_GET['id'])) {
 }
 
 if (isset($_POST['submit'])) {
+    $emptype = $_POST['emptype'];
     $name = $_POST['name'];
     $fname = $_POST['fname'];
     $address = $_POST['address'];
@@ -64,7 +65,7 @@ if (isset($_POST['submit'])) {
     if ($password == $cpassword) {
         if (isset($_GET['id'])) {
             $sid = $_GET['id'];
-            $sql = "UPDATE staff SET name='$name', fname='$fname', address='$address', phone='$phone', salary='$salary', username='$username', password='$password' WHERE id='$sid'";
+            $sql = "UPDATE staff SET emptype='$emptype', name='$name', fname='$fname', address='$address', phone='$phone', salary='$salary', username='$username', password='$password' WHERE id='$sid'";
         } else {
             $sql = "INSERT INTO `staff` (name,fname,address,phone,photo,salary,username,password,emptype) VALUES ('$name','$fname','$address','$phone','$imageupload','$salary','$username','$password','$emptype')";
         }
@@ -87,7 +88,7 @@ if (isset($_POST['submit'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-    <script src="../include/js/add_staff.js"></script>
+    <script src="../include/js/customers.js"></script>
 
     <title>Add Staff Member</title>
 </head>
@@ -109,8 +110,8 @@ if (isset($_POST['submit'])) {
                             <label for="emptype" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select Loan Type</label>
                             <select id="emptype" name="emptype" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                 <option>Select Employee Type</option>
-                                <option value="0">Staff</option>
-                                <option value="1">Manager</option>
+                                <option value="0" <?php if(isset($_GET['id'])){ if($user['emptype'] == 0){ echo "selected";}}?>>Staff</option>
+                                <option value="1" <?php if(isset($_GET['id'])){ if($user['emptype'] == 1){ echo "selected";}}?>>Manager</option>
                             </select>
                         </div>
                         <div>
