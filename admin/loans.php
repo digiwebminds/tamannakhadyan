@@ -68,7 +68,7 @@ if(time() - $_SESSION['logintime'] > 600) { //subtract new timestamp from the ol
 
     <?php
     include("../include/connect.php");
-    $query = "SELECT * FROM loans";
+    $query = "SELECT * FROM loans WHERE status = 1 AND delete_status = 0 ORDER BY id DESC";
     $result  = mysqli_query($conn, $query);
     $rowcount = mysqli_num_rows($result);
     echo '<input type="hidden" name="rowcount" id="rowcount" value=' . $rowcount . '>';
