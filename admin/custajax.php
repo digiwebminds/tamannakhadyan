@@ -1,4 +1,6 @@
 <?php
+session_start();
+$role = $_SESSION['role'];
 require_once("../include/connect.php");
 require_once("pagination.class.php");
 
@@ -69,39 +71,39 @@ $output = '';
 $output .= '<table class="w-full text-sm text-left text-gray-400">
 	<thead class="text-xs uppercase bg-gray-700 text-gray-200">
 		<tr>
-			<th scope="col" class="px-6 py-3">
+			<th scope="col" class="px-2 py-3">
 				S.no.
 			</th>
-			<th scope="col" class="px-6 py-3">
+			<th scope="col" class="px-2 py-3">
 				Cust. Id
 			</th>
-			<th scope="col" class="px-6 py-3">
+			<th scope="col" class="px-2 py-3">
 				Name
 			</th>
-			<th scope="col" class="px-6 py-3">
+			<th scope="col" class="px-2 py-3">
 				Address
 			</th>
-			<th scope="col" class="px-6 py-3">
+			<th scope="col" class="px-2 py-3">
 				Mobile
 			</th>
-			<th scope="col" class="px-6 py-3">
+			<th scope="col" class="px-2 py-3">
 				Guarantor Name
 			</th>
-			<th scope="col" class="px-6 py-3">
+			<th scope="col" class="px-2 py-3">
 				Guarantor Details
 			</th>
-			<th scope="col" class="px-6 py-3">
+			<th scope="col" class="px-2 py-3">
 				Date of Reg.
 			</th>
-			<th scope="col" class="px-6 py-3">
+			<th scope="col" class="px-2 py-3">
 				Cust. Photo
 			</th>
-			<th scope="col" class="px-6 py-3">
+			<th scope="col" class="px-2 py-3">
 				Gtr. Photo
 			</th>
-			<th scope="col" class="px-6 py-3">
+			<th scope="col" class="px-2 py-3">
 			</th>
-			<th scope="col" class="px-6 py-3">
+			<th scope="col" class="px-2 py-3">
 			</th>
 		</tr>
 	</thead>
@@ -130,9 +132,9 @@ foreach ($faq as $k => $v) {
 		<td>" . $faq[$k]['dor'] . "</td>
 		<td><img src='$image' style='object-fit:fill; width:60px; height:60px;'></td>
 		<td><img src='$gimage' style='object-fit:fill; width:60px; height:60px;'></td>
-		<td>" . '<a class="bg-blue-700 py-1 px-2 rounded" href="add_user.php?id='.$faq[$k]['id'].'">Update</a></td>
-		<td><a id="deletecust" class="bg-red-700 py-1 px-2 rounded" href="" value="'.$faq[$k]['id'].'">Delete</a>
-			</tr>';
+		<td><a class='bg-blue-700 py-1 px-2 rounded' href='add_user.php?id=".$faq[$k]['id']."'>Update</a></td>
+		<td><a id='deletecust' class='bg-red-700 py-1 px-2 rounded' href='' value='".$faq[$k]['id']."'>Delete</a></td>
+			</tr>";
 }
 $output .= '</tbody>
         </table>';
