@@ -1,4 +1,5 @@
 <?php
+session_start(); 
 require_once("../include/connect.php");
 require_once("pagination.class.php");
 
@@ -98,12 +99,14 @@ $output .= '<table class="w-full text-sm text-left text-gray-400">
 			</th>
 			<th scope="col" class="px-6 py-3">
 				Gtr. Photo
-			</th>
-			<th scope="col" class="px-6 py-3">
-			</th>
-			<th scope="col" class="px-6 py-3">
-			</th>
-		</tr>
+			</th>';
+			if($_SESSION['role'] != 0){
+				$output .='<th scope="col" class="px-6 py-3">
+							</th>
+							<th scope="col" class="px-6 py-3">
+							</th>';
+			}
+	$output .= '</tr>
 	</thead>
 	<tbody>';
 $i = $start * 1;
@@ -129,10 +132,10 @@ foreach ($faq as $k => $v) {
 		<td>" . $faq[$k]['gaddress'] . "</td>
 		<td>" . $faq[$k]['dor'] . "</td>
 		<td><img src='$image' style='object-fit:fill; width:60px; height:60px;'></td>
-		<td><img src='$gimage' style='object-fit:fill; width:60px; height:60px;'></td>
-		<td>" . '<a class="bg-blue-700 py-1 px-2 rounded" href="add_user.php?id='.$faq[$k]['id'].'">Update</a></td>
-		<td><a id="deletecust" class="bg-red-700 py-1 px-2 rounded" href="" value="'.$faq[$k]['id'].'">Delete</a>
-			</tr>';
+		<td><img src='$gimage' style='object-fit:fill; width:60px; height:60px;'></td>";
+	if($_SESSION['role'] != 0){
+		$output .= '<td><a class="bg-blue-700 py-1 px-2 rounded" href="add_user.php?id='.$faq[$k]['id'].'">Update</a></td><td><a id="deletecust" class="bg-red-700 py-1 px-2 rounded" href="" value="'.$faq[$k]['id'].'">Delete</a></td></tr>';
+	}
 }
 $output .= '</tbody>
         </table>';
