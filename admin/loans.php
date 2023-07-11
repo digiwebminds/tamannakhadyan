@@ -116,6 +116,10 @@ if(time() - $_SESSION['logintime'] > 600) { //subtract new timestamp from the ol
             });
         });
     </script>
-
+<!-- Footer start-->
+<?php 
+include "../include/footer.php"; 
+?>
+<!-- Footer End-->
 </body>
 </html>
