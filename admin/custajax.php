@@ -67,7 +67,8 @@ if (empty($_GET["rowcount"])) {
 $perpageresult = $perPage->getAllPageLinks($_GET["rowcount"], $paginationlink);
 
 $output = '';
-$output .= '<table class="w-full text-sm text-left text-gray-400">
+$output .= '<div class="relative overflow-x-auto">
+<table class="mb-2 w-full text-sm text-left text-gray-400">
 	<thead class="text-xs uppercase bg-gray-700 text-gray-200">
 		<tr>
 			<th scope="col" class="px-2 py-3">
@@ -124,21 +125,23 @@ foreach ($faq as $k => $v) {
 	}
 	$output .= "<tr class='border-b text-gray-200 bg-gray-800 border-gray-700'>
 		<th>" . $i . "</th>
-		<td>" . $faq[$k]['id'] . "</td>
-		<td>" . $faq[$k]['name'] . "</td>
-		<td>" . $faq[$k]['address'] . "</td>
+		<td>" . $faq[$k]['id'] ."</td>
+		<td>" . $faq[$k]['name'] . "<br>(S/D of ". $faq[$k]['fname'].")</td>
+		<td>Shop - " . $faq[$k]['sname'] ."<br>Address - ". $faq[$k]['address'].", " .$faq[$k]['city']."</td>
 		<td>" . $faq[$k]['phone'] . "</td>
-		<td>" . $faq[$k]['gname'] . "</td>
-		<td>" . $faq[$k]['gaddress'] . "</td>
+		<td>" . $faq[$k]['gname'] . "<br>(S/D of ". $faq[$k]['gfname']. ")</td>
+		<td>" . $faq[$k]['gaddress'] .", ". $faq[$k]['gcity']. "</td>
 		<td>" . $faq[$k]['dor'] . "</td>
 		<td><img src='$image' style='object-fit:fill; width:60px; height:60px;'></td>
-		<td><img src='$gimage' style='object-fit:fill; width:60px; height:60px;'></td>
-		<td>" . '<a class="bg-blue-700 py-1 px-2 rounded" href="add_user.php?id='.$faq[$k]['id'].'">Update</a></td>
-		<td><a id="deletecust" class="bg-red-700 py-1 px-2 rounded" href="" value="'.$faq[$k]['id'].'">Delete</a>
-			</tr>';
+		<td><img src='$gimage' style='object-fit:fill; width:60px; height:60px;'></td>";
+		if($_SESSION['role'] != 0){
+			$output .= "<td>" . '<a class="bg-blue-700 py-1 px-2 rounded" href="add_user.php?id='.$faq[$k]['id'].'">Update</a></td>
+			<td><a id="deletecust" class="bg-red-700 py-1 px-2 rounded" href="" value="'.$faq[$k]['id'].'">Delete</a></td>';
+		}
+	$output .= '</tr>';
 }
 $output .= '</tbody>
-        </table>';
+        </table></div>';
 if (!empty($perpageresult)) {
 	$output .= '<div id="pagination grid h-screen place-items-center">' . $perpageresult . '</div>';
 }

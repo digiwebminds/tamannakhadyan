@@ -31,7 +31,8 @@ if (empty($_GET["rowcount"])) {
 $perpageresult = $perPage->getAllPageLinks($_GET["rowcount"], $paginationlink);
 
 $output = '';
-$output .= '<table class="w-full text-sm text-left text-gray-400">
+$output .= '<div class="relative overflow-x-auto">
+<table class="mb-2 w-full text-sm text-left text-gray-400">
 	<thead class="text-xs uppercase bg-gray-700 text-gray-200">
 		<tr>
 			<th scope="col" class="px-6 py-3">
@@ -100,7 +101,7 @@ foreach ($faq as $k => $v) {
 			</tr>';
 }
 $output .= '</tbody>
-        </table>';
+        </table></div>';
 if (!empty($perpageresult)) {
 	$output .= '<div id="pagination grid h-screen place-items-center">' . $perpageresult . '</div>';
 }
