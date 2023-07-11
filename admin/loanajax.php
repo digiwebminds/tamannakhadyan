@@ -135,12 +135,12 @@ foreach ($faq as $k => $v) {
 	$output .= "
 		<td class='py-2 px-2' >" . $faq[$k]['customer_id'] . "</td>";
 		$userid = $faq[$k]['customer_id'];
-		$sql = "SELECT name FROM customers WHERE id = $userid";
+		$sql = "SELECT name, fname FROM customers WHERE id = $userid";
 		$result = mysqli_query($conn,$sql);
 		if (mysqli_num_rows($result) > 0) {
 			$row = mysqli_fetch_assoc($result);
 			$name = $row['name'];
-			$output .= "<td class='py-2 px-2'>" . $row['name'] . "</td>";
+			$output .= "<td class='py-2 px-2'>" . $row['name'] . "<br>(S/D of ". $row['fname'].")</td>";
 		}
 	$output .= "<td class='py-2 px-2'>" . $faq[$k]['principle'] . "</td>
 		<td class='py-2 px-2'>" . $faq[$k]['installment'] . "</td>

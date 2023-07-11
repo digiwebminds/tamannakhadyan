@@ -49,7 +49,7 @@ if(time() - $_SESSION['logintime'] > 600) { //subtract new timestamp from the ol
     </h1>
 </div>
 <!-- Search Box -->
-    <span class="flex items-center space-x-2 my-2">
+    <span class="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-2 my-2">
     <label for="searchvalue" class="text-gray-700 font-bold">Search</label>
     <input type="text" id="searchvalue" name="searchvalue" class="border border-gray-300 rounded px-2 py-1">
     <label for="searchby" class="text-gray-700">By</label>
