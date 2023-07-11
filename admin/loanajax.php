@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once("../include/connect.php");
 require_once("pagination.class.php");
 
@@ -102,11 +103,15 @@ $output .= '
 			</th>
 			<th scope="col" class="py-2 px-2">
 				Loan End Date
-			</th>
-			<th scope="col" class="py-2 px-2">
-			Action
-			</th>
-		</tr>
+			</th>';
+			if($_SESSION['role'] != 0){
+				$output .='<th scope="col" class="py-2 px-2">
+							</th>
+							<th scope="col" class="py-2 px-2">
+							</th>';
+			}
+
+$output .= '</tr>
 	</thead>
 	<tbody>';
 $i = $start * 1;
@@ -140,10 +145,13 @@ foreach ($faq as $k => $v) {
 	$output .= "<td class='py-2 px-2'>" . $faq[$k]['principle'] . "</td>
 		<td class='py-2 px-2'>" . $faq[$k]['installment'] . "</td>
 		<td class='py-2 px-2'>" . $faq[$k]['dor'] . "</td>
-		<td class='py-2 px-2'>" . $faq[$k]['ldol'] . "</td>
-		<td class='py-2 px-2'>" . '<a id="deleteloan" class="bg-red-700 py-1 px-2 rounded" href="" value="'.$faq[$k]['id'].'">Delete</a></td>
-		</tr>
-		';
+		<td class='py-2 px-2'>" . $faq[$k]['ldol'] . "</td>";
+
+	if($_SESSION['role'] != 0){
+		$output .= "<td>" . '<a id="closeloan" class="bg-blue-700 py-1 px-2 rounded" href="" value="'.$faq[$k]['id'].'">Close</a></td><td><a id="deleteloan" class="bg-red-700 py-1 px-2 rounded" href="" value="'.$faq[$k]['id'].'">Delete</a></td>';
+	}
+
+	$output .= '</tr>';
 }
 $output .= '</tbody>
        		</table>
