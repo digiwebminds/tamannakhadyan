@@ -9,7 +9,9 @@ $(document).ready(function() {
             type: 'POST',
             data: { 'customer_id': customer_id },
             success: function(data) {
-                $("#customer-name").val(data);
+                var result = $.parseJSON(data);
+                $("#customer-name").val(result.name);
+                $("#customer-shop").val(result.sname);
             }
         });
     });

@@ -7,7 +7,7 @@ if (isset($_POST['customer_id'])) {
   $cust_id = $_POST['customer_id'];
 
   // Prepare the query using a parameterized statement
-  $sql = "SELECT name FROM customers WHERE id = ?";
+  $sql = "SELECT name, sname FROM customers WHERE id = ?";
   $stmt = $conn->prepare($sql);
   $stmt->bind_param("i", $cust_id);
   $stmt->execute();
@@ -15,8 +15,10 @@ if (isset($_POST['customer_id'])) {
 
   if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
-    echo $name = $row['name'];
-    // echo json_encode($name);
+    $result = new stdClass();
+    $result->name = $row['name'];
+    $result->sname = $row['sname'];
+    echo json_encode($result);
   } else {
     echo 'Customer not found';
   }
