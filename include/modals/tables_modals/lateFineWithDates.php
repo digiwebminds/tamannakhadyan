@@ -21,17 +21,15 @@ echo '<div id="lateFineTableModal" class="fixed inset-0 flex items-center justif
     <!-- Remove the nasty inline CSS fixed height on production and replace it with a CSS class — this is just for demonstration purposes! -->
 		<tbody class="bg-grey-light flex flex-col items-center justify-between overflow-y-scroll w-full" style="height: 30vh;">
 			';
-
+      // $lateFinearray = lateFineCalforCC($loanid);
       foreach($lateFinearray as $date => $latefine){
-
         echo '<tr class="flex w-full mb-1 border">
         <td class="p-4 w-1/2 font-bold border">'.$date.'</td>
         <td class="p-4 w-1/2 font-bold border">'.$latefine.'</td>
         </tr>';
         
       }
-          echo '
-          </tbody>
+      echo '</tbody>
   </table>
   </div>
   </div>

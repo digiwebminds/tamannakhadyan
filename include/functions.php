@@ -45,6 +45,7 @@ function totalEmiAmountDue_in_CCloan($loanid){
         }
       $previousDate = $repayEpoch + 86400; // Move to the next day after the repayment date
       $initial_loan_amount -= $values['repay_amount'];
+      // print($initial_loan_amount);
     }
     // Calculate installment changes from the last repayment date till the current date
     while ($previousDate <= $loanLastDate) {
@@ -100,15 +101,15 @@ function lateFineCalforCC($loanid){
         if (!$existingRow) {
           $lateFine = -$lateFine;
           // Add the late fine to the principal repayment table
-          $sqlInsert = "INSERT INTO principle_repayment (loan_id, dorepayment,repay_amount) VALUES ($loanid, '$dateKey', $lateFine)";
+          $info = 2;
+          $sqlInsert = "INSERT INTO principle_repayment (loan_id, dorepayment,repay_amount,info) VALUES ('$loanid', '$dateKey', $lateFine,'$info')";
           mysqli_query($conn, $sqlInsert);
           $lateFine = -$lateFine;
           $totalLateFine[$dateKey] = $lateFine; // Store the late fine for the date
-          
         }
-        // else{
-        //   $totalLateFine[$dateKey] = $lateFine;
-        // }
+        else{
+          $totalLateFine[$dateKey] = $lateFine;
+        }
         
         $currentDate += 86400; // Move to the next day (86400 seconds = 1 day)
       }
@@ -132,15 +133,16 @@ function lateFineCalforCC($loanid){
       
       if (!$existingRow) {
         $lateFine = -$lateFine;
+        $info = 2;
         // Add the late fine to the principal repayment table
-        $sqlInsert = "INSERT INTO principle_repayment (loan_id, dorepayment,repay_amount) VALUES ($loanid, '$dateKey', $lateFine)";
+        $sqlInsert = "INSERT INTO principle_repayment (loan_id, dorepayment,repay_amount,info) VALUES ('$loanid', '$dateKey','$lateFine','$info')";
         mysqli_query($conn, $sqlInsert);
         $lateFine = -$lateFine;
         $totalLateFine[$dateKey] = $lateFine; // Store the late fine for the date
       }
-      // else{
-      //   $totalLateFine[$dateKey] = $lateFine;
-      // }
+      else{
+        $totalLateFine[$dateKey] = $lateFine;
+      }
       
       $currentDate += 86400; // Move to the next day (86400 seconds = 1 day)
     }
@@ -148,7 +150,6 @@ function lateFineCalforCC($loanid){
   
   return $totalLateFine;
 }
-
 
 
 // to calculate late Fine for Daily Loans

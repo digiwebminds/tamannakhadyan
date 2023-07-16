@@ -23,8 +23,7 @@ echo '<div id="totalinstallmenttableModal" class="fixed inset-0 flex items-cente
   <tbody class="bg-grey-light flex flex-col items-center justify-between overflow-y-scroll w-full" style="height: 30vh;">
     ';
 
-
-require_once "../connect.php";
+require_once "../include/connect.php";
 if($loan_type == 2){
 
 // Fetch loan start date and last date from the loans table

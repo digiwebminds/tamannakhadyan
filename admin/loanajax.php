@@ -108,6 +108,8 @@ $output .= '
 				$output .='<th scope="col" class="py-2 px-2">
 							</th>
 							<th scope="col" class="py-2 px-2">
+							</th>
+							<th scope="col" class="py-2 px-2">
 							</th>';
 			}
 
@@ -146,9 +148,11 @@ foreach ($faq as $k => $v) {
 		<td class='py-2 px-2'>" . $faq[$k]['installment'] . "</td>
 		<td class='py-2 px-2'>" . $faq[$k]['dor'] . "</td>
 		<td class='py-2 px-2'>" . $faq[$k]['ldol'] . "</td>";
+		$output .= '<td><a id="repayment" class="bg-cyan-700 py-1 px-2 rounded" href="repaymentPage.php?loanid='.$faq[$k]['id'].'" value="'.$faq[$k]['id'].'">Repayment</a></td>';
 
 	if($_SESSION['role'] != 0){
-		$output .= "<td>" . '<a id="closeloan" class="bg-blue-700 py-1 px-2 rounded" href="" value="'.$faq[$k]['id'].'">Close</a></td><td><a id="deleteloan" class="bg-red-700 py-1 px-2 rounded" href="" value="'.$faq[$k]['id'].'">Delete</a></td>';
+		$output .= "<td>" . '<a id="closeloan" class="bg-blue-700 py-1 px-2 rounded" href="" value="'.$faq[$k]['id'].'">Close</a></td>
+		<td><a id="deleteloan" class="bg-red-700 py-1 px-2 rounded" href="" value="'.$faq[$k]['id'].'">Delete</a></td>';
 	}
 
 	$output .= '</tr>';

@@ -23,7 +23,7 @@ echo '<div id="unpaidinstallmenttableModal" class="fixed inset-0 flex items-cent
 		<tbody class="bg-grey-light flex flex-col items-center justify-between overflow-y-scroll w-full" style="height: 30vh;">
 			';
 
-require_once "../connect.php";
+require_once "../include/connect.php";
 if($loan_type == 1){
   // Fetch loan start date and last date from the loans table
   $sql4 = "SELECT dor, ldol FROM loans WHERE id =$loanid";

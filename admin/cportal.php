@@ -32,17 +32,17 @@ if(time() - $_SESSION['logintime'] > 600) { //subtract new timestamp from the ol
 </head>
 <body>
 <?php
-    include "../include/navbar.php";
-    date_default_timezone_set("Asia/Calcutta");
-    include "../include/connect.php";
-    $sql = "SELECT c.id AS cust_id,l.latefine,l.latefineafter,c.phone, l.id,l.days_weeks_month,l.total, c.name, c.fname, c.city, COUNT(c.phone) AS phone_count, COUNT(re.loan_id) AS emi_count, c.photo, l.principle, l.dor, l.loan_type,l.dor,l.ldol, l.installment, l.roi,SUM(re.	installment_amount) as amount_paid,
-    (SELECT SUM(repay_amount) FROM principle_repayment WHERE loan_id = l.id) AS total_principal_paid
-  FROM customers AS c
-  JOIN loans AS l ON c.id = l.customer_id
-  LEFT JOIN repayment AS re ON l.id = re.loan_id
-  WHERE l.status = 1
-  GROUP BY c.id, l.id,l.latefine,l.latefineafter,c.phone, c.name, c.fname, c.city, c.photo, l.principle,l.total, l.dor, l.loan_type,l.dor,l.ldol, l.installment, l.roi
-  HAVING phone_count > 0";
+include "../include/navbar.php";
+date_default_timezone_set("Asia/Calcutta");
+include "../include/connect.php";
+$sql = "SELECT c.id AS cust_id,l.latefine,l.latefineafter,c.phone, l.id,l.days_weeks_month,l.total, c.name, c.fname, c.city, COUNT(c.phone) AS phone_count, COUNT(re.loan_id) AS emi_count, c.photo, l.principle, l.dor, l.loan_type,l.dor,l.ldol, l.installment, l.roi,SUM(re.	installment_amount) as amount_paid,
+(SELECT SUM(repay_amount) FROM principle_repayment WHERE loan_id = l.id) AS total_principal_paid
+FROM customers AS c
+JOIN loans AS l ON c.id = l.customer_id
+LEFT JOIN repayment AS re ON l.id = re.loan_id
+WHERE l.status = 1 and l.delete_status=0
+GROUP BY c.id, l.id,l.latefine,l.latefineafter,c.phone, c.name, c.fname, c.city, c.photo, l.principle,l.total, l.dor, l.loan_type,l.dor,l.ldol, l.installment, l.roi
+HAVING phone_count > 0";
     $result = mysqli_query($conn,$sql);
     if($result){
         if (mysqli_num_rows($result) > 0) {
@@ -82,7 +82,7 @@ if(time() - $_SESSION['logintime'] > 600) { //subtract new timestamp from the ol
                         <div class="pt-0.5"><span class="font-medium">Phone:</span> <span class="font-medium text-white">'.$row['phone'].'</span> <br/></div>
                         <div class="pt-0.5 pb-1"><span class="font-medium">Installment Amount:</span> <span class="font-medium text-white">'.$reminstallmentamount.'</span> <br/> </div>
 
-                        <a href="repayment.php"><button type="button" class="text-gray-900 bg-white hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-sm px-5 py-2.5 mr-2 mb-2 bg-gray-800 hover:bg-white hover:text-blue-900 focus:ring-gray-700 border-gray-700">Repayment Page</button></a>
+                        <a href="repaymentPage.php?loanid='.$loanid.'"><button type="button" class="text-gray-900 bg-white hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-sm px-5 py-2.5 mr-2 mb-2 bg-gray-800 hover:bg-white hover:text-blue-900 focus:ring-gray-700 border-gray-700">Repayment Page</button></a>
 
                         
                          </div>
