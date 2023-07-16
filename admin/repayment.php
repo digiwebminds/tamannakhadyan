@@ -21,6 +21,15 @@ if(time() - $_SESSION['logintime'] > 600) { //subtract new timestamp from the ol
   $_SESSION['logintime'] = time(); //set new timestamp
 }
 ?>
+<?php
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+  $loadid = $_POST['search-loanid'];
+  header('location:repaymentPage.php?loanid='.$loadid);
+
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -33,7 +42,6 @@ if(time() - $_SESSION['logintime'] > 600) { //subtract new timestamp from the ol
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="../include/js/repayment.js"></script>
     <script src="https://kit.fontawesome.com/0ef3c59d0f.js" crossorigin="anonymous"></script>
-    
   <style>
   .modal {
     display: none;
@@ -59,8 +67,12 @@ if(time() - $_SESSION['logintime'] > 600) { //subtract new timestamp from the ol
             <form action="" method="POST">
                 <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
                     <div class="sm:col-span-2 relative">
+                      <form action="" method="post">
+
                         <input type="number" name="search-loanid" id="search-loanid" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Enter Loan ID" required>
+
                         <button type="submit" name="submit" id="loanidsearchbutton" class="text-white absolute right-1 bottom-1 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
+                      </form>
                     </div>
                 </div>
             </form>

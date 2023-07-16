@@ -23,7 +23,7 @@ echo '<div id="paidinstallmentModal" class="fixed inset-0 flex items-center just
     <!-- Remove the nasty inline CSS fixed height on production and replace it with a CSS class — this is just for demonstration purposes! -->
 		<tbody class="bg-grey-light flex flex-col items-center justify-between overflow-y-scroll w-full" style="height: 30vh;">
 			';
-      require_once "../connect.php";
+      require_once "../include/connect.php";
       $sql2 = "SELECT * FROM `repayment` where loan_id=$loanid";
       $result2 = mysqli_query($conn,$sql2);
       if (mysqli_num_rows($result2) > 0) {

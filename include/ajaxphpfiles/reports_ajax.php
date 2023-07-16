@@ -25,7 +25,7 @@ if($result){
           FROM customers AS c
           JOIN loans AS l ON c.id = l.customer_id
           LEFT JOIN repayment AS re ON l.id = re.loan_id
-          WHERE c.id = $custid
+          WHERE c.id = $custid and l.status = 1 and l.delete_status=0
           GROUP BY c.id, l.id, c.name, c.fname,l.status, c.city, c.photo, l.principle,l.total, l.dor, l.loan_type,l.dor,l.ldol, l.installment, l.roi
           HAVING phone_count > 0";
           
@@ -294,13 +294,8 @@ if($result){
       <span class="font-medium">Loan Not Found!</span> Enter Correct CustomerID !
     </div>
   </div>';
-    }
-    }
-
-
-
-
-include "../footer.php"; 
+}
+}
 
 }
 
